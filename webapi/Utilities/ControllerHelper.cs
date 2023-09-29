@@ -17,11 +17,6 @@ namespace webapi.Utilities
             return item is null ? NotFoundRespond<T>() : Ok(item);
         }
 
-        public IActionResult CheckCountAndRespond<T>(List<T> items)
-        {
-            return items.Count == 0 ? NotFoundRespond<T>() : Ok(items);
-        }
-
         public async Task<IActionResult> CreateAndRespond<TEntity>(Func<Task<TEntity>> createFunc)
         {
             try

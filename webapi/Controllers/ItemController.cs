@@ -44,7 +44,7 @@ namespace webapi.Controllers
 
             var items = await _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel);
 
-            return _controllerHelper.CheckCountAndRespond(items);
+            return Ok(items);
         }
 
         [Authorize]

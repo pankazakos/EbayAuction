@@ -26,7 +26,7 @@ namespace webapi.Controllers
         {
             var users = await _userService.GetAll(cancel);
 
-            return _controllerHelper.CheckCountAndRespond(users);
+            return Ok(users);
         }
 
         [Authorize(Policy = "Admin")]
@@ -35,7 +35,7 @@ namespace webapi.Controllers
         {
             var usernames = await _userService.GetAllUsernames(cancel);
 
-            return _controllerHelper.CheckCountAndRespond(usernames);
+            return Ok(usernames);
         }
 
         [Authorize]
