@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using webapi.Contracts.Requests;
+using webapi.Contracts.Responses;
 using webapi.Database;
 using webapi.Models;
 using webapi.Utilities;
@@ -39,7 +40,7 @@ namespace webapi.Repository
             return usernames;
         }
 
-        public async Task<User> Create(CreateUserRequest input, CancellationToken cancel)
+        public async Task<User?> Create(UserCredentialsRequest input, CancellationToken cancel)
         {
             string salt = PasswordHelper.GenerateSalt();
             string hashedPassword = PasswordHelper.HashPassword(input.Password, salt);

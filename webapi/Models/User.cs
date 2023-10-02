@@ -11,7 +11,7 @@ namespace webapi.Models
         public string FirstName { get; init; } = string.Empty;
         public string LastName { get; init; } = string.Empty;
         public DateTime? LastLogin { get; set; }
-        public DateTime? DateJoined { get; init; }
+        public DateTime DateJoined { get; init; }
         [MaxLength(255)] public string Email { get; init; } = string.Empty;
 
         [MaxLength(12), MinLength(12)] public string Country { get; set; } = string.Empty;

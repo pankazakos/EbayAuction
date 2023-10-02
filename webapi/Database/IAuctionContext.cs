@@ -13,6 +13,6 @@ namespace webapi.Database
 
         DbSet<Bid> Bids { get; set; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancel);
+        Task<int> SaveChangesAsync(CancellationToken cancel = default);
     }
 }

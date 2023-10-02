@@ -4,11 +4,13 @@ using webapi.Contracts.Requests;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities;
+using webapi.Contracts.Endpoints;
+using webapi.Contracts.Mapping;
 
 namespace webapi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route(ItemEndpoints.BaseUrl)]
     public class ItemController : ControllerBase
     {
         private readonly IItemService _itemService;
@@ -23,15 +25,15 @@ namespace webapi.Controllers
         }
 
         [Authorize]
-        [HttpPost("Create")]
+        [HttpPost(ItemEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] CreateItemRequest item, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel));
+            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel), ItemMapper.MapToCreateItemResponse);
         }
 
         [Authorize]
-        [HttpGet("ListItems")]
-        public async Task<IActionResult> ListItems(bool active, CancellationToken cancel = default)
+        [HttpGet(ItemEndpoints.All)]
+        public async Task<IActionResult> ListAll(bool active, CancellationToken cancel = default)
         {
             var username = _controllerHelper.UsernameClaim;
 
@@ -48,29 +50,28 @@ namespace webapi.Controllers
         }
 
         [Authorize]
-        [HttpGet("ListInactive")]
+        [HttpGet(ItemEndpoints.Inactive)]
         public async Task<IActionResult> ListInactive(CancellationToken cancel = default)
         {
-            return await ListItems(active: true, cancel);
+            return await ListAll(active: true, cancel);
         }
 
         [Authorize]
-        [HttpGet("ListActive")]
+        [HttpGet(ItemEndpoints.Active)]
         public async Task<IActionResult> ListActive(CancellationToken cancel = default)
         {
-            return await ListItems(active: false, cancel);
+            return await ListAll(active: false, cancel);
         }
 
         [Authorize]
-        [HttpGet("ListBidden")]
+        [HttpGet(ItemEndpoints.Bidden)]
         public async Task<IActionResult> ListBidden(CancellationToken cancel = default)
         {
-            return await ListItems(active: true, cancel);
+            return await ListAll(active: true, cancel);
         }
 
-
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(long id, CancellationToken cancel = default)
+        [HttpGet(ItemEndpoints.GetById)]
+        public async Task<IActionResult> GetById([FromRoute] long id, CancellationToken cancel = default)
         {
             var item = await _itemService.GetById(id, cancel);
 

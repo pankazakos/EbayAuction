@@ -41,7 +41,6 @@ namespace webapi.Database
                 .WithMany(u => u.Bids)
                 .HasForeignKey(b => b.BidderId)
                 .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }
