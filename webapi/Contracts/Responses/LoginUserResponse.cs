@@ -2,6 +2,6 @@
 {
     public class LoginUserResponse
     {
-        public string AccesToken { get; set; } = string.Empty;
+        public string AccessToken { get; init; } = string.Empty;
     }
 }

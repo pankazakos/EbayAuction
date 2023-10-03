@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Utilities
 {
@@ -16,15 +17,14 @@ namespace webapi.Utilities
             return item is null ? NotFoundRespond<T>() : Ok(item);
         }
 
-        public async Task<IActionResult> CreateAndRespond<TEntity, TResponse>(Func<Task<TEntity>> createFunc, Func<TEntity, TResponse> mapFunc)
+        public async Task<IActionResult> CreateAndRespond<TEntity, TResponse>(
+            Func<Task<TEntity>> createFunc, Func<TEntity, IMapper, TResponse> mapFunc, IMapper mapper)
         {
             try
             {
-                var newEntity = await createFunc();
-                var entityName = typeof(TEntity).Name;
-                var response = mapFunc(newEntity);
-
-                return Created(entityName, response);
+                var entity = await createFunc();
+                var response = mapFunc(entity, mapper);
+                return Created(nameof(TEntity), response);
             }
             catch (ArgumentException ex)
             {

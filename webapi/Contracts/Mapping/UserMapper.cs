@@ -1,26 +1,19 @@
 ﻿using webapi.Contracts.Responses;
 using webapi.Models;
+using AutoMapper;
 
 namespace webapi.Contracts.Mapping
 {
     public static class UserMapper
     {
-        public static CreateUserResponse MapToCreateUserResponse(User? user)
+        public static NoPasswordUserResponse MapToNoPasswordUserResponse(this User user, IMapper mapper)
         {
-            if (user is null) throw new ArgumentNullException(nameof(user));
+            return mapper.Map<NoPasswordUserResponse>(user);
+        }
 
-            return new CreateUserResponse
-            {
-                Id = user.Id,
-                UserName = user.Username,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                DateJoined = user.DateJoined,
-                Country = user.Country,
-                Location = user.Location,
-                IsSuperuser = user.IsSuperuser
-            };
+        public static RegisterUserResponse MapToRegisterUserResponse(this User user, IMapper mapper)
+        {
+            return mapper.Map<RegisterUserResponse>(user);
         }
     }
 }

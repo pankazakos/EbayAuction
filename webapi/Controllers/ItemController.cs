@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Contracts.Requests;
 using webapi.Models;
@@ -15,12 +16,14 @@ namespace webapi.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
         private readonly ControllerHelper _controllerHelper;
 
-        public ItemController(IItemService itemService, IUserService userService, ControllerHelper controllerHelper)
+        public ItemController(IItemService itemService, IUserService userService, IMapper mapper, ControllerHelper controllerHelper)
         {
             _itemService = itemService;
             _userService = userService;
+            _mapper = mapper;
             _controllerHelper = controllerHelper;
         }
 
@@ -28,7 +31,7 @@ namespace webapi.Controllers
         [HttpPost(ItemEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] CreateItemRequest item, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel), ItemMapper.MapToCreateItemResponse);
+            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel), ItemMapper.MapToCreateItemResponse, _mapper);
         }
 
         [Authorize]

@@ -40,10 +40,10 @@ namespace webapi.Repository
             return usernames;
         }
 
-        public async Task<User?> Create(UserCredentialsRequest input, CancellationToken cancel)
+        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel)
         {
-            string salt = PasswordHelper.GenerateSalt();
-            string hashedPassword = PasswordHelper.HashPassword(input.Password, salt);
+            var salt = PasswordHelper.GenerateSalt();
+            var hashedPassword = PasswordHelper.HashPassword(input.Password, salt);
 
             // Create a new user
             var user = new User

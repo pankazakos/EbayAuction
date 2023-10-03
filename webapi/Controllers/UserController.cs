@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using webapi.Contracts.Requests;
 using webapi.Services;
@@ -15,12 +16,14 @@ namespace webapi.Controllers
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
         private readonly ControllerHelper _controllerHelper;
 
-        public UserController(IUserService service, IConfiguration configuration, ControllerHelper controllerHelper)
+        public UserController(IUserService service, IConfiguration configuration, IMapper mapper, ControllerHelper controllerHelper)
         {
             _userService = service;
             _configuration = configuration;
+            _mapper = mapper;
             _controllerHelper = controllerHelper;
         }
 
@@ -60,13 +63,13 @@ namespace webapi.Controllers
                 return Forbid();
             }
 
-            return Ok(user);
+            return Ok(user.MapToNoPasswordUserResponse(_mapper));
         }
 
         [HttpPost(UserEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] UserCredentialsRequest input, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _userService.Create(input, cancel), UserMapper.MapToCreateUserResponse);
+            return await _controllerHelper.CreateAndRespond(() => _userService.Create(input, cancel), UserMapper.MapToRegisterUserResponse, _mapper);
         }
 
         [HttpPost(UserEndpoints.Login)]
@@ -86,7 +89,7 @@ namespace webapi.Controllers
 
             return Ok(new LoginUserResponse
             {
-                AccesToken = new JwtHelper(_configuration).GenerateAccessToken(user.Username, user.IsSuperuser)
+                AccessToken = new JwtHelper(_configuration).GenerateAccessToken(user.Username, user.IsSuperuser)
             });
         }
     }

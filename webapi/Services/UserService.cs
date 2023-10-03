@@ -34,7 +34,7 @@ namespace webapi.Services
             return await _userRepository.GetAllUsernames(cancel);
         }
 
-        public async Task<User?> Create(UserCredentialsRequest input, CancellationToken cancel)
+        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel)
         {
             if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
             {

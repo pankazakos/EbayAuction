@@ -8,6 +8,7 @@ using webapi.Contracts.Policies;
 using webapi.Database;
 using webapi.Models;
 using webapi.Repository;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Authorization
 builder.Services.AddAuthorization(options => options.AddPolicy(Policies.Admin, policy => policy.RequireClaim("IsSuperuser", "True")));
 
+// AutoMapper configuration
+var config = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<MappingProfile>();
+});
+
+var mapper = config.CreateMapper();
+
+builder.Services.AddSingleton(mapper);
+
+// Build app
 var app = builder.Build();
 
 // Create admin
