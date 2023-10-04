@@ -75,5 +75,19 @@ namespace webapi.Repository
 
             return user;
         }
+
+        public async Task Delete(User user, CancellationToken cancel = default)
+        {
+            _dbContext.Users.Remove(user);
+            try
+            {
+                await _dbContext.SaveChangesAsync(cancel);
+            }
+            catch (Exception)
+            {
+                _dbContext.Users.Add(user);
+                throw;
+            }
+        }
     }
 }

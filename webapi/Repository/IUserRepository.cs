@@ -1,5 +1,4 @@
 ﻿using webapi.Contracts.Requests;
-using webapi.Contracts.Responses;
 using webapi.Models;
 
 namespace webapi.Repository
@@ -15,5 +14,7 @@ namespace webapi.Repository
         public Task<List<string>> GetAllUsernames(CancellationToken cancel = default);
 
         public Task<User> Create(UserCredentialsRequest input, CancellationToken cancel = default);
+
+        public Task Delete(User user, CancellationToken cancel = default);
     }
 }

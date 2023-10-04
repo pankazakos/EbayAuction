@@ -67,6 +67,18 @@ namespace webapi.Controllers
             return Ok(user.MapToResponse<NoPasswordUserResponse>(_mapper));
         }
 
+        [Authorize(Policy = Policies.Admin)]
+        [HttpDelete(UserEndpoints.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancel = default)
+        {
+            if(await _userService.Delete(id, cancel))
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
+
         [HttpPost(UserEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] UserCredentialsRequest input, CancellationToken cancel = default)
         {

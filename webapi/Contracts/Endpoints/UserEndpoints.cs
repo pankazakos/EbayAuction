@@ -6,6 +6,7 @@
         public const string All = "All";
         public const string Usernames = "Usernames";
         public const string GetById = "{id:int}";
+        public const string Delete = "{id:int}";
         public const string Create = "Create";
         public const string Login = "Login";
     }

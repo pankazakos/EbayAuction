@@ -40,7 +40,7 @@ namespace webapi.Services
                 throw new ArgumentException("Username and password are required.");
             }
 
-            var user = await _userRepository.GetByUsername(input.Username);
+            var user = await _userRepository.GetByUsername(input.Username, cancel);
 
             if (user != null)
             {
@@ -48,6 +48,27 @@ namespace webapi.Services
             }
 
             return await _userRepository.Create(input, cancel);
+        }
+
+        public async Task<bool> Delete(int id, CancellationToken cancel = default)
+        {
+            var user = await _userRepository.GetById(id, cancel);
+            if (user is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                await _userRepository.Delete(user, cancel);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+
         }
     }
 }
