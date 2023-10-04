@@ -46,7 +46,7 @@ namespace webapi.Controllers
             return Ok(usernames);
         }
 
-        [Authorize(Policy = Policies.SelfUser)]
+        [AuthorizeMultiplePolicies(Policies.Admin, Policies.SelfUser)]
         [HttpGet(UserEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancel = default)
         {
