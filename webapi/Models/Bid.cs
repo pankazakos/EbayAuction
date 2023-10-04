@@ -1,6 +1,6 @@
 ﻿namespace webapi.Models
 {
-    public class Bid
+    public class Bid : IModel
     {
         public long BidId { get; init; }
         public DateTime Time { get; init; }

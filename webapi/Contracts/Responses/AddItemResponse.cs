@@ -1,6 +1,6 @@
 ﻿namespace webapi.Contracts.Responses
 {
-    public class AddItemResponse
+    public class AddItemResponse : IItemResponse
     {
         public long ItemId { get; init; }
 

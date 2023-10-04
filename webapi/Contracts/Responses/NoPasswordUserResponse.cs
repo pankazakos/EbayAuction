@@ -3,9 +3,9 @@ using webapi.Models;
 
 namespace webapi.Contracts.Responses
 {
-    public class NoPasswordUserResponse
+    public class NoPasswordUserResponse : IUserResponse
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
         public string Username { get; init; } = string.Empty;
         public string FirstName { get; init; } = string.Empty;
         public string LastName { get; init; } = string.Empty;
@@ -20,7 +20,7 @@ namespace webapi.Contracts.Responses
         public bool IsActive { get; init; } = true;
 
         // navigation properties
-        public ICollection<Bid> Bids { get; set; } = new List<Bid>();
+        public ICollection<Bid> Bids { get; init; } = new List<Bid>();
         public ICollection<Item> Items { get; init; } = new List<Item>();
     }
 }

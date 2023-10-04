@@ -2,7 +2,7 @@
 
 namespace webapi.Models
 {
-    public class Item
+    public class Item : IModel
     {
         [Key]
         public long ItemId { get; init; }

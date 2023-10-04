@@ -8,9 +8,32 @@ namespace webapi.Utilities
     {
         public MappingProfile()
         {
-            // Define your mappings here
-            CreateMap<User, NoPasswordUserResponse>();
-            CreateMap<User, RegisterUserResponse>();
+            var entityToInterfaceMappings = new Dictionary<Type, Type>
+            {
+                { typeof(User), typeof(IUserResponse) },
+                { typeof(Item), typeof(IItemResponse) }
+            };
+
+            foreach (var mapping in entityToInterfaceMappings)
+            {
+                var responseTypes = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(t => t.IsClass &&
+                                !t.IsAbstract &&
+                                t.GetInterfaces().Contains(mapping.Value))
+                    .ToList();
+
+                foreach (var responseType in responseTypes)
+                {
+                    var mapMethod = typeof(Profile)
+                        .GetMethods()
+                        .First(m => m.Name == nameof(CreateMap) && m.IsGenericMethod)
+                        .MakeGenericMethod(mapping.Key, responseType);
+
+                    mapMethod.Invoke(this, null);
+                }
+            }
+
         }
     }
 

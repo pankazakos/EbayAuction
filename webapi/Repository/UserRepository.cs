@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using webapi.Contracts.Requests;
-using webapi.Contracts.Responses;
 using webapi.Database;
 using webapi.Models;
 using webapi.Utilities;
@@ -16,31 +15,31 @@ namespace webapi.Repository
             _dbContext = context;
         }
 
-        public async Task<User?> GetById(int id, CancellationToken cancel)
+        public async Task<User?> GetById(int id, CancellationToken cancel = default)
         {
             var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id, cancel);
             return user;
         }
 
-        public async Task<User?> GetByUsername(string username)
+        public async Task<User?> GetByUsername(string username, CancellationToken cancel = default)
         {
-            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username, cancel);
             return user;
         }
 
-        public async Task<List<User>> GetAll(CancellationToken cancel)
+        public async Task<List<User>> GetAll(CancellationToken cancel = default)
         {
             var users = await _dbContext.Users.ToListAsync(cancel);
             return users;
         }
 
-        public async Task<List<string>> GetAllUsernames(CancellationToken cancel)
+        public async Task<List<string>> GetAllUsernames(CancellationToken cancel = default)
         {
             var usernames = await _dbContext.Users.Select(u => u.Username).ToListAsync(cancel);
             return usernames;
         }
 
-        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel)
+        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel = default)
         {
             var salt = PasswordHelper.GenerateSalt();
             var hashedPassword = PasswordHelper.HashPassword(input.Password, salt);

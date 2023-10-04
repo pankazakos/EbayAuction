@@ -63,19 +63,19 @@ namespace webapi.Controllers
                 return Forbid();
             }
 
-            return Ok(user.MapToNoPasswordUserResponse(_mapper));
+            return Ok(user.MapToResponse<NoPasswordUserResponse>(_mapper));
         }
 
         [HttpPost(UserEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] UserCredentialsRequest input, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _userService.Create(input, cancel), UserMapper.MapToRegisterUserResponse, _mapper);
+            return await _controllerHelper.CreateAndRespond(() => _userService.Create(input, cancel), AppMapper.MapToResponse<RegisterUserResponse>, _mapper);
         }
 
         [HttpPost(UserEndpoints.Login)]
         public async Task<IActionResult> Login([FromBody] UserCredentialsRequest input, CancellationToken cancel = default)
         {
-            var user = await _userService.GetByUsername(input.Username);
+            var user = await _userService.GetByUsername(input.Username, cancel);
 
             if (user is null)
             {

@@ -1,5 +1,4 @@
 ﻿using webapi.Contracts.Requests;
-using webapi.Contracts.Responses;
 using webapi.Models;
 using webapi.Repository;
 
@@ -14,27 +13,27 @@ namespace webapi.Services
             _userRepository = userRepository;
         }
 
-        public async Task<User?> GetById(int id, CancellationToken cancel)
+        public async Task<User?> GetById(int id, CancellationToken cancel = default)
         {
             return await _userRepository.GetById(id, cancel);
         }
 
-        public async Task<User?> GetByUsername(string username)
+        public async Task<User?> GetByUsername(string username, CancellationToken cancel = default)
         {
-            return await _userRepository.GetByUsername(username);
+            return await _userRepository.GetByUsername(username, cancel);
         }
 
-        public async Task<List<User>> GetAll(CancellationToken cancel)
+        public async Task<List<User>> GetAll(CancellationToken cancel = default)
         {
             return await _userRepository.GetAll(cancel);
         }
 
-        public async Task<List<string>> GetAllUsernames(CancellationToken cancel)
+        public async Task<List<string>> GetAllUsernames(CancellationToken cancel = default)
         {
             return await _userRepository.GetAllUsernames(cancel);
         }
 
-        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel)
+        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel = default)
         {
             if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
             {

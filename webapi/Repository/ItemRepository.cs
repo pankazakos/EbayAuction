@@ -14,7 +14,7 @@ namespace webapi.Repository
             _dbContext = context;
         }
 
-        public async Task<Item> Create(CreateItemRequest item, CancellationToken cancel)
+        public async Task<Item> Create(CreateItemRequest item, CancellationToken cancel = default)
         {
             var newItem = new Item
             {
@@ -47,7 +47,7 @@ namespace webapi.Repository
             return newItem;
         }
 
-        public async Task<Item?> GetById(long id, CancellationToken cancel)
+        public async Task<Item?> GetById(long id, CancellationToken cancel = default)
         {
             var item = await _dbContext.Items.SingleOrDefaultAsync(i => i.ItemId == id, cancel);
 
@@ -55,7 +55,7 @@ namespace webapi.Repository
         }
 
 
-        public async Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel)
+        public async Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel = default)
         {
             var items = await _dbContext.Items.Where(i => i.Active == active && i.SellerId == userId).ToListAsync(cancel);
 

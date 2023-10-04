@@ -7,6 +7,7 @@ using webapi.Services;
 using webapi.Utilities;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
+using webapi.Contracts.Responses;
 
 namespace webapi.Controllers
 {
@@ -31,7 +32,7 @@ namespace webapi.Controllers
         [HttpPost(ItemEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] CreateItemRequest item, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel), ItemMapper.MapToCreateItemResponse, _mapper);
+            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel), AppMapper.MapToResponse<AddItemResponse>, _mapper);
         }
 
         [Authorize]

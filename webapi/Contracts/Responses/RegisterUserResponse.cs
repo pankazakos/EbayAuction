@@ -1,6 +1,6 @@
 ﻿namespace webapi.Contracts.Responses
 {
-    public class RegisterUserResponse
+    public class RegisterUserResponse : IUserResponse
     {
         public long Id { get; init; }
 

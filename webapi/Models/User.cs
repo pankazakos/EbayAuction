@@ -2,7 +2,7 @@
 
 namespace webapi.Models
 {
-    public class User
+    public class User : IModel
     {
         public int Id { get; set; }
         public string Username { get; init; } = string.Empty;
