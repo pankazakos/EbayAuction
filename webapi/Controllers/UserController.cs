@@ -7,7 +7,8 @@ using webapi.Utilities;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
 using webapi.Contracts.Policies;
-using webapi.Contracts.Responses;
+using webapi.Contracts.Responses.Other;
+using webapi.Contracts.Responses.User;
 
 namespace webapi.Controllers
 {

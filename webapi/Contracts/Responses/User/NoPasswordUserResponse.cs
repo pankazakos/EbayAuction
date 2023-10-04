@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using webapi.Models;
 
-namespace webapi.Contracts.Responses
+namespace webapi.Contracts.Responses.User
 {
     public class NoPasswordUserResponse : IUserResponse
     {
@@ -21,6 +21,6 @@ namespace webapi.Contracts.Responses
 
         // navigation properties
         public ICollection<Bid> Bids { get; init; } = new List<Bid>();
-        public ICollection<Item> Items { get; init; } = new List<Item>();
+        public ICollection<Models.Item> Items { get; init; } = new List<Models.Item>();
     }
 }

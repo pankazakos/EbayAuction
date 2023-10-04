@@ -1,4 +1,4 @@
-﻿namespace webapi.Contracts.Responses
+﻿namespace webapi.Contracts.Responses.User
 {
     public class RegisterUserResponse : IUserResponse
     {

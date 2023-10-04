@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using webapi.Contracts.Responses;
+using webapi.Contracts.Responses.Item;
+using webapi.Contracts.Responses.User;
 using webapi.Models;
 
 namespace webapi.Utilities

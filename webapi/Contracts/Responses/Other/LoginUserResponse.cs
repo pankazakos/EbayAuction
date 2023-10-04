@@ -1,4 +1,4 @@
-﻿namespace webapi.Contracts.Responses
+﻿namespace webapi.Contracts.Responses.Other
 {
     public class LoginUserResponse
     {
