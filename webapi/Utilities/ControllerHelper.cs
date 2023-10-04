@@ -5,7 +5,22 @@ namespace webapi.Utilities
 {
     public class ControllerHelper : Controller
     {
-        public string UsernameClaim => User.Claims.First(c => c.Type == "username").Value;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ControllerHelper(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public string UsernameClaim
+        {
+            get
+            {
+                var user = _httpContextAccessor!.HttpContext!.User;
+                var usernameClaim = user.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+                return usernameClaim!;
+            }
+        }
 
         public IActionResult NotFoundRespond<T>()
         {

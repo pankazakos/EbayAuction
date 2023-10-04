@@ -24,6 +24,8 @@ builder.Services.AddScoped<IAuctionContext, AuctionContext>();
 builder.Services.AddDbContext<AuctionContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpContextAccessor();
+
 // Add Service, Repository, and Controller helper
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IItemService, ItemService>();

@@ -99,10 +99,11 @@ namespace webapi.Controllers
 
                 return BadRequest("Password is incorrect.");
 
+            var jwt = new JwtHelper(_configuration).GenerateAccessToken(user.Username, user.IsSuperuser);
 
             return Ok(new LoginUserResponse
             {
-                AccessToken = new JwtHelper(_configuration).GenerateAccessToken(user.Username, user.IsSuperuser)
+                AccessToken = jwt
             });
         }
     }
