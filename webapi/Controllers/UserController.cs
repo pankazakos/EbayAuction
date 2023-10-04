@@ -46,7 +46,7 @@ namespace webapi.Controllers
             return Ok(usernames);
         }
 
-        [Authorize]
+        [Authorize(Policy = Policies.SelfUser)]
         [HttpGet(UserEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancel = default)
         {
@@ -55,13 +55,6 @@ namespace webapi.Controllers
             if (user is null)
             {
                 return _controllerHelper.CheckNullAndRespond(user);
-            }
-
-            var username = _controllerHelper.UsernameClaim;
-
-            if (username != user.Username && !_controllerHelper.IsSuperuserClaim)
-            {
-                return Forbid();
             }
 
             return Ok(user.MapToResponse<NoPasswordUserResponse>(_mapper));

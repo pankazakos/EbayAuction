@@ -9,6 +9,7 @@ using webapi.Database;
 using webapi.Models;
 using webapi.Repository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<ControllerHelper>();
+builder.Services.AddScoped<IAuthorizationHandler, SelfUserAuthorizationHandler>();
 
 // Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -50,7 +52,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 });
 
 // Authorization
-builder.Services.AddAuthorization(options => options.AddPolicy(Policies.Admin, policy => policy.RequireClaim("IsSuperuser", "True")));
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.Admin, policy => policy.RequireClaim("IsSuperuser", "True"));
+    options.AddPolicy(Policies.SelfUser, policy => policy.AddRequirements(new SelfUserRequirement()));
+});
 
 // AutoMapper configuration
 var config = new MapperConfiguration(cfg =>
