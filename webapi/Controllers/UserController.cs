@@ -59,7 +59,7 @@ namespace webapi.Controllers
 
             var username = _controllerHelper.UsernameClaim;
 
-            if (username != user.Username && !user.IsSuperuser)
+            if (username != user.Username && !_controllerHelper.IsSuperuserClaim)
             {
                 return Forbid();
             }

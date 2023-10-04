@@ -22,6 +22,16 @@ namespace webapi.Utilities
             }
         }
 
+        public bool IsSuperuserClaim
+        {
+            get
+            {
+                var user = _httpContextAccessor!.HttpContext!.User;
+                var isSuperuserClaim= user.Claims.FirstOrDefault(c => c.Type == "IsSuperuser")?.Value;
+                return bool.Parse(isSuperuserClaim!);
+            }
+        }
+
         public IActionResult NotFoundRespond<T>()
         {
             return NotFound($"No {typeof(T).Name} found.");
