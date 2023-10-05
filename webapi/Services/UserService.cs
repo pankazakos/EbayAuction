@@ -23,7 +23,7 @@ namespace webapi.Services
             return await _userRepository.GetByUsername(username, cancel);
         }
 
-        public async Task<List<User>> GetAll(CancellationToken cancel = default)
+        public async Task<IEnumerable<User>> GetAll(CancellationToken cancel = default)
         {
             return await _userRepository.GetAll(cancel);
         }

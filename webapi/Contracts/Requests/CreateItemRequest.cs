@@ -4,7 +4,7 @@
     {
         public string Name { get; set; } = string.Empty;
 
-        public List<long> CategoryIds { get; set; } = new();
+        public List<int> CategoryIds { get; set; } = new();
 
         public float FirstBid { get; set; }
 

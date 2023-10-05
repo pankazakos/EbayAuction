@@ -9,6 +9,7 @@ using webapi.Contracts.Mapping;
 using webapi.Contracts.Policies;
 using webapi.Contracts.Responses.Other;
 using webapi.Contracts.Responses.User;
+using webapi.Models;
 
 namespace webapi.Controllers
 {
@@ -64,12 +65,12 @@ namespace webapi.Controllers
         [HttpDelete(UserEndpoints.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancel = default)
         {
-            if(await _userService.Delete(id, cancel))
+            if (await _userService.Delete(id, cancel))
             {
                 return NoContent();
             }
 
-            return NotFound();
+            return _controllerHelper.NotFoundRespond<User>();
         }
 
         [HttpPost(UserEndpoints.Create)]

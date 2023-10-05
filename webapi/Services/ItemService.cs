@@ -20,6 +20,9 @@ namespace webapi.Services
                 throw new ArgumentException("Invalid data.");
             }
 
+            // Get or create categories
+
+
             return await _itemRepository.Create(item, cancel);
         }
 

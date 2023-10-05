@@ -9,7 +9,7 @@ namespace webapi.Services
 
         public Task<User?> GetByUsername(string username, CancellationToken cancel = default);
 
-        public Task<List<User>> GetAll(CancellationToken cancel = default);
+        public Task<IEnumerable<User>> GetAll(CancellationToken cancel = default);
 
         public Task<List<string>> GetAllUsernames(CancellationToken cancel = default);
 

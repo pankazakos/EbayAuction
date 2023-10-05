@@ -41,7 +41,7 @@ namespace webapi.Controllers
         {
             var username = _controllerHelper.UsernameClaim;
 
-            var user = await _userService.GetByUsername(username);
+            var user = await _userService.GetByUsername(username, cancel);
 
             if (user is null)
             {

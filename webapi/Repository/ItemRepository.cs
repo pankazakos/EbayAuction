@@ -2,16 +2,19 @@
 using webapi.Contracts.Requests;
 using webapi.Database;
 using webapi.Models;
+using webapi.Services;
 
 namespace webapi.Repository
 {
     public class ItemRepository : IItemRepository
     {
         private readonly IAuctionContext _dbContext;
+        private readonly ICategoryService _categoryService;
 
-        public ItemRepository(IAuctionContext context)
+        public ItemRepository(IAuctionContext context, ICategoryService categoryService)
         {
             _dbContext = context;
+            _categoryService = categoryService;
         }
 
         public async Task<Item> Create(CreateItemRequest item, CancellationToken cancel = default)
@@ -28,9 +31,9 @@ namespace webapi.Repository
                 Description = item.Description,
             };
 
-            var categories = await _dbContext.Categories.Where(c => item.CategoryIds.Contains(c.Id)).ToListAsync(cancel);
+            var categories = await _categoryService.FilterWithIds(item.CategoryIds, cancel);
 
-            newItem.Categories = categories;
+            newItem.Categories = new List<Category>(categories);
 
             _dbContext.Items.Add(newItem);
 
