@@ -53,6 +53,7 @@ namespace webapi.Services
         public async Task<bool> Delete(int id, CancellationToken cancel = default)
         {
             var user = await _userRepository.GetById(id, cancel);
+
             if (user is null)
             {
                 return false;
@@ -68,7 +69,6 @@ namespace webapi.Services
             }
 
             return true;
-
         }
     }
 }

@@ -34,7 +34,10 @@ builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<ControllerHelper>();
+
+// Add Authorization handlers
 builder.Services.AddScoped<IAuthorizationHandler, SelfUserAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ItemOwnerAuthorizationHandler>();
 
 // Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -57,6 +60,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(Policies.Admin, policy => policy.RequireClaim("IsSuperuser", "True"));
     options.AddPolicy(Policies.SelfUser, policy => policy.AddRequirements(new SelfUserRequirement()));
+    options.AddPolicy(Policies.ItemOwner, policy => policy.AddRequirements(new ItemOwnerRequirement()));
 });
 
 // AutoMapper configuration

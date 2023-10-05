@@ -7,6 +7,7 @@ using webapi.Services;
 using webapi.Utilities;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
+using webapi.Contracts.Policies;
 using webapi.Contracts.Responses.Item;
 
 namespace webapi.Controllers
@@ -35,28 +36,28 @@ namespace webapi.Controllers
             return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel), AppMapper.MapToResponse<AddItemResponse>, _mapper);
         }
 
-        [Authorize]
+        [Authorize(Policy = Policies.ItemOwner)]
         [HttpGet(ItemEndpoints.Inactive)]
         public async Task<IActionResult> ListInactive(CancellationToken cancel = default)
         {
             return await ListAll(active: true, cancel);
         }
 
-        [Authorize]
+        [Authorize(Policy = Policies.ItemOwner)]
         [HttpGet(ItemEndpoints.Active)]
         public async Task<IActionResult> ListActive(CancellationToken cancel = default)
         {
             return await ListAll(active: false, cancel);
         }
 
-        [Authorize]
+        [Authorize(Policy = Policies.ItemOwner)]
         [HttpGet(ItemEndpoints.Bidden)]
         public async Task<IActionResult> ListBidden(CancellationToken cancel = default)
         {
             return await ListAll(active: true, cancel);
         }
 
-        [Authorize]
+        [Authorize(Policy = Policies.ItemOwner)]
         [HttpPut(ItemEndpoints.Activate)]
         public async Task<IActionResult> Activate([FromRoute] long id, [FromBody] ActivateItemRequest input, CancellationToken cancel = default)
         {
