@@ -25,6 +25,7 @@ builder.Services.AddScoped<IAuctionContext, AuctionContext>();
 builder.Services.AddDbContext<AuctionContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add Http context accessor
 builder.Services.AddHttpContextAccessor();
 
 // Add Service, Repository, and Controller helper
@@ -83,7 +84,7 @@ using (var scope = app.Services.CreateScope())
     const string adminPassword = "admin";
     var adminUser = await userService.GetByUsername(adminUsername);
 
-    if (adminUser == null)
+    if (adminUser is null)
     {
         var salt = PasswordHelper.GenerateSalt();
         var hashedPassword = PasswordHelper.HashPassword(adminPassword, salt);

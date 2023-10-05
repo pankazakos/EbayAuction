@@ -43,7 +43,7 @@ namespace webapi.Controllers
 
             var user = await _userService.GetByUsername(username);
 
-            if (user == null)
+            if (user is null)
             {
                 return _controllerHelper.NotFoundRespond<User>();
             }

@@ -15,7 +15,7 @@ namespace webapi.Services
 
         public async Task<Item> Create(CreateItemRequest item, CancellationToken cancel)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentException("Invalid data.");
             }
