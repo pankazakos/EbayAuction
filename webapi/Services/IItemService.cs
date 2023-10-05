@@ -7,8 +7,10 @@ namespace webapi.Services
     {
         public Task<Item> Create(CreateItemRequest item, CancellationToken cancel = default);
 
-        public Task<Item?> GetById(long id, CancellationToken token = default);
+        public Task<Item?> GetById(long id, CancellationToken cancel = default);
 
-        public Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken token = default);
+        public Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel = default);
+
+        public Task<Item> Activate(long id, ActivateItemRequest input, CancellationToken cancel = default);
     }
 }

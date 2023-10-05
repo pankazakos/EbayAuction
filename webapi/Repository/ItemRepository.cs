@@ -64,5 +64,23 @@ namespace webapi.Repository
 
             return items;
         }
+
+        public async Task<Item> Activate(long id, DateTime expiration, CancellationToken cancel = default)
+        {
+            var item = await GetById(id, cancel);
+
+            if (item is null)
+            {
+                throw new ArgumentException("Cannot find item with given id.");
+            }
+
+            item.Started = DateTime.Now;
+            item.Ends = expiration;
+            item.Active = true;
+
+            await _dbContext.SaveChangesAsync(cancel);
+
+            return item;
+        }
     }
 }

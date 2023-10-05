@@ -36,24 +36,6 @@ namespace webapi.Controllers
         }
 
         [Authorize]
-        [HttpGet(ItemEndpoints.All)]
-        public async Task<IActionResult> ListAll(bool active, CancellationToken cancel = default)
-        {
-            var username = _controllerHelper.UsernameClaim;
-
-            var user = await _userService.GetByUsername(username, cancel);
-
-            if (user is null)
-            {
-                return _controllerHelper.NotFoundRespond<User>();
-            }
-
-            var items = await _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel);
-
-            return Ok(items);
-        }
-
-        [Authorize]
         [HttpGet(ItemEndpoints.Inactive)]
         public async Task<IActionResult> ListInactive(CancellationToken cancel = default)
         {
@@ -72,6 +54,39 @@ namespace webapi.Controllers
         public async Task<IActionResult> ListBidden(CancellationToken cancel = default)
         {
             return await ListAll(active: true, cancel);
+        }
+
+        [Authorize]
+        [HttpPut(ItemEndpoints.Activate)]
+        public async Task<IActionResult> Activate([FromRoute] long id, [FromBody] ActivateItemRequest input, CancellationToken cancel = default)
+        {
+            try
+            {
+                var item = await _itemService.Activate(id, input, cancel);
+
+                return Ok(item);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet(ItemEndpoints.All)]
+        public async Task<IActionResult> ListAll(bool active, CancellationToken cancel = default)
+        {
+            var username = _controllerHelper.UsernameClaim;
+
+            var user = await _userService.GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                return _controllerHelper.NotFoundRespond<User>();
+            }
+
+            var items = await _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel);
+
+            return Ok(items);
         }
 
         [HttpGet(ItemEndpoints.GetById)]
