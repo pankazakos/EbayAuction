@@ -14,8 +14,10 @@
 
         public const string Bidden = "Bidden";
 
-        public const string GetById = "{id:int}";
+        public const string GetById = "{id:long}";
 
         public const string Activate = "Activate/{id:long}";
+
+        public const string Bid = "bid/{id:long}";
     }
 }
