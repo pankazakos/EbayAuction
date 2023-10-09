@@ -4,7 +4,7 @@
     {
         public const string BaseUrl = "api/Item";
 
-        public const string Create = "Create";
+        public const string Create = "";
 
         public const string All = "All";
 
