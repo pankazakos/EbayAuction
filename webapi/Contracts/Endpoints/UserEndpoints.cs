@@ -12,7 +12,7 @@
 
         public const string Delete = "{id:int}";
 
-        public const string Create = "Create";
+        public const string Create = "";
 
         public const string Login = "Login";
     }
