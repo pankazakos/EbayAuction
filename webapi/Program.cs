@@ -33,6 +33,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBidService, BidService>();
+builder.Services.AddScoped<IBidRepository, BidRepository>();
 builder.Services.AddScoped<ControllerHelper>();
 
 // Add Authorization handlers
