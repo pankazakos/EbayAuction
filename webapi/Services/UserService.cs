@@ -33,7 +33,7 @@ namespace webapi.Services
             return await _userRepository.GetAllUsernames(cancel);
         }
 
-        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel = default)
+        public async Task<User> Create(RegisterUserRequest input, CancellationToken cancel = default)
         {
             if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
             {

@@ -39,24 +39,23 @@ namespace webapi.Repository
             return usernames;
         }
 
-        public async Task<User> Create(UserCredentialsRequest input, CancellationToken cancel = default)
+        public async Task<User> Create(RegisterUserRequest input, CancellationToken cancel = default)
         {
             var salt = PasswordHelper.GenerateSalt();
             var hashedPassword = PasswordHelper.HashPassword(input.Password, salt);
 
-            // Create a new user
             var user = new User
             {
                 Username = input.Username,
                 PasswordHash = hashedPassword,
                 PasswordSalt = salt,
-                FirstName = "First_Name",
-                LastName = "Last_Name",
+                FirstName = input.FirstName,
+                LastName = input.LastName,
                 LastLogin = null,
                 DateJoined = DateTime.Now,
-                Email = $"{input.Username}@email.com",
-                Country = "USA",
-                Location = "Chicago",
+                Email = input.Email,
+                Country = input.Country,
+                Location = input.Location,
                 IsSuperuser = false,
                 IsActive = true
             };

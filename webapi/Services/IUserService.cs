@@ -13,7 +13,7 @@ namespace webapi.Services
 
         public Task<List<string>> GetAllUsernames(CancellationToken cancel = default);
 
-        public Task<User> Create(UserCredentialsRequest input, CancellationToken cancel = default);
+        public Task<User> Create(RegisterUserRequest input, CancellationToken cancel = default);
 
         public Task<bool> Delete(int id, CancellationToken cancel = default);
     }
