@@ -8,8 +8,8 @@
 
         public const string GetAll = "All";
 
-        public const string Create = "Create";
+        public const string Create = "";
 
-        public const string Delete = "Delete";
+        public const string Delete = "{id:int}";
     }
 }
