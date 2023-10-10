@@ -2,18 +2,12 @@
 {
     public class CreateItemRequest
     {
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
-        public List<int> CategoryIds { get; set; } = new();
+        public List<int> CategoryIds { get; init; } = new();
 
-        public float FirstBid { get; set; }
+        public float FirstBid { get; init; }
 
-        public DateTime? Started { get; set; }
-
-        public DateTime? Ends { get; set; }
-
-        public int SellerId { get; set; }
-
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; init; } = string.Empty;
     }
 }

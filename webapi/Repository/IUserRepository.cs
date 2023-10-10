@@ -18,5 +18,7 @@ namespace webapi.Repository
         public Task Delete(User user, CancellationToken cancel = default);
 
         public Task UpdateLastLogin(User user, CancellationToken cancel = default);
+
+        public Task<int> UsernameToId(string username, CancellationToken cancel = default);
     }
 }

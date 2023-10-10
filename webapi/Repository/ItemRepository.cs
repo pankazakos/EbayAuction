@@ -17,18 +17,20 @@ namespace webapi.Repository
             _categoryService = categoryService;
         }
 
-        public async Task<Item> Create(CreateItemRequest item, CancellationToken cancel = default)
+        public async Task<Item> Create(CreateItemRequest item, int userId, CancellationToken cancel = default)
         {
             var newItem = new Item
             {
                 Name = item.Name,
-                FirstBid = item.FirstBid,
                 Currently = item.FirstBid,
+                BuyPrice = null,
+                FirstBid = item.FirstBid,
+                NumBids = 0,
+                Started = null,
+                Ends = null,
                 Active = false,
-                Started = item.Started,
-                Ends = item.Ends,
-                SellerId = item.SellerId,
                 Description = item.Description,
+                SellerId = userId,
             };
 
             var categories = await _categoryService.FilterWithIds(item.CategoryIds, cancel);

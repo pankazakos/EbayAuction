@@ -5,7 +5,7 @@ namespace webapi.Services
 {
     public interface IItemService
     {
-        public Task<Item> Create(CreateItemRequest item, CancellationToken cancel = default);
+        public Task<Item> Create(CreateItemRequest item, string username, CancellationToken cancel = default);
 
         public Task<Item?> GetById(long id, CancellationToken cancel = default);
 

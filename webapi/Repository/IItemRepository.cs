@@ -5,7 +5,7 @@ namespace webapi.Repository
 {
     public interface IItemRepository
     {
-        public Task<Item> Create(CreateItemRequest item, CancellationToken cancel = default);
+        public Task<Item> Create(CreateItemRequest item, int userId, CancellationToken cancel = default);
 
         public Task<Item?> GetById(long id, CancellationToken cancel = default);
 

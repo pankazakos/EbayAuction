@@ -95,5 +95,17 @@ namespace webapi.Repository
 
             await _dbContext.SaveChangesAsync(cancel);
         }
+
+        public async Task<int> UsernameToId(string username, CancellationToken cancel = default)
+        {
+            var user = await GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                throw new InvalidOperationException("Username not found");
+            }
+
+            return user.Id;
+        }
     }
 }

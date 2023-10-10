@@ -34,7 +34,15 @@ namespace webapi.Repository
             var newCategory = new Category { Name = name };
 
             _dbContext.Categories.Add(newCategory);
-            await _dbContext.SaveChangesAsync(cancel);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync(cancel);
+            }
+            catch(Exception)
+            {
+                _dbContext.Categories.Remove(newCategory);
+            }
 
             return newCategory;
         }

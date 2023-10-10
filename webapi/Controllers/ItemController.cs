@@ -33,7 +33,9 @@ namespace webapi.Controllers
         [HttpPost(ItemEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] CreateItemRequest item, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, cancel), AppMapper.MapToResponse<AddItemResponse>, _mapper);
+            var username = _controllerHelper.UsernameClaim;
+
+            return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, username, cancel), AppMapper.MapToResponse<AddItemResponse>, _mapper);
         }
 
         [Authorize(Policy = Policies.ItemOwner)]

@@ -9,23 +9,26 @@ namespace webapi.Services
     public class ItemService : IItemService
     {
         private readonly IItemRepository _itemRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ItemService(IItemRepository itemRepository)
+        public ItemService(IItemRepository itemRepository, IUserRepository userRepository, ICategoryRepository categoryRepository)
         {
             _itemRepository = itemRepository;
+            _userRepository = userRepository;
+            _categoryRepository = categoryRepository;
         }
 
-        public async Task<Item> Create(CreateItemRequest item, CancellationToken cancel)
+        public async Task<Item> Create(CreateItemRequest item, string username, CancellationToken cancel)
         {
             if (item is null)
             {
                 throw new ArgumentException("Invalid data.");
             }
 
-            // Get or create categories
+            var userId = await _userRepository.UsernameToId(username, cancel);
 
-
-            return await _itemRepository.Create(item, cancel);
+            return await _itemRepository.Create(item, userId, cancel);
         }
 
         public async Task<Item?> GetById(long id, CancellationToken cancel)
