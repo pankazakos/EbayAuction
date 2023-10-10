@@ -53,7 +53,7 @@ namespace webapi.Repository
                 LastName = input.LastName,
                 LastLogin = null,
                 DateJoined = DateTime.Now,
-                Email = input.Email,
+                Email = $"{input.Username}@email.com",
                 Country = input.Country,
                 Location = input.Location,
                 IsSuperuser = false,
