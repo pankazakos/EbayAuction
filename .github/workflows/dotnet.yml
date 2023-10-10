@@ -20,6 +20,11 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
+    - name: Install .NET Framework 4.7.2 Developer Pack
+      run: |
+        wget -q https://download.visualstudio.microsoft.com/download/pr/7afca223-55d2-470a-8edc-6a1739ae3252/0fd4b9d25747bf285151c878fa8e9e1e/ndp48-devpack-enu.exe -O net472-devpack.exe
+        sudo apt-get install -y wine
+        wine net472-devpack.exe /q /norestart
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
