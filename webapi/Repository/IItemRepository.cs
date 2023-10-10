@@ -12,5 +12,7 @@ namespace webapi.Repository
         public Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel = default);
 
         public Task<Item> Activate(long id, DateTime expiration, CancellationToken cancel = default);
+
+        public Task Delete(Item item, CancellationToken cancel = default);
     }
 }

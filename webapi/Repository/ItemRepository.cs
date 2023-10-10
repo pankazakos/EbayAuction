@@ -82,5 +82,19 @@ namespace webapi.Repository
 
             return item;
         }
+
+        public async Task Delete(Item item, CancellationToken cancel = default)
+        {
+            _dbContext.Items.Remove(item);
+            try
+            {
+                await _dbContext.SaveChangesAsync(cancel);
+            }
+            catch (Exception)
+            {
+                _dbContext.Items.Add(item);
+                throw;
+            }
+        }
     }
 }

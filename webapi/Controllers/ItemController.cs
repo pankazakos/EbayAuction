@@ -73,6 +73,21 @@ namespace webapi.Controllers
             }
         }
 
+        [AuthorizeMultiplePolicies(Policies.Admin, Policies.ItemOwner)]
+        [HttpDelete(ItemEndpoints.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] long id, CancellationToken cancel = default)
+        {
+            try
+            {
+                await _itemService.Delete(id, cancel);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return _controllerHelper.NotFoundRespond<User>();
+            }
+        }
+
         [HttpGet(ItemEndpoints.All)]
         public async Task<IActionResult> ListAll(bool active, CancellationToken cancel = default)
         {

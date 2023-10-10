@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Humanizer.Localisation.NumberToWords;
 using webapi.Contracts.Requests;
 using webapi.Models;
 using webapi.Repository;
@@ -59,6 +60,18 @@ namespace webapi.Services
             }
 
             return await _itemRepository.Activate(id, input.Expiration, cancel);
+        }
+
+        public async Task Delete(long id, CancellationToken cancel = default)
+        {
+            var item = await _itemRepository.GetById(id, cancel);
+
+            if (item is null)
+            {
+                throw new InvalidOperationException("item not found");
+            }
+
+            await _itemRepository.Delete(item, cancel);
         }
     }
 }
