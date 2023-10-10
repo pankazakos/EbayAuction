@@ -70,5 +70,18 @@ namespace webapi.Services
 
             return true;
         }
+
+        public async Task UpdateLastLogin(string username, CancellationToken cancel = default)
+        {
+            var user = await _userRepository.GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                throw new InvalidOperationException("User not found");
+            }
+
+            await _userRepository.UpdateLastLogin(user, cancel);
+        }
+
     }
 }

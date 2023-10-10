@@ -16,5 +16,7 @@ namespace webapi.Repository
         public Task<User> Create(RegisterUserRequest input, CancellationToken cancel = default);
 
         public Task Delete(User user, CancellationToken cancel = default);
+
+        public Task UpdateLastLogin(User user, CancellationToken cancel = default);
     }
 }

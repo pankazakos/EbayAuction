@@ -88,5 +88,12 @@ namespace webapi.Repository
                 throw;
             }
         }
+
+        public async Task UpdateLastLogin(User user, CancellationToken cancel = default)
+        {
+            user.LastLogin = DateTime.Now;
+
+            await _dbContext.SaveChangesAsync(cancel);
+        }
     }
 }

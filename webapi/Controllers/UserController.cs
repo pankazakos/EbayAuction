@@ -90,10 +90,21 @@ namespace webapi.Controllers
             }
 
             if (!PasswordHelper.VerifyPassword(input.Password, user.PasswordHash, user.PasswordSalt))
-
+            {
                 return BadRequest("Password is incorrect.");
 
+            }
+
             var jwt = new JwtHelper(_configuration).GenerateAccessToken(user.Username, user.IsSuperuser);
+
+            try
+            {
+                await _userService.UpdateLastLogin(input.Username, cancel);
+            }
+            catch (InvalidOperationException)
+            {
+                return _controllerHelper.NotFoundRespond<User>();
+            }
 
             return Ok(new LoginUserResponse
             {
