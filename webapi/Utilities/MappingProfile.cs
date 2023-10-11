@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using webapi.Contracts.Responses.bid;
 using webapi.Contracts.Responses.Item;
 using webapi.Contracts.Responses.User;
 using webapi.Models;
@@ -12,7 +13,8 @@ namespace webapi.Utilities
             var entityToInterfaceMappings = new Dictionary<Type, Type>
             {
                 { typeof(User), typeof(IUserResponse) },
-                { typeof(Item), typeof(IItemResponse) }
+                { typeof(Item), typeof(IItemResponse) },
+                { typeof(Bid), typeof(IBidResponse)}
             };
 
             foreach (var mapping in entityToInterfaceMappings)
