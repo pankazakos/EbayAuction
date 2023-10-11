@@ -1,6 +1,6 @@
 ﻿namespace webapi.Contracts.Endpoints
 {
-    public class CategoryEndpoints
+    public static class CategoryEndpoints
     {
         public const string BaseUrl = "api/Category";
 

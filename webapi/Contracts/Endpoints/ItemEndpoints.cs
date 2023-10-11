@@ -1,6 +1,6 @@
 ﻿namespace webapi.Contracts.Endpoints
 {
-    public class ItemEndpoints
+    public static class ItemEndpoints
     {
         public const string BaseUrl = "api/Item";
 
