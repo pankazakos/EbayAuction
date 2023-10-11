@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
 using webapi.Contracts.Requests;
+using webapi.Contracts.Responses;
 using webapi.Contracts.Responses.bid;
 using webapi.Services;
 using webapi.Utilities;
@@ -37,7 +38,9 @@ namespace webapi.Controllers
         {
             var bids = await _bidService.GetItemBids(itemId, cancel);
 
-            return Ok(bids);
+            var mappedBids = bids.Select(bid => bid.MapToResponse<AddBidResponse>(_mapper)).ToList();
+
+            return Ok(mappedBids);
         }
     }
 }
