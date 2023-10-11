@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using webapi.Models;
 
 namespace webapi.Database
@@ -14,5 +15,6 @@ namespace webapi.Database
         DbSet<Bid> Bids { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancel = default);
+        DatabaseFacade Database { get; }
     }
 }

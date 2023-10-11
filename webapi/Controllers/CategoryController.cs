@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Policies;
+using webapi.Contracts.Requests;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities;
@@ -40,11 +41,11 @@ namespace webapi.Controllers
 
         [Authorize(Policy = Policies.Admin)]
         [HttpPost(CategoryEndpoints.Create)]
-        public async Task<IActionResult> Create([FromBody] string name, CancellationToken cancel = default)
+        public async Task<IActionResult> Create([FromBody] AddCategoryRequest body, CancellationToken cancel = default)
         {
             try
             {
-                var category = await _categoryService.Create(name, cancel);
+                var category = await _categoryService.Create(body, cancel);
 
                 return Created(nameof(category), category);
             }

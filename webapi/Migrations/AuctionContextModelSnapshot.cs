@@ -22,13 +22,28 @@ namespace webapi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Auctions.Bid", b =>
+            modelBuilder.Entity("CategoryItem", b =>
                 {
-                    b.Property<long>("BidID")
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ItemsItemId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CategoriesId", "ItemsItemId");
+
+                    b.HasIndex("ItemsItemId");
+
+                    b.ToTable("ItemCategories", (string)null);
+                });
+
+            modelBuilder.Entity("webapi.Models.Bid", b =>
+                {
+                    b.Property<long>("BidId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("BidID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("BidId"));
 
                     b.Property<float>("Amount")
                         .HasColumnType("real");
@@ -42,7 +57,7 @@ namespace webapi.Migrations
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("BidID");
+                    b.HasKey("BidId");
 
                     b.HasIndex("BidderId");
 
@@ -51,7 +66,7 @@ namespace webapi.Migrations
                     b.ToTable("Bids");
                 });
 
-            modelBuilder.Entity("Auctions.Category", b =>
+            modelBuilder.Entity("webapi.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,13 +83,13 @@ namespace webapi.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Auctions.Item", b =>
+            modelBuilder.Entity("webapi.Models.Item", b =>
                 {
-                    b.Property<long>("ItemID")
+                    b.Property<long>("ItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ItemID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ItemId"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -108,14 +123,14 @@ namespace webapi.Migrations
                     b.Property<DateTime?>("Started")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ItemID");
+                    b.HasKey("ItemId");
 
                     b.HasIndex("SellerId");
 
                     b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("Auctions.User", b =>
+            modelBuilder.Entity("webapi.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,7 +143,7 @@ namespace webapi.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
-                    b.Property<DateTime?>("DateJoined")
+                    b.Property<DateTime>("DateJoined")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -153,16 +168,10 @@ namespace webapi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("Latitude")
-                        .HasColumnType("float");
-
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<double?>("Longitude")
-                        .HasColumnType("float");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -186,28 +195,28 @@ namespace webapi.Migrations
 
             modelBuilder.Entity("CategoryItem", b =>
                 {
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("int");
+                    b.HasOne("webapi.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<long>("ItemsItemID")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("CategoriesId", "ItemsItemID");
-
-                    b.HasIndex("ItemsItemID");
-
-                    b.ToTable("ItemCategories", (string)null);
+                    b.HasOne("webapi.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("ItemsItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Auctions.Bid", b =>
+            modelBuilder.Entity("webapi.Models.Bid", b =>
                 {
-                    b.HasOne("Auctions.User", "Bidder")
+                    b.HasOne("webapi.Models.User", "Bidder")
                         .WithMany("Bids")
                         .HasForeignKey("BidderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Auctions.Item", "Item")
+                    b.HasOne("webapi.Models.Item", "Item")
                         .WithMany("Bids")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -218,9 +227,9 @@ namespace webapi.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("Auctions.Item", b =>
+            modelBuilder.Entity("webapi.Models.Item", b =>
                 {
-                    b.HasOne("Auctions.User", "Seller")
+                    b.HasOne("webapi.Models.User", "Seller")
                         .WithMany("Items")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -229,27 +238,12 @@ namespace webapi.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("CategoryItem", b =>
-                {
-                    b.HasOne("Auctions.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Auctions.Item", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsItemID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Auctions.Item", b =>
+            modelBuilder.Entity("webapi.Models.Item", b =>
                 {
                     b.Navigation("Bids");
                 });
 
-            modelBuilder.Entity("Auctions.User", b =>
+            modelBuilder.Entity("webapi.Models.User", b =>
                 {
                     b.Navigation("Bids");
 

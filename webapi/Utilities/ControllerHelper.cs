@@ -16,8 +16,8 @@ namespace webapi.Utilities
         {
             get
             {
-                var user = _httpContextAccessor!.HttpContext!.User;
-                var usernameClaim = user.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+                var user = _httpContextAccessor.HttpContext!.User;
+                var usernameClaim = user.Claims.FirstOrDefault(c => c.Type == "username")!.Value;
                 return usernameClaim!;
             }
         }

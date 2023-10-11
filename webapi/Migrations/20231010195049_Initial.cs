@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,12 +36,10 @@ namespace webapi.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DateJoined = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateJoined = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Country = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Latitude = table.Column<double>(type: "float", nullable: true),
-                    Longitude = table.Column<double>(type: "float", nullable: true),
                     IsSuperuser = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -54,7 +52,7 @@ namespace webapi.Migrations
                 name: "Items",
                 columns: table => new
                 {
-                    ItemID = table.Column<long>(type: "bigint", nullable: false)
+                    ItemId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Currently = table.Column<float>(type: "real", nullable: false),
@@ -69,7 +67,7 @@ namespace webapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Items", x => x.ItemID);
+                    table.PrimaryKey("PK_Items", x => x.ItemId);
                     table.ForeignKey(
                         name: "FK_Items_Users_SellerId",
                         column: x => x.SellerId,
@@ -82,7 +80,7 @@ namespace webapi.Migrations
                 name: "Bids",
                 columns: table => new
                 {
-                    BidID = table.Column<long>(type: "bigint", nullable: false)
+                    BidId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Amount = table.Column<float>(type: "real", nullable: false),
@@ -91,12 +89,12 @@ namespace webapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bids", x => x.BidID);
+                    table.PrimaryKey("PK_Bids", x => x.BidId);
                     table.ForeignKey(
                         name: "FK_Bids_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
-                        principalColumn: "ItemID",
+                        principalColumn: "ItemId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Bids_Users_BidderId",
@@ -111,11 +109,11 @@ namespace webapi.Migrations
                 columns: table => new
                 {
                     CategoriesId = table.Column<int>(type: "int", nullable: false),
-                    ItemsItemID = table.Column<long>(type: "bigint", nullable: false)
+                    ItemsItemId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemCategories", x => new { x.CategoriesId, x.ItemsItemID });
+                    table.PrimaryKey("PK_ItemCategories", x => new { x.CategoriesId, x.ItemsItemId });
                     table.ForeignKey(
                         name: "FK_ItemCategories_Categories_CategoriesId",
                         column: x => x.CategoriesId,
@@ -123,10 +121,10 @@ namespace webapi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ItemCategories_Items_ItemsItemID",
-                        column: x => x.ItemsItemID,
+                        name: "FK_ItemCategories_Items_ItemsItemId",
+                        column: x => x.ItemsItemId,
                         principalTable: "Items",
-                        principalColumn: "ItemID",
+                        principalColumn: "ItemId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -141,9 +139,9 @@ namespace webapi.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemCategories_ItemsItemID",
+                name: "IX_ItemCategories_ItemsItemId",
                 table: "ItemCategories",
-                column: "ItemsItemID");
+                column: "ItemsItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_SellerId",

@@ -1,4 +1,5 @@
-﻿using webapi.Models;
+﻿using webapi.Contracts.Requests;
+using webapi.Models;
 
 namespace webapi.Repository
 {
@@ -10,7 +11,7 @@ namespace webapi.Repository
 
         public Task<IEnumerable<Category>> FilterWithIds(List<int> ids, CancellationToken cancel = default);
 
-        public Task<Category> Create(string name, CancellationToken cancel = default);
+        public Task<Category> Create(AddCategoryRequest input, CancellationToken cancel = default);
 
         public Task Delete(Category category, CancellationToken cancel = default);
     }

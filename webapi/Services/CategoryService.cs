@@ -1,4 +1,5 @@
-﻿using webapi.Database;
+﻿using webapi.Contracts.Requests;
+using webapi.Database;
 using webapi.Models;
 using webapi.Repository;
 
@@ -28,9 +29,9 @@ namespace webapi.Services
             return await _categoryRepository.FilterWithIds(ids, cancel);
         }
 
-        public async Task<Category> Create(string name, CancellationToken cancel = default)
+        public async Task<Category> Create(AddCategoryRequest input, CancellationToken cancel = default)
         {
-            return await _categoryRepository.Create(name, cancel);
+            return await _categoryRepository.Create(input, cancel);
         }
 
         public async Task Delete(int id, CancellationToken cancel = default)

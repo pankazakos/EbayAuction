@@ -9,13 +9,11 @@ namespace webapi.Services
     {
         private readonly IItemRepository _itemRepository;
         private readonly IUserRepository _userRepository;
-        private readonly ICategoryRepository _categoryRepository;
 
-        public ItemService(IItemRepository itemRepository, IUserRepository userRepository, ICategoryRepository categoryRepository)
+        public ItemService(IItemRepository itemRepository, IUserRepository userRepository)
         {
             _itemRepository = itemRepository;
             _userRepository = userRepository;
-            _categoryRepository = categoryRepository;
         }
 
         public async Task<Item> Create(CreateItemRequest item, string username, CancellationToken cancel)
@@ -25,9 +23,14 @@ namespace webapi.Services
                 throw new ArgumentException("Invalid data.");
             }
 
-            var userId = await _userRepository.UsernameToId(username, cancel);
+            var user = await _userRepository.GetByUsername(username, cancel);
 
-            return await _itemRepository.Create(item, userId, cancel);
+            if (user is null)
+            {
+                throw new InvalidOperationException("User not found");
+            }
+
+            return await _itemRepository.Create(item, user, cancel);
         }
 
         public async Task<Item?> GetById(long id, CancellationToken cancel)

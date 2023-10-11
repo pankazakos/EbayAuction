@@ -38,21 +38,21 @@ namespace webapi.Controllers
             return await _controllerHelper.CreateAndRespond(() => _itemService.Create(item, username, cancel), AppMapper.MapToResponse<AddItemResponse>, _mapper);
         }
 
-        [Authorize(Policy = Policies.ItemOwner)]
+        [Authorize]
         [HttpGet(ItemEndpoints.Inactive)]
         public async Task<IActionResult> ListInactive(CancellationToken cancel = default)
         {
             return await ListAll(active: true, cancel);
         }
 
-        [Authorize(Policy = Policies.ItemOwner)]
+        [Authorize]
         [HttpGet(ItemEndpoints.Active)]
         public async Task<IActionResult> ListActive(CancellationToken cancel = default)
         {
             return await ListAll(active: false, cancel);
         }
 
-        [Authorize(Policy = Policies.ItemOwner)]
+        [Authorize]
         [HttpGet(ItemEndpoints.Bidden)]
         public async Task<IActionResult> ListBidden(CancellationToken cancel = default)
         {

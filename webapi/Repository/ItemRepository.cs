@@ -17,7 +17,7 @@ namespace webapi.Repository
             _categoryService = categoryService;
         }
 
-        public async Task<Item> Create(CreateItemRequest item, int userId, CancellationToken cancel = default)
+        public async Task<Item> Create(CreateItemRequest item, User seller, CancellationToken cancel = default)
         {
             var newItem = new Item
             {
@@ -30,23 +30,29 @@ namespace webapi.Repository
                 Ends = null,
                 Active = false,
                 Description = item.Description,
-                SellerId = userId,
+                SellerId = seller.Id,
+                Seller = seller
             };
 
-            var categories = await _categoryService.FilterWithIds(item.CategoryIds, cancel);
-
-            newItem.Categories = new List<Category>(categories);
-
-            _dbContext.Items.Add(newItem);
-
-            try
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync(cancel))
             {
-                await _dbContext.SaveChangesAsync(cancel);
-            }
-            catch (Exception)
-            {
-                _dbContext.Items.Remove(newItem);
-                throw;
+                try
+                {
+                    var categories = await _categoryService.FilterWithIds(item.CategoryIds, cancel);
+
+                    newItem.Categories = categories.ToList();
+
+                    _dbContext.Items.Add(newItem);
+
+                    await _dbContext.SaveChangesAsync(cancel);
+
+                    await transaction.CommitAsync(cancel);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync(cancel);
+                    throw;
+                }
             }
 
             return newItem;
