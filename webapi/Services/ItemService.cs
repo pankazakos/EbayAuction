@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using webapi.Contracts.Requests;
+using webapi.Contracts.Requests.Item;
 using webapi.Models;
 using webapi.Repository;
 
@@ -16,7 +16,7 @@ namespace webapi.Services
             _userRepository = userRepository;
         }
 
-        public async Task<Item> Create(CreateItemRequest item, string username, CancellationToken cancel)
+        public async Task<Item> Create(AddItemRequest item, string username, CancellationToken cancel)
         {
             if (item is null)
             {
@@ -44,7 +44,7 @@ namespace webapi.Services
             return await _itemRepository.GetItemsOfUserBasedOnStatus(userId, active, cancel);
         }
 
-        public async Task<Item> Activate(long id, ActivateItemRequest input, CancellationToken cancel = default)
+        public async Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default)
         {
             const string format = "yyyy-MM-dd HH:mm";
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using webapi.Contracts.Requests;
+using webapi.Contracts.Requests.Item;
 using webapi.Database;
 using webapi.Models;
 using webapi.Services;
@@ -17,7 +17,7 @@ namespace webapi.Repository
             _categoryService = categoryService;
         }
 
-        public async Task<Item> Create(CreateItemRequest item, User seller, CancellationToken cancel = default)
+        public async Task<Item> Create(AddItemRequest item, User seller, CancellationToken cancel = default)
         {
             var newItem = new Item
             {

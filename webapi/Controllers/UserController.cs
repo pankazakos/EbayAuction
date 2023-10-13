@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using webapi.Contracts.Requests;
 using webapi.Services;
 using webapi.Utilities;
 using webapi.Contracts.Endpoints;
@@ -10,6 +9,7 @@ using webapi.Contracts.Policies;
 using webapi.Contracts.Responses.Other;
 using webapi.Contracts.Responses.User;
 using webapi.Models;
+using webapi.Contracts.Requests.User;
 
 namespace webapi.Controllers
 {

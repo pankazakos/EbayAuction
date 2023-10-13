@@ -1,4 +1,4 @@
-﻿namespace webapi.Contracts.Requests
+﻿namespace webapi.Contracts.Requests.User
 {
     public class UserCredentialsRequest
     {

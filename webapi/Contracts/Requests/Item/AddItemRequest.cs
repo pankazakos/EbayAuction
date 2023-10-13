@@ -1,6 +1,6 @@
-﻿namespace webapi.Contracts.Requests
+﻿namespace webapi.Contracts.Requests.Item
 {
-    public class CreateItemRequest
+    public class AddItemRequest
     {
         public string Name { get; init; } = string.Empty;
 

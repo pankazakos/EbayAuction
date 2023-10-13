@@ -1,4 +1,4 @@
-﻿using webapi.Contracts.Requests;
+﻿using webapi.Contracts.Requests.Category;
 using webapi.Database;
 using webapi.Models;
 using webapi.Repository;

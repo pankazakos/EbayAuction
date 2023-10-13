@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Policies;
-using webapi.Contracts.Requests;
+using webapi.Contracts.Requests.Category;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities;

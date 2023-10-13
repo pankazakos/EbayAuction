@@ -1,11 +1,11 @@
-﻿using webapi.Contracts.Requests;
+﻿using webapi.Contracts.Requests.Item;
 using webapi.Models;
 
 namespace webapi.Repository
 {
     public interface IItemRepository
     {
-        public Task<Item> Create(CreateItemRequest item, User seller, CancellationToken cancel = default);
+        public Task<Item> Create(AddItemRequest item, User seller, CancellationToken cancel = default);
 
         public Task<Item?> GetById(long id, CancellationToken cancel = default);
 

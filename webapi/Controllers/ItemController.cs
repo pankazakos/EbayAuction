@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Contracts.Requests;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities;
@@ -9,6 +8,7 @@ using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
 using webapi.Contracts.Policies;
 using webapi.Contracts.Responses.Item;
+using webapi.Contracts.Requests.Item;
 
 namespace webapi.Controllers
 {
@@ -31,7 +31,7 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpPost(ItemEndpoints.Create)]
-        public async Task<IActionResult> Create([FromBody] CreateItemRequest item, CancellationToken cancel = default)
+        public async Task<IActionResult> Create([FromBody] AddItemRequest item, CancellationToken cancel = default)
         {
             var username = _controllerHelper.UsernameClaim;
 
@@ -61,7 +61,7 @@ namespace webapi.Controllers
 
         [Authorize(Policy = Policies.ItemOwner)]
         [HttpPut(ItemEndpoints.Activate)]
-        public async Task<IActionResult> Activate([FromRoute] long id, [FromBody] ActivateItemRequest input, CancellationToken cancel = default)
+        public async Task<IActionResult> Activate([FromRoute] long id, [FromBody] PublishItemRequest input, CancellationToken cancel = default)
         {
             try
             {
