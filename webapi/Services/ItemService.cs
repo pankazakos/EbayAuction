@@ -33,6 +33,12 @@ namespace webapi.Services
             return await _itemRepository.Create(item, user, cancel);
         }
 
+        public async Task<IEnumerable<Item>> ListAll(CancellationToken cancel = default)
+        {
+            return await _itemRepository.ListAll(cancel);
+        }
+
+
         public async Task<Item?> GetById(long id, CancellationToken cancel)
         {
             return await _itemRepository.GetById(id, cancel);

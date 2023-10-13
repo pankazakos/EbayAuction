@@ -58,6 +58,13 @@ namespace webapi.Repository
             return newItem;
         }
 
+        public async Task<IEnumerable<Item>> ListAll(CancellationToken cancel = default)
+        {
+            var items = await _dbContext.Items.ToListAsync(cancel);
+
+            return items;
+        }
+
         public async Task<Item?> GetById(long id, CancellationToken cancel = default)
         {
             var item = await _dbContext.Items.SingleOrDefaultAsync(i => i.ItemId == id, cancel);

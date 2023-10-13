@@ -39,24 +39,42 @@ namespace webapi.Controllers
         }
 
         [Authorize]
+        [HttpGet(ItemEndpoints.MyItems)]
+        public async Task<IActionResult> ListMyItems(bool active, CancellationToken cancel = default)
+        {
+            var username = _controllerHelper.UsernameClaim;
+
+            var user = await _userService.GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                return _controllerHelper.NotFoundRespond<User>();
+            }
+
+            var items = await _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel);
+
+            return Ok(items);
+        }
+
+        [Authorize]
         [HttpGet(ItemEndpoints.Inactive)]
         public async Task<IActionResult> ListInactive(CancellationToken cancel = default)
         {
-            return await ListAll(active: true, cancel);
+            return await ListMyItems(active: true, cancel);
         }
 
         [Authorize]
         [HttpGet(ItemEndpoints.Active)]
         public async Task<IActionResult> ListActive(CancellationToken cancel = default)
         {
-            return await ListAll(active: false, cancel);
+            return await ListMyItems(active: false, cancel);
         }
 
         [Authorize]
         [HttpGet(ItemEndpoints.Bidden)]
         public async Task<IActionResult> ListBidden(CancellationToken cancel = default)
         {
-            return await ListAll(active: true, cancel);
+            return await ListMyItems(active: true, cancel);
         }
 
         [Authorize(Policy = Policies.ItemOwner)]
@@ -91,18 +109,9 @@ namespace webapi.Controllers
         }
 
         [HttpGet(ItemEndpoints.All)]
-        public async Task<IActionResult> ListAll(bool active, CancellationToken cancel = default)
+        public async Task<IActionResult> All(CancellationToken cancel = default)
         {
-            var username = _controllerHelper.UsernameClaim;
-
-            var user = await _userService.GetByUsername(username, cancel);
-
-            if (user is null)
-            {
-                return _controllerHelper.NotFoundRespond<User>();
-            }
-
-            var items = await _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel);
+            var items = await _itemService.ListAll(cancel);
 
             return Ok(items);
         }
