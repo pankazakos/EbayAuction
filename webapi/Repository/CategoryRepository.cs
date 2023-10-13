@@ -25,13 +25,16 @@ namespace webapi.Repository
 
         public async Task<IEnumerable<Category>> FilterWithIds(List<int> ids, CancellationToken cancel = default)
         {
-            var filteredCategories = await _dbContext.Categories
-                .Where(category => ids.Contains(category.Id))
-                .ToListAsync(cancel);
+            var filteredCategories = _dbContext.Categories
+                .Where(category => ids.Contains(category.Id));
+                
 
             var filteredIds = filteredCategories.Select(category => category.Id);
 
-            if (!filteredIds.SequenceEqual(ids))
+            var sortedFilteredIds = filteredIds.OrderBy(id => id).ToList();
+            var sortedInputIds = ids.OrderBy(id => id).ToList();
+
+            if (!sortedFilteredIds.SequenceEqual(sortedInputIds))
             {
                 throw new ArgumentException("Invalid category Ids");
             }

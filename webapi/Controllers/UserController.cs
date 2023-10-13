@@ -12,7 +12,6 @@ using webapi.Contracts.Requests.User;
 using webapi.Utilities.ControllerUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
-using webapi.Contracts.Responses;
 
 namespace webapi.Controllers
 {
