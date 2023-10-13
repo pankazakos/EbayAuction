@@ -7,7 +7,7 @@ using webapi.Contracts.Requests.Bid;
 using webapi.Contracts.Responses;
 using webapi.Contracts.Responses.bid;
 using webapi.Services;
-using webapi.Utilities;
+using webapi.Utilities.ControllerUtils;
 
 namespace webapi.Controllers
 {

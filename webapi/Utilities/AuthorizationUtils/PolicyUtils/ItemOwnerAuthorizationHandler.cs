@@ -2,7 +2,7 @@
 using webapi.Models;
 using webapi.Services;
 
-namespace webapi.Utilities
+namespace webapi.Utilities.AuthorizationUtils.PolicyUtils
 {
     public class ItemOwnerAuthorizationHandler : AuthorizationHandler<ItemOwnerRequirement>
     {

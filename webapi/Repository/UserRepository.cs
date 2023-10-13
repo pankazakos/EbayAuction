@@ -2,7 +2,7 @@
 using webapi.Contracts.Requests.User;
 using webapi.Database;
 using webapi.Models;
-using webapi.Utilities;
+using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 
 namespace webapi.Repository
 {

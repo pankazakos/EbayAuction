@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Channels;
 using webapi.Models;
 
-namespace webapi.Utilities
+namespace webapi.Utilities.ControllerUtils
 {
     public class ControllerHelper : Controller
     {
@@ -29,7 +29,7 @@ namespace webapi.Utilities
             get
             {
                 var user = _httpContextAccessor!.HttpContext!.User;
-                var isSuperuserClaim= user.Claims.FirstOrDefault(c => c.Type == "IsSuperuser")?.Value;
+                var isSuperuserClaim = user.Claims.FirstOrDefault(c => c.Type == "IsSuperuser")?.Value;
                 return bool.Parse(isSuperuserClaim!);
             }
         }

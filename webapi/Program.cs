@@ -1,5 +1,4 @@
 using webapi.Services;
-using webapi.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +9,10 @@ using webapi.Models;
 using webapi.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using webapi.Utilities.ControllerUtils;
+using webapi.Utilities.MappingUtils;
+using webapi.Utilities.AuthorizationUtils.PolicyUtils;
+using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 
 var builder = WebApplication.CreateBuilder(args);
 

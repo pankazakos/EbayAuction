@@ -4,7 +4,7 @@ using webapi.Contracts.Responses.Item;
 using webapi.Contracts.Responses.User;
 using webapi.Models;
 
-namespace webapi.Utilities
+namespace webapi.Utilities.MappingUtils
 {
     public class MappingProfile : Profile
     {

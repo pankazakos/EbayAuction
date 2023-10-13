@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace webapi.Utilities
+namespace webapi.Utilities.AuthorizationUtils.PasswordUtils
 {
     public class JwtHelper
     {
@@ -13,7 +13,7 @@ namespace webapi.Utilities
         {
             _configuration = configuration;
         }
-        
+
         public string GenerateAccessToken(string username, bool isSuperuser)
         {
             var claims = new[] { new Claim("username", username), new Claim("IsSuperuser", isSuperuser.ToString()) };

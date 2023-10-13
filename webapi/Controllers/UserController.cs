@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using webapi.Services;
-using webapi.Utilities;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
 using webapi.Contracts.Policies;
@@ -10,6 +9,9 @@ using webapi.Contracts.Responses.Other;
 using webapi.Contracts.Responses.User;
 using webapi.Models;
 using webapi.Contracts.Requests.User;
+using webapi.Utilities.ControllerUtils;
+using webapi.Utilities.AuthorizationUtils.PasswordUtils;
+using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 
 namespace webapi.Controllers
 {

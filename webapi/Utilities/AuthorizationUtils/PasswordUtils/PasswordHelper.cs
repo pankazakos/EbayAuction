@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace webapi.Utilities
+namespace webapi.Utilities.AuthorizationUtils.PasswordUtils
 {
     public class PasswordHelper
     {

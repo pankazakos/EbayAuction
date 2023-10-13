@@ -6,7 +6,7 @@ using webapi.Contracts.Policies;
 using webapi.Contracts.Requests.Category;
 using webapi.Models;
 using webapi.Services;
-using webapi.Utilities;
+using webapi.Utilities.ControllerUtils;
 
 namespace webapi.Controllers
 {
