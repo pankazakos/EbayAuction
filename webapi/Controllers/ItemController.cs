@@ -99,15 +99,7 @@ namespace webapi.Controllers
         [HttpDelete(ItemEndpoints.Delete)]
         public async Task<IActionResult> Delete([FromRoute] long id, CancellationToken cancel = default)
         {
-            try
-            {
-                await _itemService.Delete(id, cancel);
-                return NoContent();
-            }
-            catch (Exception)
-            {
-                return _controllerHelper.NotFoundRespond<User>();
-            }
+            return await _controllerHelper.DeleteAndRespond<Item>(() => _itemService.Delete(id, cancel));
         }
 
         [HttpGet(ItemEndpoints.All)]

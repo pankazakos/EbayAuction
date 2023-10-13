@@ -59,16 +59,7 @@ namespace webapi.Controllers
         [HttpDelete(CategoryEndpoints.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancel = default)
         {
-            try
-            {
-                await _categoryService.Delete(id, cancel);
-
-                return NoContent();
-            }
-            catch (Exception)
-            {
-                return _controllerHelper.NotFoundRespond<Category>();
-            }
+            return await _controllerHelper.DeleteAndRespond<Category>(() => _categoryService.Delete(id, cancel));
         }
     }
 }
