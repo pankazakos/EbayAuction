@@ -31,7 +31,7 @@ namespace webapi.Repository
 
             var filteredIds = filteredCategories.Select(category => category.Id);
 
-            var sortedFilteredIds = filteredIds.OrderBy(id => id).ToList();
+            var sortedFilteredIds = await filteredIds.OrderBy(id => id).ToListAsync(cancel);
             var sortedInputIds = ids.OrderBy(id => id).ToList();
 
             if (!sortedFilteredIds.SequenceEqual(sortedInputIds))
