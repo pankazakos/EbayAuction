@@ -28,7 +28,12 @@ namespace webapi.Controllers
         {
             var category = await _categoryService.GetById(id, cancel);
 
-            return _controllerHelper.CheckNullAndRespond(category);
+            if (category is null)
+            {
+                return _controllerHelper.NotFoundRespond<Category>();
+            }
+
+            return Ok(category);
         }
 
         [HttpGet(CategoryEndpoints.GetAll)]

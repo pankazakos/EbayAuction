@@ -12,6 +12,7 @@ using webapi.Contracts.Requests.User;
 using webapi.Utilities.ControllerUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
+using webapi.Contracts.Responses;
 
 namespace webapi.Controllers
 {
@@ -53,14 +54,9 @@ namespace webapi.Controllers
         [HttpGet(UserEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancel = default)
         {
-            var user = await _userService.GetById(id, cancel);
-
-            if (user is null)
-            {
-                return _controllerHelper.CheckNullAndRespond(user);
-            }
-
-            return Ok(user.MapToResponse<NoPasswordUserResponse>(_mapper));
+            return await _controllerHelper.GetAndRespond(
+                () => _userService.GetById(id, cancel),
+                (user, mapper) => user!.MapToResponse<NoPasswordUserResponse>(mapper), _mapper);
         }
 
         [Authorize(Policy = Policies.Admin)]
@@ -84,7 +80,7 @@ namespace webapi.Controllers
 
             if (user is null)
             {
-                return _controllerHelper.CheckNullAndRespond(user);
+                return _controllerHelper.NotFoundRespond<User>();
             }
 
             if (!PasswordHelper.VerifyPassword(input.Password, user.PasswordHash, user.PasswordSalt))

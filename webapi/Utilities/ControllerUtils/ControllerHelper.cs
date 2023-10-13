@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Channels;
+using webapi.Contracts.Responses;
+using webapi.Contracts.Responses.User;
 using webapi.Models;
 
 namespace webapi.Utilities.ControllerUtils
@@ -24,24 +26,9 @@ namespace webapi.Utilities.ControllerUtils
             }
         }
 
-        public bool IsSuperuserClaim
-        {
-            get
-            {
-                var user = _httpContextAccessor!.HttpContext!.User;
-                var isSuperuserClaim = user.Claims.FirstOrDefault(c => c.Type == "IsSuperuser")?.Value;
-                return bool.Parse(isSuperuserClaim!);
-            }
-        }
-
         public IActionResult NotFoundRespond<T>()
         {
             return NotFound($"No {typeof(T).Name} found.");
-        }
-
-        public IActionResult CheckNullAndRespond<T>(T item)
-        {
-            return item is null ? NotFoundRespond<T>() : Ok(item);
         }
 
         public async Task<IActionResult> CreateAndRespond<TEntity, TResponse>(
@@ -57,6 +44,24 @@ namespace webapi.Utilities.ControllerUtils
             {
                 return BadRequest(ex.Message);
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while saving the data to the database. Please try again later.");
+            }
+        }
+
+        public async Task<IActionResult> GetAndRespond<TEntity, TResponse>(Func<Task<TEntity>> getFunc,
+            Func<TEntity, IMapper, TResponse> mapFunc, IMapper mapper)
+        {
+            var entity = await getFunc();
+
+            if (entity is null)
+            {
+                return NotFoundRespond<TEntity>();
+            }
+            
+            var response = mapFunc(entity, mapper);
+            return Ok(response);
         }
 
         public async Task<IActionResult> DeleteAndRespond<TEntity>(Func<Task> deleteFunc)
