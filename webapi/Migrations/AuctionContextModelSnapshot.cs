@@ -219,7 +219,7 @@ namespace webapi.Migrations
                     b.HasOne("webapi.Models.Item", "Item")
                         .WithMany("Bids")
                         .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Bidder");

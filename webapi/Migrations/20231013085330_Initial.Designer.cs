@@ -12,7 +12,7 @@ using webapi.Database;
 namespace webapi.Migrations
 {
     [DbContext(typeof(AuctionContext))]
-    [Migration("20231010195049_Initial")]
+    [Migration("20231013085330_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -222,7 +222,7 @@ namespace webapi.Migrations
                     b.HasOne("webapi.Models.Item", "Item")
                         .WithMany("Bids")
                         .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Bidder");

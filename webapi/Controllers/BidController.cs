@@ -11,7 +11,7 @@ using webapi.Utilities;
 
 namespace webapi.Controllers
 {
-    [Route(UserEndpoints.BaseUrl)]
+    [Route(BidEndpoints.BaseUrl)]
     public class BidController : Controller
     {
         private readonly IBidService _bidService;

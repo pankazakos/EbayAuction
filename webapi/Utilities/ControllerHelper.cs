@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Channels;
+using webapi.Models;
 
 namespace webapi.Utilities
 {
@@ -54,6 +56,23 @@ namespace webapi.Utilities
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> DeleteAndRespond<TEntity>(Func<Task> deleteFunc)
+        {
+            try
+            {
+                await deleteFunc();
+                return NoContent();
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFoundRespond<TEntity>();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while saving the data to the database. Please try again later.");
             }
         }
     }

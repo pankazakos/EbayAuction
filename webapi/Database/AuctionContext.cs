@@ -37,7 +37,7 @@ namespace webapi.Database
                 .HasOne(b => b.Item)
                 .WithMany(i => i.Bids)
                 .HasForeignKey(b => b.ItemId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Bid>()
                 .HasOne(b => b.Bidder)
@@ -45,5 +45,25 @@ namespace webapi.Database
                 .HasForeignKey(b => b.BidderId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancel = default)
+        {
+            var orphanUsers = ChangeTracker.Entries<User>()
+                .Where(e => e.State == EntityState.Deleted)
+                .Select(e => e.Entity.Id)
+                .ToList();
+
+            foreach (var userId in orphanUsers)
+            {
+                var bidsToRemove = await Bids.Where(b => b.BidderId == userId).ToListAsync(cancel);
+                Bids.RemoveRange(bidsToRemove);
+
+                var itemsToRemove = await Items.Where(i => i.SellerId == userId).ToListAsync(cancel);
+                Items.RemoveRange(itemsToRemove);
+            }
+
+            return await base.SaveChangesAsync(cancel);
+        }
+
     }
 }
