@@ -50,25 +50,16 @@ namespace webapi.Services
             return await _userRepository.Create(input, cancel);
         }
 
-        public async Task<bool> Delete(int id, CancellationToken cancel = default)
+        public async Task Delete(int id, CancellationToken cancel = default)
         {
             var user = await _userRepository.GetById(id, cancel);
 
             if (user is null)
             {
-                return false;
+                throw new InvalidOperationException("User not Found");
             }
 
-            try
-            {
-                await _userRepository.Delete(user, cancel);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
+            await _userRepository.Delete(user, cancel);
         }
 
         public async Task UpdateLastLogin(string username, CancellationToken cancel = default)

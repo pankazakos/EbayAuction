@@ -15,7 +15,7 @@ namespace webapi.Services
 
         public Task<User> Create(RegisterUserRequest input, CancellationToken cancel = default);
 
-        public Task<bool> Delete(int id, CancellationToken cancel = default);
+        public Task Delete(int id, CancellationToken cancel = default);
 
         public Task UpdateLastLogin(string username, CancellationToken cancel = default);
     }

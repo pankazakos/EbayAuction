@@ -65,12 +65,15 @@ namespace webapi.Controllers
         [HttpDelete(UserEndpoints.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancel = default)
         {
-            if (await _userService.Delete(id, cancel))
+            try
             {
+                await _userService.Delete(id, cancel);
                 return NoContent();
             }
-
-            return _controllerHelper.NotFoundRespond<User>();
+            catch (Exception)
+            {
+                return _controllerHelper.NotFoundRespond<User>();
+            }
         }
 
         [HttpPost(UserEndpoints.Create)]
