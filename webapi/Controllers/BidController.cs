@@ -25,6 +25,7 @@ namespace webapi.Controllers
             _controllerHelper = controllerHelper;
         }
 
+
         [Authorize]
         [HttpPost(BidEndpoints.Create)]
         public async Task<IActionResult> CreateBid([FromBody] AddBidRequest body, CancellationToken cancel = default)
@@ -32,6 +33,7 @@ namespace webapi.Controllers
             return await _controllerHelper.CreateAndRespond(() => _bidService.Create(body.ItemId, cancel),
                 AppMapper.MapToResponse<AddBidResponse>, _mapper);
         }
+
 
         [HttpGet(BidEndpoints.GetItemBids)]
         public async Task<IActionResult> GetItemBids([FromQuery] long itemId, CancellationToken cancel = default)

@@ -32,6 +32,7 @@ namespace webapi.Controllers
             _controllerHelper = controllerHelper;
         }
 
+
         [Authorize(Policy = Policies.Admin)]
         [HttpGet(UserEndpoints.All)]
         public async Task<IActionResult> ListAll(CancellationToken cancel = default)
@@ -40,6 +41,7 @@ namespace webapi.Controllers
 
             return Ok(users);
         }
+
 
         [Authorize(Policy = Policies.Admin)]
         [HttpGet(UserEndpoints.Usernames)]
@@ -50,6 +52,7 @@ namespace webapi.Controllers
             return Ok(usernames);
         }
 
+
         [AuthorizeMultiplePolicies(Policies.Admin, Policies.SelfUser)]
         [HttpGet(UserEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancel = default)
@@ -59,6 +62,7 @@ namespace webapi.Controllers
                 (user, mapper) => user!.MapToResponse<NoPasswordUserResponse>(mapper), _mapper);
         }
 
+
         [Authorize(Policy = Policies.Admin)]
         [HttpDelete(UserEndpoints.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancel = default)
@@ -66,12 +70,14 @@ namespace webapi.Controllers
             return await _controllerHelper.DeleteAndRespond<User>(() => _userService.Delete(id, cancel));
         }
 
+
         [HttpPost(UserEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] RegisterUserRequest input, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _userService.Create(input, cancel), 
+            return await _controllerHelper.CreateAndRespond(() => _userService.Create(input, cancel),
                 AppMapper.MapToResponse<RegisterUserResponse>, _mapper);
         }
+
 
         [HttpPost(UserEndpoints.Login)]
         public async Task<IActionResult> Login([FromBody] UserCredentialsRequest input, CancellationToken cancel = default)

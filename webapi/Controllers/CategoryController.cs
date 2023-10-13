@@ -23,6 +23,7 @@ namespace webapi.Controllers
             _controllerHelper = controllerHelper;
         }
 
+
         [HttpGet(CategoryEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancel = default)
         {
@@ -36,6 +37,7 @@ namespace webapi.Controllers
             return Ok(category);
         }
 
+
         [HttpGet(CategoryEndpoints.GetAll)]
         public async Task<IActionResult> GetAll(CancellationToken cancel = default)
         {
@@ -43,6 +45,7 @@ namespace webapi.Controllers
 
             return Ok(categories);
         }
+
 
         [Authorize(Policy = Policies.Admin)]
         [HttpPost(CategoryEndpoints.Create)]
@@ -59,6 +62,7 @@ namespace webapi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [Authorize(Policy = Policies.Admin)]
         [HttpDelete(CategoryEndpoints.Delete)]
