@@ -8,12 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginModalComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
     NavBarComponent,
+    LoginModalComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
