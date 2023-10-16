@@ -7,16 +7,15 @@ import { NavBarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginModalComponent,
-  ],
+  declarations: [AppComponent, LoginModalComponent],
   imports: [
-    BrowserModule, HttpClientModule, BrowserAnimationsModule, NavBarComponent
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NavBarComponent,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
