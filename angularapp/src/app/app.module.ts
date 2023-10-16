@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { NavBarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginModalComponent } from './login-modal/login-modal.component';
+import { LoginTabsComponent } from './login-modal/login-tabs/login-tabs.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,6 +16,7 @@ import { LoginModalComponent } from './login-modal/login-modal.component';
     BrowserAnimationsModule,
     NavBarComponent,
     LoginModalComponent,
+    LoginTabsComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
