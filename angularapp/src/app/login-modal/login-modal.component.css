@@ -1,0 +1,13 @@
+.custom-dialog-title {
+  padding-bottom: 0;
+}
+
+.custom-close-icon-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.custom-dialog-content {
+  padding-top: 0;
+}

@@ -1,7 +1,11 @@
-<div mat-dialog-content>
-  <!-- <p>Dialog content goes here.</p> -->
+<div mat-dialog-title class="custom-dialog-title">
+  <button mat-icon-button mat-dialog-close class="custom-close-icon-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="custom-dialog-content">
   <app-login-tabs></app-login-tabs>
 </div>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
+<div mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Close</button>
 </div>
