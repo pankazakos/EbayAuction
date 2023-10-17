@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './navbar/navbar.component';
@@ -10,17 +11,23 @@ import { LoginTabsComponent } from './login-modal/login-tabs/login-tabs.componen
 import { SignInComponent } from './login-modal/login-tabs/sign-in/sign-in.component';
 import { SignUpComponent } from './login-modal/login-tabs/sign-up/sign-up.component';
 
+import { MaterialUiModule } from './material-ui/material-ui.module';
+
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
+  declarations: [
+    AppComponent,
     NavBarComponent,
     LoginModalComponent,
     LoginTabsComponent,
     SignInComponent,
     SignUpComponent,
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MaterialUiModule,
+    CommonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
