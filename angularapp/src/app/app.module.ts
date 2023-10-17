@@ -11,7 +11,7 @@ import { SignInComponent } from './login-modal/login-tabs/sign-in/sign-in.compon
 import { SignUpComponent } from './login-modal/login-tabs/sign-up/sign-up.component';
 
 @NgModule({
-  declarations: [AppComponent, SignInComponent, SignUpComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -19,6 +19,8 @@ import { SignUpComponent } from './login-modal/login-tabs/sign-up/sign-up.compon
     NavBarComponent,
     LoginModalComponent,
     LoginTabsComponent,
+    SignInComponent,
+    SignUpComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
