@@ -1,0 +1,11 @@
+.custom-form {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-form-field {
+  width: 70%;
+}
