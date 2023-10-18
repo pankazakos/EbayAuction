@@ -1,0 +1,25 @@
+.card-wrapper {
+  height: 60vh;
+  width: 100%;
+}
+
+.custom-card {
+  width: 100%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.custom-content {
+  width: 50%;
+}
+
+.custom-form-field {
+  width: 100%;
+}
+
+.custom-card-actions {
+  width: 25%;
+}
+
+.custom-button {
+  width: 100%;
+}
