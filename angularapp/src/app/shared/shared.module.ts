@@ -5,6 +5,7 @@ import { LoginTabsComponent } from './login-modal/login-tabs/login-tabs.componen
 import { SignInComponent } from './login-modal/login-tabs/sign-in/sign-in.component';
 import { SignUpComponent } from './login-modal/login-tabs/sign-up/sign-up.component';
 import { CommonImportsModule } from '../common-imports/common-imports.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import { CommonImportsModule } from '../common-imports/common-imports.module';
     SignInComponent,
     SignUpComponent,
   ],
-  imports: [CommonImportsModule],
+  imports: [CommonImportsModule, RouterModule],
   exports: [
     NavBarComponent,
     LoginModalComponent,

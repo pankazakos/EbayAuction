@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,9 +7,9 @@ import { LoginModalComponent } from '../login-modal/login-modal.component';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavBarComponent {
-  constructor(public dialog: MatDialog) {}
+  constructor(private router: Router) {}
 
-  openDialog(): void {
-    this.dialog.open(LoginModalComponent);
+  openLogin(): void {
+    this.router.navigate(['/register']);
   }
 }
