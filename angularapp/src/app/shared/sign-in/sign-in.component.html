@@ -1,35 +1,37 @@
-<div class="card-wrapper" fxLayout="row" fxLayoutAlign="center center">
-  <mat-card
-    fxFlex="80%"
-    fxFlex.gt-md="30%"
-    fxFlex.gt-sm="60%"
-    fxLayout="column"
-    fxLayoutAlign="space-evenly center"
-    class="custom-card"
+<app-card [cssProps]="cardCssProps">
+  <div slot="header"><h1>Sign In</h1></div>
+  <div slot="content">
+    <form
+      class="custom-form"
+      fxFlex="100%"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <mat-form-field class="custom-form-field">
+        <mat-label>username</mat-label>
+        <input matInput name="username" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>password</mat-label>
+        <input matInput name="password" [type]="hide ? 'password' : 'text'" />
+        <button mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </div>
+  <div
+    class="custom-actions"
+    slot="actions"
+    fxLayout="row"
+    fxLayoutAlign="center none"
   >
-    <mat-card-header><h1>Sign In</h1></mat-card-header>
-    <mat-card-content class="custom-content">
-      <form class="custom-form">
-        <mat-form-field class="custom-form-field">
-          <mat-label>username</mat-label>
-          <input matInput name="username" />
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>password</mat-label>
-          <input matInput name="password" [type]="hide ? 'password' : 'text'" />
-          <button mat-icon-button matSuffix (click)="hide = !hide">
-            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
-        </mat-form-field>
-      </form>
-    </mat-card-content>
-    <mat-card-actions class="custom-card-actions">
-      <button class="custom-button" mat-raised-button color="primary">
-        Sign In
-      </button>
-    </mat-card-actions>
-    <mat-card-footer>
-      <p>don't have an account? <a routerLink="/register">Sign Up</a></p>
-    </mat-card-footer>
-  </mat-card>
-</div>
+    <button class="custom-button" mat-raised-button color="primary">
+      Sign In
+    </button>
+  </div>
+
+  <div slot="footer">
+    <p>don't have an account? <a routerLink="/register">Sign Up</a></p>
+  </div>
+</app-card>

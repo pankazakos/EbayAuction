@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CardWrapperCssProps } from '../card/card.component';
 
 @Component({
   selector: 'app-sign-in',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class SignInComponent {
   hide = true;
+
+  cardCssProps: CardWrapperCssProps = {
+    height: '60%',
+    width: '100%',
+  };
 }

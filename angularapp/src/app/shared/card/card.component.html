@@ -1,0 +1,29 @@
+<div
+  class="card-wrapper"
+  fxLayout="row"
+  fxLayoutAlign="center center"
+  [style.height]="cssProps.height"
+  [style.width]="cssProps.width"
+>
+  <mat-card
+    fxFlex="80%"
+    fxFlex.gt-md="30%"
+    fxFlex.gt-sm="60%"
+    fxLayout="column"
+    fxLayoutAlign="space-evenly center"
+    class="custom-card"
+  >
+    <mat-card-header
+      ><ng-content select="[slot='header']"></ng-content>
+    </mat-card-header>
+    <mat-card-content class="custom-content"
+      ><ng-content select="[slot='content']"></ng-content
+    ></mat-card-content>
+    <mat-card-actions class="custom-actions">
+      <ng-content select="[slot='actions']"></ng-content>
+    </mat-card-actions>
+    <mat-card-footer>
+      <ng-content select="[slot='footer']"></ng-content>
+    </mat-card-footer>
+  </mat-card>
+</div>

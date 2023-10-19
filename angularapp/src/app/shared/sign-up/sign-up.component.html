@@ -1,57 +1,62 @@
-<div class="card-wrapper" fxLayout="row" fxLayoutAlign="center center">
-  <mat-card
-    fxFlex="80%"
-    fxFlex.gt-md="50%"
-    fxFlex.gt-sm="70%"
-    fxLayout="column"
-    fxLayoutAlign="space-evenly center"
-    class="custom-card"
+<app-card [cssProps]="cardCssProps">
+  <div slot="header">
+    <h1>Sign Up</h1>
+  </div>
+  <div slot="content">
+    <form
+      class="custom-form"
+      fxFlex="100%"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <mat-form-field class="custom-form-field">
+        <mat-label>email</mat-label>
+        <input matInput name="email" placeholder="user@example.com" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>username</mat-label>
+        <input matInput name="username" placeholder="" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>firstname</mat-label>
+        <input matInput name="firstname" placeholder="" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>lastname</mat-label>
+        <input matInput name="lastname" placeholder="" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>country</mat-label>
+        <input matInput name="country" placeholder="" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>location</mat-label>
+        <input matInput name="location" placeholder="" />
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>password</mat-label>
+        <input matInput name="password" [type]="hide ? 'password' : 'text'" />
+        <button mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="custom-form-field">
+        <mat-label>repeat password</mat-label>
+        <input matInput name="confirm" [type]="hide ? 'password' : 'text'" />
+        <button mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </div>
+  <div
+    class="custom-actions"
+    slot="actions"
+    fxLayout="row"
+    fxLayoutAlign="center none"
   >
-    <mat-card-header class="custom-header"><h1>Sign Up</h1></mat-card-header>
-    <mat-card-content class="custom-content">
-      <form class="custom-form">
-        <mat-form-field class="custom-form-field">
-          <mat-label>email</mat-label>
-          <input matInput name="email" placeholder="user@example.com" />
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>username</mat-label>
-          <input matInput name="username" placeholder="" />
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>firstname</mat-label>
-          <input matInput name="firstname" placeholder="" />
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>lastname</mat-label>
-          <input matInput name="lastname" placeholder="" />
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>country</mat-label>
-          <input matInput name="country" placeholder="" />
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>location</mat-label>
-          <input matInput name="location" placeholder="" />
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>password</mat-label>
-          <input matInput name="password" [type]="hide ? 'password' : 'text'" />
-          <button mat-icon-button matSuffix (click)="hide = !hide">
-            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
-        </mat-form-field>
-        <mat-form-field class="custom-form-field">
-          <mat-label>repeat password</mat-label>
-          <input matInput name="confirm" [type]="hide ? 'password' : 'text'" />
-          <button mat-icon-button matSuffix (click)="hide = !hide">
-            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
-        </mat-form-field>
-      </form>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary">Sign Up</button>
-    </mat-card-actions>
-  </mat-card>
-</div>
+    <button class="custom-button" mat-raised-button color="primary">
+      Sign Up
+    </button>
+  </div>
+</app-card>
