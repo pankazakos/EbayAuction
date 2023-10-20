@@ -9,3 +9,7 @@
 .custom-button {
   width: 50%;
 }
+
+.hidden-button {
+  display: none;
+}

@@ -5,48 +5,56 @@
   <div slot="content">
     <form
       class="custom-form"
+      #loginForm="ngForm"
+      (ngSubmit)="onSubmit()"
       fxFlex="100%"
       fxLayout="column"
       fxLayoutAlign="center center"
     >
       <mat-form-field class="custom-form-field">
-        <mat-label>email</mat-label>
-        <input matInput name="email" placeholder="user@example.com" />
+        <mat-label>Email</mat-label>
+        <input matInput name="email" placeholder="user@example.com" ngModel />
       </mat-form-field>
       <mat-form-field class="custom-form-field">
         <mat-label>username</mat-label>
-        <input matInput name="username" placeholder="" />
+        <input matInput name="username" placeholder="" ngModel />
       </mat-form-field>
       <mat-form-field class="custom-form-field">
         <mat-label>firstname</mat-label>
-        <input matInput name="firstname" placeholder="" />
+        <input matInput name="firstname" placeholder="" ngModel />
       </mat-form-field>
       <mat-form-field class="custom-form-field">
         <mat-label>lastname</mat-label>
-        <input matInput name="lastname" placeholder="" />
+        <input matInput name="lastname" placeholder="" ngModel />
       </mat-form-field>
       <mat-form-field class="custom-form-field">
         <mat-label>country</mat-label>
-        <input matInput name="country" placeholder="" />
+        <input matInput name="country" placeholder="" ngModel />
       </mat-form-field>
       <mat-form-field class="custom-form-field">
         <mat-label>location</mat-label>
-        <input matInput name="location" placeholder="" />
+        <input matInput name="location" placeholder="" ngModel />
       </mat-form-field>
       <mat-form-field class="custom-form-field">
         <mat-label>password</mat-label>
-        <input matInput name="password" [type]="hide ? 'password' : 'text'" />
-        <button mat-icon-button matSuffix (click)="hide = !hide">
+        <input
+          matInput
+          name="password"
+          [type]="hide ? 'password' : 'text'"
+          ngModel
+        />
+        <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
       <mat-form-field class="custom-form-field">
         <mat-label>repeat password</mat-label>
         <input matInput name="confirm" [type]="hide ? 'password' : 'text'" />
-        <button mat-icon-button matSuffix (click)="hide = !hide">
+        <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
+      <button type="submit" class="hidden-button"></button>
     </form>
   </div>
   <div
@@ -55,7 +63,12 @@
     fxLayout="row"
     fxLayoutAlign="center none"
   >
-    <button class="custom-button" mat-raised-button color="primary">
+    <button
+      class="custom-button"
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+    >
       Sign Up
     </button>
   </div>
