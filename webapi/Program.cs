@@ -46,6 +46,13 @@ builder.Services.AddScoped<ControllerHelper>();
 builder.Services.AddScoped<IAuthorizationHandler, SelfUserAuthorizationHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ItemOwnerAuthorizationHandler>();
 
+// CORS Policy
+builder.Services.AddCors(options => options.AddPolicy("AllowAnyOrigin",
+    tempBuilder => tempBuilder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()));
+
 // Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
@@ -128,6 +135,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAnyOrigin");
 
 app.UseHttpsRedirection();
 
