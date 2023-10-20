@@ -2,22 +2,30 @@
   <div slot="header"><h1>Sign In</h1></div>
   <div slot="content">
     <form
+      #loginForm="ngForm"
+      (ngSubmit)="onSubmit()"
       class="custom-form"
       fxFlex="100%"
       fxLayout="column"
       fxLayoutAlign="center center"
     >
       <mat-form-field class="custom-form-field">
-        <mat-label>username</mat-label>
-        <input matInput name="username" />
+        <mat-label>Username</mat-label>
+        <input matInput name="username" ngModel />
       </mat-form-field>
       <mat-form-field class="custom-form-field">
-        <mat-label>password</mat-label>
-        <input matInput name="password" [type]="hide ? 'password' : 'text'" />
-        <button mat-icon-button matSuffix (click)="hide = !hide">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          name="password"
+          [type]="hide ? 'password' : 'text'"
+          ngModel
+        />
+        <button mat-icon-button matSuffix (click)="hide = !hide" type="button">
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
+      <button class="hidden-button" type="submit"></button>
     </form>
   </div>
   <div
@@ -26,7 +34,12 @@
     fxLayout="row"
     fxLayoutAlign="center none"
   >
-    <button class="custom-button" mat-raised-button color="primary">
+    <button
+      class="custom-button"
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+    >
       Sign In
     </button>
   </div>

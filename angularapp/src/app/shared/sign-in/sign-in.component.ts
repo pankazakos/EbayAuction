@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { CardWrapperCssProps } from '../card/card.component';
 
 @Component({
@@ -13,4 +15,28 @@ export class SignInComponent {
     height: '60%',
     width: '100%',
   };
+
+  @ViewChild('loginForm') loginForm!: NgForm;
+
+  constructor(private http: HttpClient) {}
+
+  onSubmit() {
+    const credentials = this.loginForm.value;
+    if (this.loginForm.valid) {
+      this.http
+        .post<{ accessToken: string }>(
+          'https://localhost:7068/api/User/login',
+          credentials
+        )
+        .subscribe({
+          next: (response) => {
+            localStorage.setItem('accessToken', response.accessToken);
+            console.log('Login successful and token stored');
+          },
+          error: (error) => {
+            console.error('Login failed', error);
+          },
+        });
+    }
+  }
 }
