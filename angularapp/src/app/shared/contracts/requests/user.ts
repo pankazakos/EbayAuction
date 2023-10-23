@@ -1,14 +1,14 @@
 export interface RegisterUserRequest {
-  Username: string;
-  Password: string;
-  FirstName: string;
-  LastName: string;
-  Email: string;
-  Country: string;
-  Location: string;
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  country: string;
+  location: string;
 }
 
 export interface UserCredentialsRequest {
-  Username: string;
-  Password: string;
+  username: string;
+  password: string;
 }

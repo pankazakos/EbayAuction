@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CardWrapperCssProps } from '../card/card.component';
 import { Router } from '@angular/router';
+import { LoginUserResponse } from '../contracts/responses/other';
 
 @Component({
   selector: 'app-sign-in',
@@ -25,7 +26,7 @@ export class SignInComponent {
     const credentials = this.loginForm.value;
     if (this.loginForm.valid) {
       this.http
-        .post<{ accessToken: string }>(
+        .post<LoginUserResponse>(
           'https://localhost:7068/api/User/login',
           credentials
         )

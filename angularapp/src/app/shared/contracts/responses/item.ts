@@ -1,25 +1,25 @@
 export interface AddItemResponse {
-  ItemId: number;
-  Name: string;
-  Currently: number;
-  BuyPrice: number;
-  FirstBid: number;
-  NumBids: number;
-  Active: boolean;
-  Description: string;
-  SellerId: number;
+  itemId: number;
+  name: string;
+  currently: number;
+  buyPrice: number;
+  firstBid: number;
+  numBids: number;
+  active: boolean;
+  description: string;
+  sellerId: number;
 }
 
-export interface PublishedItemResponse {
-  ItemId: string;
-  Name: string;
-  Currently: number;
-  BuyPrice: number;
-  FirstBid: number;
-  NumBids: number;
-  Started: Date;
-  Ends: Date;
-  Active: boolean;
-  Description: string;
-  SellerId: number;
+export interface $1ublishedItemResponse {
+  itemId: string;
+  name: string;
+  currently: number;
+  buyPrice: number;
+  firstBid: number;
+  numBids: number;
+  started: Date;
+  ends: Date;
+  active: boolean;
+  description: string;
+  sellerId: number;
 }

@@ -1,3 +1,3 @@
 export interface AddBidRequest {
-  ItemId: number;
+  itemId: number;
 }

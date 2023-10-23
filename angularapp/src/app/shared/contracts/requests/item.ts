@@ -1,10 +1,10 @@
 export interface AddItemRequest {
-  Name: string;
-  CategoryIds: number[];
-  FirstBid: number;
-  Description: string;
+  name: string;
+  categoryIds: number[];
+  firstBid: number;
+  description: string;
 }
 
 export interface PublishItemRequest {
-  Expiration: Date;
+  expiration: Date;
 }

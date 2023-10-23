@@ -1,25 +1,25 @@
 export interface RegiserUserResponse {
-  Id: number;
-  UserName: string;
-  Email: string;
-  FirstName: string;
-  LastName: string;
-  DateJoined: Date;
-  Country: string;
-  Location: string;
-  IsSuperuser: boolean;
+  id: number;
+  userName: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateJoined: Date;
+  country: string;
+  location: string;
+  isSuperuser: boolean;
 }
 
 export interface NoPasswordUserResponse {
-  Id: number;
-  Username: string;
-  FirstName: string;
-  LastName: string;
-  LastLogin: Date;
-  DateJoined: Date;
-  Email: string;
-  Country: string;
-  Location: string;
-  IsSuperuser: boolean;
-  IsActive: boolean;
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  lastLogin: Date;
+  dateJoined: Date;
+  email: string;
+  country: string;
+  location: string;
+  isSuperuser: boolean;
+  isActive: boolean;
 }

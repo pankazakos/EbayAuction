@@ -1,3 +1,3 @@
 export interface AddCategoryRequest {
-  Name: string;
+  name: string;
 }

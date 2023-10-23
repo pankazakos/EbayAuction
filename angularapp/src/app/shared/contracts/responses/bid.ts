@@ -1,7 +1,7 @@
 export interface AddBidResponse {
-  BidId: number;
-  Time: Date;
-  Amount: number;
-  ItemId: number;
-  BidderId: number;
+  bidId: number;
+  time: Date;
+  amount: number;
+  itemId: number;
+  bidderId: number;
 }
