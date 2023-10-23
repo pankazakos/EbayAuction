@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CardWrapperCssProps } from '../card/card.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -18,7 +19,7 @@ export class SignInComponent {
 
   @ViewChild('loginForm') loginForm!: NgForm;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {
     const credentials = this.loginForm.value;
@@ -31,10 +32,16 @@ export class SignInComponent {
         .subscribe({
           next: (response) => {
             localStorage.setItem('accessToken', response.accessToken);
-            console.log('Login successful and token stored');
+            this.router.navigate(['/']);
           },
           error: (error) => {
-            console.error('Login failed', error);
+            if (error.status == 404) {
+              alert('invalid username');
+            } else if (error.status == 400) {
+              alert('incorrect password');
+            } else {
+              alert('unexpected error. Please try again later');
+            }
           },
         });
     }
