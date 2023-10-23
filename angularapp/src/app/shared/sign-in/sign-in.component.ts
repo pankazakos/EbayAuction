@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CardWrapperCssProps } from '../card/card.component';
 import { Router } from '@angular/router';
 import { LoginUserResponse } from '../contracts/responses/other';
+import { UserCredentialsRequest } from '../contracts/requests/user';
 
 @Component({
   selector: 'app-sign-in',
@@ -23,7 +24,7 @@ export class SignInComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {
-    const credentials = this.loginForm.value;
+    const credentials = this.loginForm.value as UserCredentialsRequest;
     if (this.loginForm.valid) {
       this.http
         .post<LoginUserResponse>(
