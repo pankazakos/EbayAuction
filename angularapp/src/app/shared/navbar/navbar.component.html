@@ -1,7 +1,10 @@
 <mat-toolbar color="primary" class="custom-toolbar">
   <a routerLink="/" class="custom-link">EbayAuction</a>
   <span class="fill-remaining-space"></span>
-  <div>
+  <div *ngIf="authData?.isLoggedIn">
+    {{ authData?.username }}
+  </div>
+  <div *ngIf="!authData?.isLoggedIn">
     <a routerLink="login">
       <button mat-raised-button>Login</button>
     </a>
