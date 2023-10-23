@@ -2,7 +2,17 @@
   <a routerLink="/" class="custom-link">EbayAuction</a>
   <span class="fill-remaining-space"></span>
   <div *ngIf="authData?.isLoggedIn">
-    {{ authData?.username }}
+    <button mat-button [matMenuTriggerFor]="menu" class="button-container">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="username">panagiotis</div>
+        <div fxLayout="column" fxLayoutAlign="end none">
+          <mat-icon class="arrow-icon">keyboard_arrow_down</mat-icon>
+        </div>
+      </div>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="callLogoutUser()">logout</button>
+    </mat-menu>
   </div>
   <div *ngIf="!authData?.isLoggedIn">
     <a routerLink="login">

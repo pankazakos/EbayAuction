@@ -55,6 +55,7 @@ export class AuthService {
   }
 
   logoutUser() {
+    localStorage.removeItem('accessToken');
     this.authDataSubject.next({ username: '', role: '', isLoggedIn: false });
   }
 }
