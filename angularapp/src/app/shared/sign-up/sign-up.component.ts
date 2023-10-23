@@ -2,9 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CardWrapperCssProps } from '../card/card.component';
-import { Router } from '@angular/router';
 import { RegisterUserResponse } from '../contracts/responses/user';
 import { RegisterUserRequest } from '../contracts/requests/user';
+import { AuthService } from '../auth-service.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -21,7 +21,7 @@ export class SignUpComponent {
 
   @ViewChild('loginForm') registerForm!: NgForm;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   onSubmit() {
     const userInfo = this.registerForm.value as RegisterUserRequest;
@@ -31,7 +31,7 @@ export class SignUpComponent {
         .post<RegisterUserResponse>('https://localhost:7068/api/User', userInfo)
         .subscribe({
           next: (response) => {
-            this.router.navigate(['/']);
+            this.authService.LoginUser(userInfo.username, userInfo.password);
           },
           error: (error) => {
             if (error.status == 400) {
