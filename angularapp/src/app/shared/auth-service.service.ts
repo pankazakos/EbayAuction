@@ -34,10 +34,11 @@ export class AuthService {
       )
       .subscribe({
         next: (response) => {
+          let role = credentials.username == 'admin' ? 'admin' : 'user';
           localStorage.setItem('accessToken', response.accessToken);
           this.authDataSubject.next({
             username: username,
-            role: 'user',
+            role: role,
             isLoggedIn: true,
           });
           this.router.navigate(['/']);
