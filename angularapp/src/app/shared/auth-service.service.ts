@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { UserCredentialsRequest } from './contracts/requests/user';
 import { LoginUserResponse } from './contracts/responses/other';
 import { BehaviorSubject } from 'rxjs';
+import { UserRole, baseUrl } from './types';
 
 export interface AuthData {
   username: string;
-  role: string;
+  role: UserRole;
   isLoggedIn: boolean;
 }
 
@@ -20,7 +21,7 @@ export class AuthService {
 
   private authDataSubject = new BehaviorSubject<AuthData>({
     username: '',
-    role: '',
+    role: UserRole.Anonymous,
     isLoggedIn: false,
   });
   authData$ = this.authDataSubject.asObservable();
@@ -28,13 +29,13 @@ export class AuthService {
   LoginUser(username: string, password: string) {
     const credentials: UserCredentialsRequest = { username, password };
     this.http
-      .post<LoginUserResponse>(
-        'https://localhost:7068/api/User/login',
-        credentials
-      )
+      .post<LoginUserResponse>(`${baseUrl}api/User/login`, credentials)
       .subscribe({
         next: (response) => {
-          let role = credentials.username == 'admin' ? 'admin' : 'user';
+          let role: UserRole =
+            credentials.username == UserRole.Admin
+              ? UserRole.Admin
+              : UserRole.User;
           localStorage.setItem('accessToken', response.accessToken);
           this.authDataSubject.next({
             username: username,
@@ -57,6 +58,10 @@ export class AuthService {
 
   logoutUser() {
     localStorage.removeItem('accessToken');
-    this.authDataSubject.next({ username: '', role: '', isLoggedIn: false });
+    this.authDataSubject.next({
+      username: '',
+      role: UserRole.Anonymous,
+      isLoggedIn: false,
+    });
   }
 }

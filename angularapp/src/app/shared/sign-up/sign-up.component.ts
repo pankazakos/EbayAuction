@@ -5,6 +5,7 @@ import { CardWrapperCssProps } from '../card/card.component';
 import { RegisterUserResponse } from '../contracts/responses/user';
 import { RegisterUserRequest } from '../contracts/requests/user';
 import { AuthService } from '../auth-service.service';
+import { baseUrl } from '../types';
 
 @Component({
   selector: 'app-sign-up',
@@ -28,7 +29,7 @@ export class SignUpComponent {
 
     if (this.registerForm.valid) {
       this.http
-        .post<RegisterUserResponse>('https://localhost:7068/api/User', userInfo)
+        .post<RegisterUserResponse>(`${baseUrl}api/User`, userInfo)
         .subscribe({
           next: (response) => {
             this.authService.LoginUser(userInfo.username, userInfo.password);
