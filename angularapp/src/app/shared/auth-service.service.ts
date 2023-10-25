@@ -26,6 +26,10 @@ export class AuthService {
   });
   authData$ = this.authDataSubject.asObservable();
 
+  getCurrentAuthData(): AuthData {
+    return this.authDataSubject.getValue();
+  }
+
   LoginUser(username: string, password: string) {
     const credentials: UserCredentialsRequest = { username, password };
     this.http
@@ -33,9 +37,7 @@ export class AuthService {
       .subscribe({
         next: (response) => {
           let role: UserRole =
-            credentials.username == UserRole.Admin
-              ? UserRole.Admin
-              : UserRole.User;
+            credentials.username == 'admin' ? UserRole.Admin : UserRole.User;
           localStorage.setItem('accessToken', response.accessToken);
           this.authDataSubject.next({
             username: username,
