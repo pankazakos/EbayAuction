@@ -11,3 +11,7 @@
 .fill-remaining-space {
   flex: 1 1 auto;
 }
+
+.margin-right {
+  margin-right: 2rem;
+}

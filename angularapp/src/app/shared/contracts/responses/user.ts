@@ -15,8 +15,8 @@ export interface NoPasswordUserResponse {
   username: string;
   firstName: string;
   lastName: string;
-  lastLogin: Date;
-  dateJoined: Date;
+  lastLogin: string;
+  dateJoined: string;
   email: string;
   country: string;
   location: string;

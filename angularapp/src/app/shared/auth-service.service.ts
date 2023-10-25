@@ -65,5 +65,6 @@ export class AuthService {
       role: UserRole.Anonymous,
       isLoggedIn: false,
     });
+    this.router.navigate(['/']);
   }
 }

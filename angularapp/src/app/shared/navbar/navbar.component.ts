@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../auth-service.service';
 import { Subscription } from 'rxjs';
 import { AuthData } from '../auth-service.service';
+import { UserRole } from '../types';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +12,7 @@ import { AuthData } from '../auth-service.service';
 export class NavBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription | null = null;
   authData: AuthData | null = null;
+  adminRole = UserRole.Admin;
 
   constructor(private authService: AuthService) {}
 

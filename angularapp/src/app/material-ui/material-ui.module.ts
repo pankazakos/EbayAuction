@@ -7,6 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCardModule,
     FlexLayoutModule,
     MatMenuModule,
+    MatTableModule,
   ],
   exports: [
     MatIconModule,
@@ -28,6 +30,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCardModule,
     FlexLayoutModule,
     MatMenuModule,
+    MatTableModule,
   ],
 })
 export class MaterialUiModule {}
