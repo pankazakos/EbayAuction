@@ -13,9 +13,43 @@
   >
     <div id="content" fxFlex="90%" fxFill>
       <mat-tab-group (selectedTabChange)="onTabChanged($event)">
-        <mat-tab label="Saved Items"> Content 1 </mat-tab>
-        <mat-tab label="Published"> Content 2 </mat-tab>
-        <mat-tab label="Bids"> Content 3 </mat-tab>
+        <mat-tab label="Saved Items">
+          <button
+            class="add-item-button"
+            mat-raised-button
+            color="primary"
+            (click)="addItem()"
+          >
+            Add item
+          </button>
+          <mat-list>
+            <mat-list-item *ngFor="let saved of inactiveItems">
+              <mat-list>
+                <mat-list-item>
+                  <div class="field-wrapper">
+                    <div class="field-label">BuyPrice:</div>
+                    <div class="field-value">{{ saved.buyPrice }}</div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="field-wrapper">
+                    <div class="field-label">FirstBid:</div>
+                    <div class="field-value">{{ saved.firstBid }}</div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="field-wrapper">
+                    <div class="field-label">Description:</div>
+                    <div class="field-value">{{ saved.description }}</div>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+              <mat-divider></mat-divider>
+            </mat-list-item>
+          </mat-list>
+        </mat-tab>
+        <mat-tab label="Published"></mat-tab>
+        <mat-tab label="Bids"></mat-tab>
       </mat-tab-group>
     </div>
   </div>

@@ -9,6 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { MatListModule } from '@angular/material/list';
     MatMenuModule,
     MatTableModule,
     MatListModule,
+    MatDividerModule,
   ],
   exports: [
     MatIconModule,
@@ -34,6 +36,7 @@ import { MatListModule } from '@angular/material/list';
     MatMenuModule,
     MatTableModule,
     MatListModule,
+    MatDividerModule,
   ],
 })
 export class MaterialUiModule {}

@@ -80,4 +80,12 @@ export class MyItemsComponent {
         error: (error: any) => console.error(error),
       } as Partial<any>);
   }
+
+  addItem(): void {
+    this.http.post(
+      `${baseUrl}api/item`,
+      // { body: {} },
+      { headers: this.headers }
+    );
+  }
 }
