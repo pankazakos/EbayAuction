@@ -12,7 +12,7 @@
     fxFlex="60%"
   >
     <div id="content" fxFlex="90%" fxFill>
-      <mat-tab-group>
+      <mat-tab-group (selectedTabChange)="onTabChanged($event)">
         <mat-tab label="Saved Items"> Content 1 </mat-tab>
         <mat-tab label="Published"> Content 2 </mat-tab>
         <mat-tab label="Bids"> Content 3 </mat-tab>
