@@ -1,1 +1,24 @@
-<p>my-items works!</p>
+<div
+  id="search-container"
+  fxLayout="row"
+  fxLayoutAlign="space-between none"
+  fxFill
+>
+  <div id="left-margin" fxFlex="20%"></div>
+  <div
+    id="my-items-body"
+    fxLayout="column"
+    fxLayoutAlign="space-evenly center"
+    fxFlex="60%"
+  >
+    <div id="content" fxFlex="90%" fxFill>
+      <mat-tab-group>
+        <mat-tab label="Saved Items"> Content 1 </mat-tab>
+        <mat-tab label="Published"> Content 2 </mat-tab>
+        <mat-tab label="Bids"> Content 3 </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+
+  <div id="right-margin" fxFlex="20%"></div>
+</div>

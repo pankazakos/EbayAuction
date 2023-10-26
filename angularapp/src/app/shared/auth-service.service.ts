@@ -30,6 +30,15 @@ export class AuthService {
     return this.authDataSubject.getValue();
   }
 
+  setAuthData(username: string, isSuperUser: boolean): void {
+    const newAuthData: AuthData = {
+      username: username,
+      role: isSuperUser ? UserRole.Admin : UserRole.User,
+      isLoggedIn: true,
+    };
+    this.authDataSubject.next(newAuthData);
+  }
+
   LoginUser(username: string, password: string) {
     const credentials: UserCredentialsRequest = { username, password };
     this.http
