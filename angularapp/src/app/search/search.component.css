@@ -1,0 +1,44 @@
+#item-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.item-box {
+  flex-basis: 100%; /* Default for xs: 1x4 */
+  box-sizing: border-box;
+  padding: 3rem;
+  background-color: rgb(229, 229, 233);
+}
+
+/* sm and larger */
+@media (min-width: 768px) {
+  .item-box {
+    flex-basis: calc(50% - 1rem); /* 2x2 grid */
+  }
+}
+
+.item-title {
+  display: flex;
+  justify-content: center;
+}
+
+.field-wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.field-label {
+  width: 10em;
+  text-align: left;
+}
+
+.field-value {
+  text-align: left;
+}
+
+.item-link {
+  color: black;
+  text-decoration: none;
+}

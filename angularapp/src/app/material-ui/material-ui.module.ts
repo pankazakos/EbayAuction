@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { MatTableModule } from '@angular/material/table';
     FlexLayoutModule,
     MatMenuModule,
     MatTableModule,
+    MatListModule,
   ],
   exports: [
     MatIconModule,
@@ -31,6 +33,7 @@ import { MatTableModule } from '@angular/material/table';
     FlexLayoutModule,
     MatMenuModule,
     MatTableModule,
+    MatListModule,
   ],
 })
 export class MaterialUiModule {}

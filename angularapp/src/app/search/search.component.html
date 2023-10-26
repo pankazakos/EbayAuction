@@ -1,1 +1,57 @@
-<p>search works!</p>
+<div
+  id="search-container"
+  fxLayout="row"
+  fxLayoutAlign="space-between none"
+  fxFill
+>
+  <div id="left-margin" fxFlex="20%"></div>
+  <div
+    id="search-body"
+    fxLayout="column"
+    fxLayoutAlign="space-evenly center"
+    fxFlex="60%"
+  >
+    <div id="search-input" fxflex="30%"></div>
+    <div id="item-boxes" fxFlex="70%" fxFill>
+      <div class="item-box" *ngFor="let item of items">
+        <div class="item-title">
+          <a class="item-link" routerLink="item/{{ item.itemId }}">
+            <h2>{{ item.name }}</h2>
+          </a>
+        </div>
+        <mat-list-item>
+          <div class="field-wrapper">
+            <div class="field-label">Currently:</div>
+            <div class="field-value">{{ item.currently }}$</div>
+          </div>
+        </mat-list-item>
+        <mat-list-item>
+          <div class="field-wrapper">
+            <div class="field-label">BuyPrice:</div>
+            <div class="field-value">
+              {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
+            </div>
+          </div>
+        </mat-list-item>
+        <mat-list-item>
+          <div class="field-wrapper">
+            <div class="field-label">FirstBid:</div>
+            <div class="field-value">
+              {{ item.firstBid }}
+            </div>
+          </div>
+        </mat-list-item>
+        <mat-list-item>
+          <div class="field-wrapper">
+            <div class="field-label">Number of bids:</div>
+            <div class="field-value">
+              {{ item.numBids }}
+            </div>
+          </div>
+        </mat-list-item>
+      </div>
+    </div>
+  </div>
+
+  <div id="right-margin" fxFlex="20%"></div>
+</div>

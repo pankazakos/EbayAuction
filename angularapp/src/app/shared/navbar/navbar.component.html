@@ -1,11 +1,6 @@
 <mat-toolbar color="primary" class="custom-toolbar">
   <a routerLink="/" class="custom-link">EbayAuction</a>
   <span class="fill-remaining-space"></span>
-  <div *ngIf="authData?.role == adminRole" class="margin-right">
-    <a routerLink="admin">
-      <button mat-raised-button>manage</button>
-    </a>
-  </div>
   <div *ngIf="authData?.isLoggedIn">
     <button mat-button [matMenuTriggerFor]="menu">
       <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -16,6 +11,12 @@
       </div>
     </button>
     <mat-menu #menu="matMenu">
+      <a class="link" routerLink="my-items">
+        <button mat-menu-item>my items</button>
+      </a>
+      <a *ngIf="authData?.role == adminRole" class="link" routerLink="admin">
+        <button mat-menu-item>control panel</button>
+      </a>
       <button mat-menu-item (click)="callLogoutUser()">logout</button>
     </mat-menu>
   </div>
