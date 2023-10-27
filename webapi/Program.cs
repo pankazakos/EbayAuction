@@ -13,8 +13,15 @@ using webapi.Utilities.ControllerUtils;
 using webapi.Utilities.MappingUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Get configuration from appsettings.json
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
 // Add services to the container.
 
@@ -87,6 +94,18 @@ var mapper = config.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
+// logger configuration
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
+
+// Register the logger with the DI container
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddSerilog();
+});
+
+
 // Build app
 var app = builder.Build();
 
@@ -130,11 +149,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.UseCors("AllowAnyOrigin");
 

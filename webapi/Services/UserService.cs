@@ -1,4 +1,5 @@
-﻿using webapi.Contracts.Requests.User;
+﻿using Microsoft.OpenApi.Validations;
+using webapi.Contracts.Requests.User;
 using webapi.Models;
 using webapi.Repository;
 
@@ -7,10 +8,12 @@ namespace webapi.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public async Task<User?> GetById(int id, CancellationToken cancel = default)
@@ -25,7 +28,11 @@ namespace webapi.Services
 
         public async Task<IEnumerable<User>> GetAll(CancellationToken cancel = default)
         {
-            return await _userRepository.GetAll(cancel);
+            var users = await _userRepository.GetAll(cancel);
+
+            _logger.LogInformation("Success: all users retrieved");
+
+            return users;
         }
 
         public async Task<List<string>> GetAllUsernames(CancellationToken cancel = default)
