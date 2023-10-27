@@ -18,19 +18,40 @@ namespace webapi.Services
 
         public async Task<User?> GetById(int id, CancellationToken cancel = default)
         {
-            return await _userRepository.GetById(id, cancel);
+            var user = await _userRepository.GetById(id, cancel);
+
+            if (user == null)
+            {
+                _logger.LogInformation("User GetById: No user found");
+                return null;
+            }
+
+            _logger.LogInformation("User GetById: Retrieved user with id: {id}", id);
+
+
+            return user;
         }
 
         public async Task<User?> GetByUsername(string username, CancellationToken cancel = default)
         {
-            return await _userRepository.GetByUsername(username, cancel);
+            var user = await _userRepository.GetByUsername(username, cancel);
+
+            if (user == null)
+            {
+                _logger.LogInformation("User GetByUsername: No user found");
+                return null;
+            }
+
+            _logger.LogInformation("User GetByUsername: Retrieved user with username: {username}", username);
+
+            return user;
         }
 
         public async Task<IEnumerable<User>> GetAll(CancellationToken cancel = default)
         {
             var users = await _userRepository.GetAll(cancel);
 
-            _logger.LogInformation("Success: all users retrieved");
+            _logger.LogInformation(!users.Any() ? "User GetAll: No users found" : "User GetAll: All users retrieved");
 
             return users;
         }
