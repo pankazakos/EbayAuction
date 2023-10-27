@@ -10,6 +10,8 @@
 
         public const string GetById = "{id:int}";
 
+        public const string GetByUsername = "{username}";
+
         public const string Delete = "{id:int}";
 
         public const string Create = "";

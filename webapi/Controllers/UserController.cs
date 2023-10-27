@@ -62,6 +62,15 @@ namespace webapi.Controllers
         }
 
 
+        [AuthorizeMultiplePolicies(Policies.Admin, Policies.SelfUser)]
+        [HttpGet(UserEndpoints.GetByUsername)]
+        public async Task<IActionResult> GetByUsername([FromRoute] string username, CancellationToken cancel = default)
+        {
+            return await _controllerHelper.GetAndRespond(() => _userService.GetByUsername(username, cancel),
+               (user, mapper) => user!.MapToResponse<NoPasswordUserResponse>(mapper), _mapper);
+        }
+
+
         [Authorize(Policy = Policies.Admin)]
         [HttpDelete(UserEndpoints.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancel = default)
