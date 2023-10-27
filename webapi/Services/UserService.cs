@@ -1,5 +1,4 @@
-﻿using Microsoft.OpenApi.Validations;
-using webapi.Contracts.Requests.User;
+﻿using webapi.Contracts.Requests.User;
 using webapi.Models;
 using webapi.Repository;
 
@@ -27,7 +26,6 @@ namespace webapi.Services
             }
 
             _logger.LogInformation("User GetById: Retrieved user with id: {id}", id);
-
 
             return user;
         }
@@ -58,13 +56,25 @@ namespace webapi.Services
 
         public async Task<List<string>> GetAllUsernames(CancellationToken cancel = default)
         {
-            return await _userRepository.GetAllUsernames(cancel);
+            var usernames = await _userRepository.GetAllUsernames(cancel);
+
+            if (!usernames.Any())
+            {
+                _logger.LogInformation("User GetAllUsernames: No users found");
+            }
+            else
+            {
+                _logger.LogInformation("User GetAllUsernames: Retrieved all usernames");
+            }
+
+            return usernames;
         }
 
         public async Task<User> Create(RegisterUserRequest input, CancellationToken cancel = default)
         {
             if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
             {
+                _logger.LogInformation("User Create: Client did not specify username or password");
                 throw new ArgumentException("Username and password are required.");
             }
 
@@ -72,10 +82,15 @@ namespace webapi.Services
 
             if (user != null)
             {
+                _logger.LogInformation("User Create: create failed. Username already exists");
                 throw new ArgumentException("Username already exists.");
             }
 
-            return await _userRepository.Create(input, cancel);
+            var createdUser = await _userRepository.Create(input, cancel);
+
+            _logger.LogInformation("User Create: User successfully created");
+
+            return createdUser;
         }
 
         public async Task Delete(int id, CancellationToken cancel = default)
@@ -84,10 +99,13 @@ namespace webapi.Services
 
             if (user is null)
             {
+                _logger.LogInformation("User Delete failed: no user found");
                 throw new InvalidOperationException("User not Found");
             }
 
             await _userRepository.Delete(user, cancel);
+
+            _logger.LogInformation("User Delete: Success");
         }
 
         public async Task UpdateLastLogin(string username, CancellationToken cancel = default)
@@ -96,10 +114,13 @@ namespace webapi.Services
 
             if (user is null)
             {
+                _logger.LogInformation("User UpdateLastLogin failed: no user found");
                 throw new InvalidOperationException("User not found");
             }
 
             await _userRepository.UpdateLastLogin(user, cancel);
+
+            _logger.LogInformation("User UpdateLastLogin: Success");
         }
 
     }
