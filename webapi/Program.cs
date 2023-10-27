@@ -102,6 +102,7 @@ Log.Logger = new LoggerConfiguration()
 // Register the logger with the DI container
 builder.Services.AddLogging(loggingBuilder =>
 {
+    loggingBuilder.ClearProviders();
     loggingBuilder.AddSerilog();
 });
 
