@@ -9,6 +9,7 @@ using webapi.Contracts.Mapping;
 using webapi.Contracts.Policies;
 using webapi.Contracts.Responses.Item;
 using webapi.Contracts.Requests.Item;
+using webapi.Contracts.Responses;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.ControllerUtils;
 
@@ -57,7 +58,14 @@ namespace webapi.Controllers
 
             var items = await _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel);
 
-            return Ok(items);
+            List<IEntityResponse> mappedItems = new();
+
+            foreach(var item in items)
+            {
+                mappedItems.Add(item.MapToResponse<AddItemResponse>(_mapper));
+            }
+
+            return Ok(mappedItems);
         }
 
 
@@ -65,7 +73,7 @@ namespace webapi.Controllers
         [HttpGet(ItemEndpoints.Inactive)]
         public async Task<IActionResult> ListInactive(CancellationToken cancel = default)
         {
-            return await ListMyItems(active: true, cancel);
+            return await ListMyItems(false, cancel);
         }
 
 
@@ -73,7 +81,7 @@ namespace webapi.Controllers
         [HttpGet(ItemEndpoints.Active)]
         public async Task<IActionResult> ListActive(CancellationToken cancel = default)
         {
-            return await ListMyItems(active: false, cancel);
+            return await ListMyItems(true, cancel);
         }
 
 
@@ -81,7 +89,7 @@ namespace webapi.Controllers
         [HttpGet(ItemEndpoints.Bidden)]
         public async Task<IActionResult> ListBidden(CancellationToken cancel = default)
         {
-            return await ListMyItems(active: true, cancel);
+            return await ListMyItems(true, cancel);
         }
 
 
