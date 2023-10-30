@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Swagger;
 using webapi.Contracts.Requests.Item;
 using webapi.Database;
 using webapi.Models;
@@ -17,7 +18,7 @@ namespace webapi.Repository
             _categoryService = categoryService;
         }
 
-        public async Task<Item> Create(AddItemRequest item, User seller, CancellationToken cancel = default)
+        public async Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile, string? imageFilename, CancellationToken cancel = default)
         {
             var newItem = new Item
             {
@@ -41,6 +42,18 @@ namespace webapi.Repository
                     var categories = await _categoryService.FilterWithIds(item.CategoryIds, cancel);
 
                     newItem.Categories = categories.ToList();
+
+                    if (postedFile != null && imageFilename != null)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "item-images", imageFilename);
+
+                        await using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await postedFile.CopyToAsync(stream, cancel);
+                        }
+
+                        newItem.ImageGuid = Path.GetFileNameWithoutExtension(imageFilename);
+                    }
 
                     _dbContext.Items.Add(newItem);
 

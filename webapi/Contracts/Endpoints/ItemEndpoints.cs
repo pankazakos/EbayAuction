@@ -21,7 +21,5 @@
         public const string Activate = "Activate/{id:long}";
 
         public const string Delete = "{id:long}";
-
-        public const string UploadImage = "upload-image";
     }
 }

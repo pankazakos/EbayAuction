@@ -19,5 +19,7 @@
         public string Description { get; init; } = string.Empty;
 
         public int SellerId { get; init; }
+
+        public string? ImageUrl { get; init; }
     }
 }

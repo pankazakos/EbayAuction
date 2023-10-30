@@ -9,5 +9,7 @@
         public float FirstBid { get; init; }
 
         public string Description { get; init; } = string.Empty;
+
+        public string? ImageFilename { get; init; }
     }
 }

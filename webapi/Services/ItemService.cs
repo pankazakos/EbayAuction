@@ -16,7 +16,7 @@ namespace webapi.Services
             _userRepository = userRepository;
         }
 
-        public async Task<Item> Create(AddItemRequest item, string username, CancellationToken cancel)
+        public async Task<Item> Create(AddItemRequest item, string username, IFormFile? postedFile, CancellationToken cancel)
         {
             if (item is null)
             {
@@ -30,7 +30,23 @@ namespace webapi.Services
                 throw new InvalidOperationException("User not found");
             }
 
-            return await _itemRepository.Create(item, user, cancel);
+            if (postedFile is null)
+            {
+                return await _itemRepository.Create(item, user, cancel: cancel);
+            }
+
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+
+            var fileExtension = Path.GetExtension(postedFile.FileName);
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new ArgumentException("Invalid file type. Only .jpg, .jpeg, and .png files are allowed.");
+            }
+
+            var fileName = Guid.NewGuid() + fileExtension;
+
+            return await _itemRepository.Create(item, user, postedFile, fileName, cancel);
         }
 
         public async Task<IEnumerable<Item>> ListAll(CancellationToken cancel = default)

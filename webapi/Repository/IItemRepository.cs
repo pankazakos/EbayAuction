@@ -5,7 +5,7 @@ namespace webapi.Repository
 {
     public interface IItemRepository
     {
-        public Task<Item> Create(AddItemRequest item, User seller, CancellationToken cancel = default);
+        public Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile = null, string? imageFilename = null, CancellationToken cancel = default);
 
         public Task<IEnumerable<Item>> ListAll(CancellationToken cancel = default);
 
