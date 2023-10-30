@@ -22,6 +22,6 @@
 
         public const string Delete = "{id:long}";
 
-        public const string Bid = "bid/{id:long}";
+        public const string UploadImage = "upload-image";
     }
 }

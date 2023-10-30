@@ -49,7 +49,7 @@ namespace webapi.Services
         {
             var users = await _userRepository.GetAll(cancel);
 
-            _logger.LogInformation(!users.Any() ? "User GetAll: No users found" : "User GetAll: All users retrieved");
+            _logger.LogInformation(!users.Any() ? "User GetAll: No users found" : "User GetAll [\u001b[31msuccess\u001b[0m]: All users retrieved");
 
             return users;
         }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+
+using Microsoft.EntityFrameworkCore;
 using webapi.Contracts.Requests.User;
 using webapi.Database;
 using webapi.Models;

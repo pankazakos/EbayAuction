@@ -27,6 +27,8 @@ namespace webapi.Models
 
         public int SellerId { get; init; }
 
+        public Guid ImageGuid { get; set; }
+
 
         public ICollection<Category> Categories { get; set; } = new List<Category>();
 

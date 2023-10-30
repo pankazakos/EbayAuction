@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Models;
 using webapi.Services;
-using webapi.Utilities;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
 using webapi.Contracts.Policies;
@@ -60,7 +59,7 @@ namespace webapi.Controllers
 
             List<IEntityResponse> mappedItems = new();
 
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 mappedItems.Add(item.MapToResponse<AddItemResponse>(_mapper));
             }
@@ -115,6 +114,48 @@ namespace webapi.Controllers
         public async Task<IActionResult> Delete([FromRoute] long id, CancellationToken cancel = default)
         {
             return await _controllerHelper.DeleteAndRespond<Item>(() => _itemService.Delete(id, cancel));
+        }
+
+        [Authorize]
+        [HttpPost(ItemEndpoints.UploadImage)]
+        public async Task<IActionResult> UploadImage(CancellationToken cancel)
+        {
+            if (!Request.HasFormContentType)
+            {
+                return BadRequest("Invalid request format.");
+            }
+
+            try
+            {
+                var formCollection = await Request.ReadFormAsync(cancel);
+
+                if (formCollection.Files.Count <= 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                var postedFile = formCollection.Files[0];
+
+                var uniqueFileName = Guid.NewGuid() + Path.GetExtension(postedFile.FileName);
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "item-images", uniqueFileName);
+
+                await using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await postedFile.CopyToAsync(stream, cancel);
+                }
+
+                return Ok(uniqueFileName);
+
+            }
+            catch (OperationCanceledException)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
 

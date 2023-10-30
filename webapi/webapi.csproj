@@ -30,4 +30,8 @@
 		<PackageReference Include="System.Text.Json" Version="7.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\item-images\" />
+	</ItemGroup>
+
 </Project>
