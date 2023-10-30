@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Channels;
-using webapi.Contracts.Responses;
-using webapi.Contracts.Responses.User;
-using webapi.Models;
 
 namespace webapi.Utilities.ControllerUtils
 {
-    public class ControllerHelper : Controller
+    public class ControllerHelper : Controller, IControllerHelper
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

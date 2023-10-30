@@ -21,9 +21,9 @@ namespace webapi.Controllers
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        private readonly ControllerHelper _controllerHelper;
+        private readonly IControllerHelper _controllerHelper;
 
-        public UserController(IUserService service, IConfiguration configuration, IMapper mapper, ControllerHelper controllerHelper)
+        public UserController(IUserService service, IConfiguration configuration, IMapper mapper, IControllerHelper controllerHelper)
         {
             _userService = service;
             _configuration = configuration;

@@ -21,9 +21,9 @@ namespace webapi.Controllers
         private readonly IItemService _itemService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly ControllerHelper _controllerHelper;
+        private readonly IControllerHelper _controllerHelper;
 
-        public ItemController(IItemService itemService, IUserService userService, IMapper mapper, ControllerHelper controllerHelper)
+        public ItemController(IItemService itemService, IUserService userService, IMapper mapper, IControllerHelper controllerHelper)
         {
             _itemService = itemService;
             _userService = userService;

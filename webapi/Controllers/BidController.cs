@@ -16,9 +16,9 @@ namespace webapi.Controllers
     {
         private readonly IBidService _bidService;
         private readonly IMapper _mapper;
-        private readonly ControllerHelper _controllerHelper;
+        private readonly IControllerHelper _controllerHelper;
 
-        public BidController(IBidService bidService, IMapper mapper, ControllerHelper controllerHelper)
+        public BidController(IBidService bidService, IMapper mapper, IControllerHelper controllerHelper)
         {
             _bidService = bidService;
             _mapper = mapper;

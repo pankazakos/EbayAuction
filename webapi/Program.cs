@@ -47,7 +47,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBidService, BidService>();
 builder.Services.AddScoped<IBidRepository, BidRepository>();
-builder.Services.AddScoped<ControllerHelper>();
+builder.Services.AddScoped<IControllerHelper, ControllerHelper>();
 
 // Add Authorization handlers
 builder.Services.AddScoped<IAuthorizationHandler, SelfUserAuthorizationHandler>();

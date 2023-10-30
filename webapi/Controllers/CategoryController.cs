@@ -15,9 +15,9 @@ namespace webapi.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private readonly ControllerHelper _controllerHelper;
+        private readonly IControllerHelper _controllerHelper;
 
-        public CategoryController(ICategoryService categoryService, ControllerHelper controllerHelper)
+        public CategoryController(ICategoryService categoryService, IControllerHelper controllerHelper)
         {
             _categoryService = categoryService;
             _controllerHelper = controllerHelper;
