@@ -1,6 +1,7 @@
 ﻿using webapi.Contracts.Requests.User;
 using webapi.Models;
 using webapi.Repository;
+using webapi.Utilities.ServiceUtils;
 
 namespace webapi.Services
 {
@@ -8,11 +9,13 @@ namespace webapi.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly ILogger<UserService> _logger;
+        private readonly IAppLogHelper _appLogHelper;
 
-        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger, IAppLogHelper appLogHelper)
         {
             _userRepository = userRepository;
             _logger = logger;
+            _appLogHelper = appLogHelper;
         }
 
         public async Task<User?> GetById(int id, CancellationToken cancel = default)
@@ -49,7 +52,9 @@ namespace webapi.Services
         {
             var users = await _userRepository.GetAll(cancel);
 
-            _logger.LogInformation(!users.Any() ? "User GetAll: No users found" : "User GetAll [\u001b[31msuccess\u001b[0m]: All users retrieved");
+            //_logger.LogInformation(!users.Any() ? "User GetAll: No users found" : "User GetAll [\u001b[31msuccess\u001b[0m]: All users retrieved");
+
+            _appLogHelper.LogSuccess(nameof(UserService), nameof(GetAll), "all users retrieved");
 
             return users;
         }

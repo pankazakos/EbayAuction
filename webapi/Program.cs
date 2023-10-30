@@ -14,6 +14,7 @@ using webapi.Utilities.MappingUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using Serilog;
+using webapi.Utilities.ServiceUtils;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,7 +73,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
 
@@ -99,12 +100,15 @@ Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
 
-// Register the logger with the DI container
+// configure Serilog logger
 builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.ClearProviders();
     loggingBuilder.AddSerilog();
 });
+
+builder.Services.AddSingleton<Serilog.ILogger>(Log.Logger);
+builder.Services.AddSingleton<IAppLogHelper, AppLogHelper>();
 
 
 // Build app
