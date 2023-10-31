@@ -12,21 +12,41 @@ namespace webapi.Utilities.ServiceUtils
             _logger = logger;
         }
 
-        public void LogSuccess(string className, string methodName, string message)
+        public void LogSuccess(string className, string methodName, string message, params object[] args)
         {
-            var greenText = "\u001b[32m[success]\u001b[0m"; // \u001b[0m resets the color
-
-            _logger.Information($"{greenText} {className} {methodName}: {message}");
+            _logger.Information($"{ColoredText("success", "green")} {className}.{methodName}: {message}", args);
         }
 
-        public void LogFailure(string className, string methodName, string message, Exception ex)
+        public void LogFailure(string className, string methodName, string message, params object[] args)
         {
-            using (LogContext.PushProperty("Status", "fail"))
-            using (LogContext.PushProperty("SourceContext", $"{className}.{methodName}"))
+            _logger.Error($"{ColoredText("fail", "red")} {className}.{methodName}: {message}", args);
+        }
+
+        private static string ColoredText(string text, string color)
+        {
+            // ANSI escaped colors
+
+            const string escapeCode = "\u001b[";
+
+            const string green = "32m";
+
+            const string red = "31m";
+
+            switch (color)
             {
-                _logger.Error("Operation failed - {ErrorMessage}", ex.Message);
+                case "green":
+                    color = green;
+                    break;
+                case "red":
+                    color = red;
+                    break;
+                default:
+                    return "";
             }
-        }
 
+            const string resetEscapeCode = "\u001b[0m";
+
+            return $"{escapeCode}{color}{text}{resetEscapeCode}";
+        }
     }
 }

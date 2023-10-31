@@ -14,6 +14,7 @@ using webapi.Utilities.MappingUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 using webapi.Utilities.ServiceUtils;
 
 

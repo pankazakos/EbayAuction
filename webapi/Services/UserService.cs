@@ -1,7 +1,6 @@
 ﻿using webapi.Contracts.Requests.User;
 using webapi.Models;
 using webapi.Repository;
-using webapi.Utilities.ServiceUtils;
 
 namespace webapi.Services
 {
@@ -9,13 +8,11 @@ namespace webapi.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly ILogger<UserService> _logger;
-        private readonly IAppLogHelper _appLogHelper;
 
-        public UserService(IUserRepository userRepository, ILogger<UserService> logger, IAppLogHelper appLogHelper)
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _logger = logger;
-            _appLogHelper = appLogHelper;
         }
 
         public async Task<User?> GetById(int id, CancellationToken cancel = default)
@@ -24,11 +21,11 @@ namespace webapi.Services
 
             if (user == null)
             {
-                _logger.LogInformation("User GetById: No user found");
+                _logger.LogWarning("User not found");
                 return null;
             }
 
-            _logger.LogInformation("User GetById: Retrieved user with id: {id}", id);
+            _logger.LogInformation("Retrieved user with id: {id}", id);
 
             return user;
         }
@@ -39,11 +36,11 @@ namespace webapi.Services
 
             if (user == null)
             {
-                _logger.LogInformation("User GetByUsername: No user found");
+                _logger.LogWarning("User not found");
                 return null;
             }
 
-            _logger.LogInformation("User GetByUsername: Retrieved user with username: {username}", username);
+            _logger.LogInformation("Retrieved user {username}", username);
 
             return user;
         }
@@ -52,9 +49,7 @@ namespace webapi.Services
         {
             var users = await _userRepository.GetAll(cancel);
 
-            //_logger.LogInformation(!users.Any() ? "User GetAll: No users found" : "User GetAll [\u001b[31msuccess\u001b[0m]: All users retrieved");
-
-            _appLogHelper.LogSuccess(nameof(UserService), nameof(GetAll), "all users retrieved");
+            _logger.LogInformation("Retrieved all users");
 
             return users;
         }
@@ -65,11 +60,11 @@ namespace webapi.Services
 
             if (!usernames.Any())
             {
-                _logger.LogInformation("User GetAllUsernames: No users found");
+                _logger.LogWarning("No users found");
             }
             else
             {
-                _logger.LogInformation("User GetAllUsernames: Retrieved all usernames");
+                _logger.LogInformation("Retrieved all usernames");
             }
 
             return usernames;
@@ -79,21 +74,23 @@ namespace webapi.Services
         {
             if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
             {
-                _logger.LogInformation("User Create: Client did not specify username or password");
-                throw new ArgumentException("Username and password are required.");
+                const string message = "Username and password are required";
+                _logger.LogWarning(message);
+                throw new ArgumentException(message);
             }
 
             var user = await _userRepository.GetByUsername(input.Username, cancel);
 
             if (user != null)
             {
-                _logger.LogInformation("User Create: create failed. Username already exists");
-                throw new ArgumentException("Username already exists.");
+                const string message = "Username already exists";
+                _logger.LogWarning(message);
+                throw new ArgumentException(message);
             }
 
             var createdUser = await _userRepository.Create(input, cancel);
 
-            _logger.LogInformation("User Create: User successfully created");
+            _logger.LogInformation("User {username} created", createdUser.Username);
 
             return createdUser;
         }
@@ -104,13 +101,14 @@ namespace webapi.Services
 
             if (user is null)
             {
-                _logger.LogInformation("User Delete failed: no user found");
-                throw new InvalidOperationException("User not Found");
+                const string message = "User not found";
+                _logger.LogWarning(message);
+                throw new InvalidOperationException(message);
             }
 
             await _userRepository.Delete(user, cancel);
 
-            _logger.LogInformation("User Delete: Success");
+            _logger.LogInformation("Deleted user {username}", user.Username);
         }
 
         public async Task UpdateLastLogin(string username, CancellationToken cancel = default)
@@ -119,13 +117,14 @@ namespace webapi.Services
 
             if (user is null)
             {
-                _logger.LogInformation("User UpdateLastLogin failed: no user found");
-                throw new InvalidOperationException("User not found");
+                const string message = "User not found";
+                _logger.LogWarning(message);
+                throw new InvalidOperationException(message);
             }
 
             await _userRepository.UpdateLastLogin(user, cancel);
 
-            _logger.LogInformation("User UpdateLastLogin: Success");
+            _logger.LogInformation("User {username} logged in", user.Username);
         }
 
     }
