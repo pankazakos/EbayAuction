@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen();
 // Add DbContext
 builder.Services.AddScoped<IAuctionContext, AuctionContext>();
 builder.Services.AddDbContext<AuctionContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")!));
 
 // Add Http context accessor
 builder.Services.AddHttpContextAccessor();

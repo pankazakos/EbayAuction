@@ -68,7 +68,7 @@ namespace webapi.Services
         {
             var items = await _itemRepository.ListAll(cancel);
 
-            _logger.LogInformation("All items retrieved");
+            _logger.LogInformation("Retrieved all items");
 
             return items;
         }

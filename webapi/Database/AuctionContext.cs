@@ -8,13 +8,13 @@ namespace webapi.Database
     {
         public AuctionContext(DbContextOptions<AuctionContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } = default!;
 
-        public DbSet<Item> Items { get; set; }
+        public DbSet<Item> Items { get; set; } = default!;
 
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; } = default!;
 
-        public DbSet<Bid> Bids { get; set; }
+        public DbSet<Bid> Bids { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

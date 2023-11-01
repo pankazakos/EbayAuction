@@ -27,7 +27,7 @@ namespace webapi.Utilities.ControllerUtils
 
         public IActionResult NotFoundRespond<T>()
         {
-            return NotFound($"No {typeof(T).Name} found.");
+            return NotFound($"{typeof(T).Name} not found.");
         }
 
         public async Task<IActionResult> CreateAndRespond<TModel, TResponse>(

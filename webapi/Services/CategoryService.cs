@@ -33,19 +33,10 @@ namespace webapi.Services
 
         public async Task<IEnumerable<Category>> GetAll(CancellationToken cancel = default)
         {
-            var categories = (await _categoryRepository.GetAll(cancel)).ToList();
+            var categories = (await _categoryRepository.GetAll(cancel));
 
-            if (categories.Any())
-            {
-                _logger.LogInformation("All categories retrieved");
-                return categories;
-            }
-
-            const string message = "No categories found";
-
-            _logger.LogWarning(message);
-
-            throw new InvalidOperationException(message);
+            _logger.LogInformation("Retrieved all categories");
+            return categories;
         }
 
         public async Task<IEnumerable<Category>> FilterWithIds(List<int> ids, CancellationToken cancel = default)
@@ -60,7 +51,7 @@ namespace webapi.Services
 
             _logger.LogWarning("No Categories with ids: {categoryIds} found", string.Join(", ", ids));
 
-            throw new InvalidOperationException("No Categories with given ids found");
+            return Enumerable.Empty<Category>();
         }
 
         public async Task<Category> Create(AddCategoryRequest input, CancellationToken cancel = default)
