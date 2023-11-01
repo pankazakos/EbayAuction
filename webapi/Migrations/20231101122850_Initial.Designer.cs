@@ -12,7 +12,7 @@ using webapi.Database;
 namespace webapi.Migrations
 {
     [DbContext(typeof(AuctionContext))]
-    [Migration("20231013085330_Initial")]
+    [Migration("20231101122850_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -112,6 +112,9 @@ namespace webapi.Migrations
 
                     b.Property<float>("FirstBid")
                         .HasColumnType("real");
+
+                    b.Property<string>("ImageGuid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

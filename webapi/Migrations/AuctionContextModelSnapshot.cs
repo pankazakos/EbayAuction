@@ -110,6 +110,9 @@ namespace webapi.Migrations
                     b.Property<float>("FirstBid")
                         .HasColumnType("real");
 
+                    b.Property<string>("ImageGuid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
