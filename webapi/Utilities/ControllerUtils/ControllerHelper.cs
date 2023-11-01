@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using webapi.Contracts.Mapping;
+using webapi.Contracts.Responses;
+using webapi.Models;
 
 namespace webapi.Utilities.ControllerUtils
 {
@@ -44,6 +47,20 @@ namespace webapi.Utilities.ControllerUtils
             {
                 return StatusCode(500, "An error occurred while saving the data to the database. Please try again later.");
             }
+        }
+
+        public async Task<IActionResult> GetAllAndRespond<TEntity, TResponse>(
+            Func<Task<IEnumerable<TEntity>>> getAllFunc, IMapper mapper) 
+            where TEntity : IModel
+            where TResponse : IEntityResponse
+        {
+            var entities = await getAllFunc();
+
+            var mappedEntities = entities.Select(entity => entity.MapToResponse<TResponse>(mapper));
+
+            var castEntities = mappedEntities.Cast<TResponse>();
+
+            return Ok(castEntities);
         }
 
         public async Task<IActionResult> GetAndRespond<TEntity, TResponse>(Func<Task<TEntity>> getFunc,

@@ -36,9 +36,7 @@ namespace webapi.Controllers
         [HttpGet(UserEndpoints.All)]
         public async Task<IActionResult> ListAll(CancellationToken cancel = default)
         {
-            var users = await _userService.GetAll(cancel);
-
-            return Ok(users);
+            return await _controllerHelper.GetAllAndRespond<User, BasicUserResponse>(() => _userService.GetAll(cancel), _mapper);
         }
 
 
@@ -58,7 +56,7 @@ namespace webapi.Controllers
         {
             return await _controllerHelper.GetAndRespond(
                 () => _userService.GetById(id, cancel),
-                (user, mapper) => user!.MapToResponse<NoPasswordUserResponse>(mapper), _mapper);
+                (user, mapper) => user!.MapToResponse<BasicUserResponse>(mapper), _mapper);
         }
 
 
@@ -67,7 +65,7 @@ namespace webapi.Controllers
         public async Task<IActionResult> GetByUsername([FromRoute] string username, CancellationToken cancel = default)
         {
             return await _controllerHelper.GetAndRespond(() => _userService.GetByUsername(username, cancel),
-               (user, mapper) => user!.MapToResponse<NoPasswordUserResponse>(mapper), _mapper);
+               (user, mapper) => user!.MapToResponse<BasicUserResponse>(mapper), _mapper);
         }
 
 
@@ -88,7 +86,7 @@ namespace webapi.Controllers
 
 
         [HttpPost(UserEndpoints.Login)]
-        public async Task<IActionResult> Login([FromBody] UserCredentialsRequest input, CancellationToken cancel = default)
+        public async Task<IActionResult> Login([FromBody] LoginUserRequest input, CancellationToken cancel = default)
         {
             var user = await _userService.GetByUsername(input.Username, cancel);
 

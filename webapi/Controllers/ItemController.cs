@@ -138,9 +138,7 @@ namespace webapi.Controllers
         [HttpGet(ItemEndpoints.All)]
         public async Task<IActionResult> All(CancellationToken cancel = default)
         {
-            var items = await _itemService.ListAll(cancel);
-
-            return Ok(items);
+            return await _controllerHelper.GetAllAndRespond<Item, BasicItemResponse>(() => _itemService.GetAll(cancel), _mapper);
         }
 
 

@@ -7,7 +7,7 @@ namespace webapi.Services
     {
         public Task<Item> Create(AddItemRequest item, string username, IFormFile? postedFile = null, CancellationToken cancel = default);
 
-        public Task<IEnumerable<Item>> ListAll(CancellationToken cancel = default);
+        public Task<IEnumerable<Item>> GetAll(CancellationToken cancel = default);
 
         public Task<Item?> GetById(long id, CancellationToken cancel = default);
 

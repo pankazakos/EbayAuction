@@ -64,7 +64,7 @@ namespace webapi.Services
             return createdItemWithImage;
         }
 
-        public async Task<IEnumerable<Item>> ListAll(CancellationToken cancel = default)
+        public async Task<IEnumerable<Item>> GetAll(CancellationToken cancel = default)
         {
             var items = await _itemRepository.ListAll(cancel);
 

@@ -1,12 +1,19 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.NetworkInformation;
 using webapi.Contracts.Endpoints;
+using webapi.Contracts.Mapping;
 using webapi.Contracts.Policies;
 using webapi.Contracts.Requests.Category;
+using webapi.Contracts.Responses;
+using webapi.Contracts.Responses.Category;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities.ControllerUtils;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
+
 
 namespace webapi.Controllers
 {
@@ -16,11 +23,13 @@ namespace webapi.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly IControllerHelper _controllerHelper;
+        private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryService categoryService, IControllerHelper controllerHelper)
+        public CategoryController(ICategoryService categoryService, IControllerHelper controllerHelper, IMapper mapper)
         {
             _categoryService = categoryService;
             _controllerHelper = controllerHelper;
+            _mapper = mapper;
         }
 
 
@@ -41,9 +50,7 @@ namespace webapi.Controllers
         [HttpGet(CategoryEndpoints.GetAll)]
         public async Task<IActionResult> GetAll(CancellationToken cancel = default)
         {
-            var categories = await _categoryService.GetAll(cancel);
-
-            return Ok(categories);
+            return await _controllerHelper.GetAllAndRespond<Category, BasicCategoryResponse>(() => _categoryService.GetAll(cancel), _mapper);
         }
 
 

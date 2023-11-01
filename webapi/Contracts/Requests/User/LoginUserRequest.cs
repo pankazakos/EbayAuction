@@ -1,6 +1,6 @@
 ﻿namespace webapi.Contracts.Requests.User
 {
-    public class UserCredentialsRequest
+    public class LoginUserRequest
     {
         public string Username { get; set; } = string.Empty;
 

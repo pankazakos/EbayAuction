@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using webapi.Contracts.Responses.bid;
+using webapi.Contracts.Responses.Category;
 using webapi.Contracts.Responses.Item;
 using webapi.Contracts.Responses.User;
 using webapi.Models;
@@ -14,7 +15,8 @@ namespace webapi.Utilities.MappingUtils
             {
                 { typeof(User), typeof(IUserResponse) },
                 { typeof(Item), typeof(IItemResponse) },
-                { typeof(Bid), typeof(IBidResponse)}
+                { typeof(Bid), typeof(IBidResponse)} ,
+                { typeof(Category), typeof(ICategoryResponse) }
             };
 
             foreach (var mapping in entityToInterfaceMappings)
