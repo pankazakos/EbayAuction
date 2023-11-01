@@ -30,14 +30,15 @@ namespace webapi.Utilities.ControllerUtils
             return NotFound($"No {typeof(T).Name} found.");
         }
 
-        public async Task<IActionResult> CreateAndRespond<TEntity, TResponse>(
-            Func<Task<TEntity>> createFunc, Func<TEntity, IMapper, TResponse> mapFunc, IMapper mapper)
+        public async Task<IActionResult> CreateAndRespond<TModel, TResponse>(
+            Func<Task<TModel>> createFunc, IMapper mapper)
+            where TModel : IModel
+            where TResponse : IEntityResponse
         {
             try
             {
                 var entity = await createFunc();
-                var response = mapFunc(entity, mapper);
-                return Created(nameof(TEntity), response);
+                return Created(nameof(TModel), entity.MapToResponse<TResponse>(mapper));
             }
             catch (ArgumentException ex)
             {
@@ -49,9 +50,9 @@ namespace webapi.Utilities.ControllerUtils
             }
         }
 
-        public async Task<IActionResult> GetAllAndRespond<TEntity, TResponse>(
-            Func<Task<IEnumerable<TEntity>>> getAllFunc, IMapper mapper) 
-            where TEntity : IModel
+        public async Task<IActionResult> GetAllAndRespond<TModel, TResponse>(
+            Func<Task<IEnumerable<TModel>>> getAllFunc, IMapper mapper)
+            where TModel : IModel
             where TResponse : IEntityResponse
         {
             var entities = await getAllFunc();
@@ -63,21 +64,17 @@ namespace webapi.Utilities.ControllerUtils
             return Ok(castEntities);
         }
 
-        public async Task<IActionResult> GetAndRespond<TEntity, TResponse>(Func<Task<TEntity>> getFunc,
-            Func<TEntity, IMapper, TResponse> mapFunc, IMapper mapper)
+        public async Task<IActionResult> GetAndRespond<TModel, TResponse>(
+            Func<Task<TModel>> getFunc, IMapper mapper)
+            where TModel : IModel?
+            where TResponse : IEntityResponse
         {
             var entity = await getFunc();
 
-            if (entity is null)
-            {
-                return NotFoundRespond<TEntity>();
-            }
-            
-            var response = mapFunc(entity, mapper);
-            return Ok(response);
+            return entity is null ? NotFoundRespond<TModel>() : Ok(entity.MapToResponse<TResponse>(mapper));
         }
 
-        public async Task<IActionResult> DeleteAndRespond<TEntity>(Func<Task> deleteFunc)
+        public async Task<IActionResult> DeleteAndRespond<TModel>(Func<Task> deleteFunc) where TModel : IModel
         {
             try
             {
@@ -86,7 +83,7 @@ namespace webapi.Utilities.ControllerUtils
             }
             catch (InvalidOperationException)
             {
-                return NotFoundRespond<TEntity>();
+                return NotFoundRespond<TModel>();
             }
             catch (Exception)
             {

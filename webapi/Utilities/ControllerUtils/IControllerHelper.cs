@@ -10,16 +10,19 @@ public interface IControllerHelper
     string UsernameClaim { get; }
     IActionResult NotFoundRespond<T>();
 
-    Task<IActionResult> CreateAndRespond<TEntity, TResponse>(
-        Func<Task<TEntity>> createFunc, Func<TEntity, IMapper, TResponse> mapFunc, IMapper mapper);
-
-    Task<IActionResult> GetAllAndRespond<TEntity, TResponse>(
-        Func<Task<IEnumerable<TEntity>>> getAllFunc, IMapper mapper)
-        where TEntity : IModel
+    Task<IActionResult> CreateAndRespond<TModel, TResponse>(
+        Func<Task<TModel>> createFunc, IMapper mapper)
+        where TModel : IModel
         where TResponse : IEntityResponse;
 
-    Task<IActionResult> GetAndRespond<TEntity, TResponse>(Func<Task<TEntity>> getFunc,
-        Func<TEntity, IMapper, TResponse> mapFunc, IMapper mapper);
+    Task<IActionResult> GetAllAndRespond<TModel, TResponse>(
+        Func<Task<IEnumerable<TModel>>> getAllFunc, IMapper mapper)
+        where TModel : IModel
+        where TResponse : IEntityResponse;
 
-    Task<IActionResult> DeleteAndRespond<TEntity>(Func<Task> deleteFunc);
+    Task<IActionResult> GetAndRespond<TModel, TResponse>(Func<Task<TModel>> getFunc, IMapper mapper)
+        where TModel : IModel?
+        where TResponse : IEntityResponse;
+
+    Task<IActionResult> DeleteAndRespond<TModel>(Func<Task> deleteFunc) where TModel : IModel;
 }

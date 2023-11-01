@@ -40,9 +40,8 @@ namespace webapi.Controllers
 
             if (!Request.HasFormContentType)
             {
-                return await _controllerHelper.CreateAndRespond(
-                    () => _itemService.Create(item, username, cancel: cancel), AppMapper.MapToResponse<AddItemResponse>,
-                    _mapper);
+                return await _controllerHelper.CreateAndRespond<Item, AddItemResponse>(
+                    () => _itemService.Create(item, username, cancel: cancel), _mapper);
             }
 
             var formCollection = await Request.ReadFormAsync(cancel);
@@ -54,9 +53,8 @@ namespace webapi.Controllers
 
             var postedFile = formCollection.Files[0];
 
-            return await _controllerHelper.CreateAndRespond(
-                () => _itemService.Create(item, username, postedFile, cancel), 
-                AppMapper.MapToResponse<AddItemResponse>, _mapper);
+            return await _controllerHelper.CreateAndRespond<Item, AddItemResponse>(
+                () => _itemService.Create(item, username, postedFile, cancel), _mapper);
         }
 
 
@@ -145,9 +143,8 @@ namespace webapi.Controllers
         [HttpGet(ItemEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] long id, CancellationToken cancel = default)
         {
-            return await _controllerHelper.GetAndRespond(
-                () => _itemService.GetById(id, cancel),
-                (item, mapper) => item!.MapToResponse<PublishedItemResponse>(mapper), _mapper);
+            return await _controllerHelper.GetAndRespond<Item?, PublishedItemResponse>(
+                () => _itemService.GetById(id, cancel), _mapper);
         }
     }
 }

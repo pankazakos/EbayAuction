@@ -54,9 +54,8 @@ namespace webapi.Controllers
         [HttpGet(UserEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancel = default)
         {
-            return await _controllerHelper.GetAndRespond(
-                () => _userService.GetById(id, cancel),
-                (user, mapper) => user!.MapToResponse<BasicUserResponse>(mapper), _mapper);
+            return await _controllerHelper.GetAndRespond<User?, BasicUserResponse>(
+                () => _userService.GetById(id, cancel), _mapper);
         }
 
 
@@ -64,8 +63,8 @@ namespace webapi.Controllers
         [HttpGet(UserEndpoints.GetByUsername)]
         public async Task<IActionResult> GetByUsername([FromRoute] string username, CancellationToken cancel = default)
         {
-            return await _controllerHelper.GetAndRespond(() => _userService.GetByUsername(username, cancel),
-               (user, mapper) => user!.MapToResponse<BasicUserResponse>(mapper), _mapper);
+            return await _controllerHelper.GetAndRespond<User?, BasicUserResponse>(
+                () => _userService.GetByUsername(username, cancel), _mapper);
         }
 
 
@@ -80,8 +79,8 @@ namespace webapi.Controllers
         [HttpPost(UserEndpoints.Create)]
         public async Task<IActionResult> Create([FromBody] RegisterUserRequest input, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _userService.Create(input, cancel),
-                AppMapper.MapToResponse<RegisterUserResponse>, _mapper);
+            return await _controllerHelper.CreateAndRespond<User, RegisterUserResponse>(
+                () => _userService.Create(input, cancel), _mapper);
         }
 
 

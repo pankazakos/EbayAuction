@@ -23,7 +23,7 @@ namespace webapi.Services
             if (category is null)
             {
                 _logger.LogWarning("Category {categoryId} not found", id);
-                throw new InvalidOperationException($"Category {id} not found");
+                return null;
             }
 
             _logger.LogInformation("Retrieved category {categoryName}", category.Name);

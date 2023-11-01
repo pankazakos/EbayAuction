@@ -81,7 +81,7 @@ namespace webapi.Services
             if (item is null)
             {
                 _logger.LogWarning("Item {itemId} not found", id);
-                throw new InvalidOperationException($"Item {id} not found");
+                return null;
             }
 
             _logger.LogInformation("Item {itemId} retrieved", item.ItemId);
