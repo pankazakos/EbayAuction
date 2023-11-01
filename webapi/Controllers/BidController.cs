@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Contracts.Endpoints;
 using webapi.Contracts.Mapping;
 using webapi.Contracts.Requests.Bid;
-using webapi.Contracts.Responses;
 using webapi.Contracts.Responses.bid;
+using webapi.Models;
 using webapi.Services;
 using webapi.Utilities.ControllerUtils;
 
@@ -30,8 +30,8 @@ namespace webapi.Controllers
         [HttpPost(BidEndpoints.Create)]
         public async Task<IActionResult> CreateBid([FromBody] AddBidRequest body, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond(() => _bidService.Create(body.ItemId, cancel),
-                AppMapper.MapToResponse<AddBidResponse>, _mapper);
+            return await _controllerHelper.CreateAndRespond<Bid, AddBidResponse>(
+                () => _bidService.Create(body.ItemId, cancel), _mapper);
         }
 
 
