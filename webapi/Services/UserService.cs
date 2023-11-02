@@ -21,11 +21,11 @@ namespace webapi.Services
 
             if (user == null)
             {
-                _logger.LogWarning("User not found");
+                _logger.LogWarning("User {userId} not found", id);
                 return null;
             }
 
-            _logger.LogInformation("Retrieved user with id: {id}", id);
+            _logger.LogInformation("Retrieved user with id: {userId}", id);
 
             return user;
         }
@@ -36,7 +36,7 @@ namespace webapi.Services
 
             if (user == null)
             {
-                _logger.LogWarning("User not found");
+                _logger.LogWarning("User {username} not found", username);
                 return null;
             }
 
@@ -83,9 +83,8 @@ namespace webapi.Services
 
             if (user != null)
             {
-                const string message = "Username already exists";
-                _logger.LogWarning(message);
-                throw new ArgumentException(message);
+                _logger.LogWarning("Username {username} already exists", input.Username);
+                throw new ArgumentException($"Username {input.Username} already exists");
             }
 
             var createdUser = await _userRepository.Create(input, cancel);
@@ -101,9 +100,8 @@ namespace webapi.Services
 
             if (user is null)
             {
-                const string message = "User not found";
-                _logger.LogWarning(message);
-                throw new InvalidOperationException(message);
+                _logger.LogWarning("User {userId} not found", id);
+                throw new InvalidOperationException($"User {id} not found");
             }
 
             await _userRepository.Delete(user, cancel);
@@ -117,9 +115,8 @@ namespace webapi.Services
 
             if (user is null)
             {
-                const string message = "User not found";
-                _logger.LogWarning(message);
-                throw new InvalidOperationException(message);
+                _logger.LogWarning("User {username} not found", username);
+                throw new InvalidOperationException($"User {username} not found");
             }
 
             await _userRepository.UpdateLastLogin(user, cancel);
