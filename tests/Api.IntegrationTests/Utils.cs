@@ -9,8 +9,15 @@ namespace Api.IntegrationTests
     {
         public const string BaseUrl = "https://localhost:7068/api/";
 
+        public static string AdminToken = string.Empty;
+
         public static async Task<string> LoginAdmin(HttpClient client)
         {
+            if (AdminToken.Length != 0)
+            {
+                return AdminToken;
+            }
+
             var adminCredentials = new LoginUserRequest
             {
                 Username = "admin",
@@ -31,6 +38,8 @@ namespace Api.IntegrationTests
             {
                 throw new InvalidOperationException("Couldn't get jwt of admin");
             }
+
+            AdminToken = responseBody.AccessToken;
 
             return responseBody.AccessToken;
         }
