@@ -9,7 +9,7 @@ namespace webapi.Repository
 
         public Task<User?> GetByUsername(string username, CancellationToken cancel = default);
 
-        public Task<List<User>> GetAll(CancellationToken cancel = default);
+        public Task<(IEnumerable<User>, int)> GetAllPaged(int page, int pageSize, CancellationToken cancel = default);
 
         public Task<List<string>> GetAllUsernames(CancellationToken cancel = default);
 

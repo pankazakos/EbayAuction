@@ -19,7 +19,7 @@ namespace webapi.Services
         {
             var user = await _userRepository.GetById(id, cancel);
 
-            if (user == null)
+            if (user is null)
             {
                 _logger.LogWarning("User {userId} not found", id);
                 return null;
@@ -34,7 +34,7 @@ namespace webapi.Services
         {
             var user = await _userRepository.GetByUsername(username, cancel);
 
-            if (user == null)
+            if (user is null)
             {
                 _logger.LogWarning("User {username} not found", username);
                 return null;
@@ -45,13 +45,13 @@ namespace webapi.Services
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetAll(CancellationToken cancel = default)
+        public async Task<(IEnumerable<User>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default)
         {
-            var users = await _userRepository.GetAll(cancel);
+            var response = await _userRepository.GetAllPaged(page, limit, cancel);
 
             _logger.LogInformation("Retrieved all users");
 
-            return users;
+            return response;
         }
 
         public async Task<List<string>> GetAllUsernames(CancellationToken cancel = default)

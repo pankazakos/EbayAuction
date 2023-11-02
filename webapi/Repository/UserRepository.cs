@@ -27,10 +27,15 @@ namespace webapi.Repository
             return user;
         }
 
-        public async Task<List<User>> GetAll(CancellationToken cancel = default)
+        public async Task<(IEnumerable<User>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default)
         {
-            var users = await _dbContext.Users.ToListAsync(cancel);
-            return users;
+            var totalCount = await _dbContext.Users.CountAsync(cancel);
+            var users = await _dbContext.Users
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync(cancel);
+
+            return (users, totalCount);
         }
 
         public async Task<List<string>> GetAllUsernames(CancellationToken cancel = default)

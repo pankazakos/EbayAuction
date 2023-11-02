@@ -34,10 +34,23 @@ namespace webapi.Controllers
 
         [Authorize(Policy = Policies.Admin)]
         [HttpGet(UserEndpoints.All)]
-        public async Task<IActionResult> ListAll(CancellationToken cancel = default)
+        public async Task<IActionResult> ListAll([FromQuery] int page = 1, [FromQuery] int limit = 10, CancellationToken cancel = default)
         {
-            return await _controllerHelper.GetAllAndRespond<User, BasicUserResponse>(() => _userService.GetAll(cancel), _mapper);
+            var response = await _userService.GetAllPaged(page, limit, cancel);
+
+            var users = response.Item1.Select(user => user.MapToResponse<BasicUserResponse>(_mapper));
+
+            var castUsers = users.Cast<BasicUserResponse>();
+
+            return Ok(new PaginatedUserResponse
+            {
+                Page = page,
+                Limit = limit,
+                Total = response.Item2,
+                Users = castUsers
+            });
         }
+
 
 
         [Authorize(Policy = Policies.Admin)]
