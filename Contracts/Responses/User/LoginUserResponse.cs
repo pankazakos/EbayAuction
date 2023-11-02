@@ -1,4 +1,4 @@
-﻿namespace Contracts.Responses.User
+﻿namespace contracts.Responses.User
 {
     public class LoginUserResponse
     {

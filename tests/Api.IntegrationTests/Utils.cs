@@ -1,9 +1,9 @@
-﻿using Contracts.Requests.User;
+﻿using contracts.Requests.User;
 using Newtonsoft.Json;
 using System.Text;
-using Contracts.Responses.User;
+using contracts.Responses.User;
 
-namespace Api.Tests.Integration
+namespace Api.IntegrationTests
 {
     public static class Utils
     {

@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
-using Contracts.Responses.User;
-using Contracts.Requests.User;
+using contracts.Responses.User;
+using contracts.Requests.User;
 using System.Net.Http.Headers;
 
-namespace Api.Tests.Integration.UserController
+namespace Api.IntegrationTests.UserController
 {
     public class CreateUserTest : IDisposable
     {
@@ -55,7 +55,7 @@ namespace Api.Tests.Integration.UserController
             if (_returnedUser != null)
             {
                 var userId = _returnedUser.Id;
-                var response = _client.DeleteAsync($"{Utils.BaseUrl}user/{userId}").GetAwaiter().GetResult();
+                _client.DeleteAsync($"{Utils.BaseUrl}user/{userId}").GetAwaiter().GetResult();
             }
         }
     }

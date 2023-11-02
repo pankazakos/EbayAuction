@@ -1,4 +1,4 @@
-﻿namespace Contracts.Requests.User
+﻿namespace contracts.Requests.User
 {
     public class LoginUserRequest
     {
