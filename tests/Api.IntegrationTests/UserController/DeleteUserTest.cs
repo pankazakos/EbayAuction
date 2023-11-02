@@ -17,10 +17,13 @@ namespace Api.IntegrationTests.UserController
         [Fact]
         public async Task DeleteUser_ReturnsNotFound_WhenUserDoesNotExist()
         {
+            // Arrange
             const int invalidUserId = 9999;
 
+            // Act
             var response = await _client.DeleteAsync($"{Utils.BaseUrl}user/{invalidUserId}");
 
+            // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }

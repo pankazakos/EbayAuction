@@ -22,6 +22,7 @@ namespace Api.IntegrationTests.UserController
         [Fact]
         public async Task Create_ReturnsUser_WhenUserIsCreated()
         {
+            // Arrange
             var user = new RegisterUserRequest
             {
                 Username = "testUser",
@@ -36,12 +37,14 @@ namespace Api.IntegrationTests.UserController
             var json = JsonConvert.SerializeObject(user);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
+            // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}user", data);
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
             _returnedUser = JsonConvert.DeserializeObject<RegisterUserResponse>(responseString);
 
+            // Assert
             Assert.NotNull(_returnedUser);
 
             Assert.Equal(user.Username, _returnedUser.UserName);
@@ -94,11 +97,14 @@ namespace Api.IntegrationTests.UserController
         [MemberData(nameof(IncompleteUserData))]
         public async Task Create_ReturnsBadRequest_WhenUserInfoIsIncomplete(RegisterUserRequest user)
         {
+            // Arrange
             var json = JsonConvert.SerializeObject(user);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
+            // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}user", data);
 
+            // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
