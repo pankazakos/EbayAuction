@@ -43,10 +43,8 @@ namespace Api.IntegrationTests.UserController
             _returnedUser = JsonConvert.DeserializeObject<RegisterUserResponse>(responseString);
 
             Assert.NotNull(_returnedUser);
-            if (_returnedUser != null)
-            {
-                Assert.Equal(user.Username, _returnedUser.UserName);
-            }
+
+            Assert.Equal(user.Username, _returnedUser.UserName);
         }
 
         public static IEnumerable<object[]> IncompleteUserData()
@@ -60,8 +58,8 @@ namespace Api.IntegrationTests.UserController
                 Country = "Test Country",
                 Location = "Test Location"
             } };
-            yield return new object[] { new RegisterUserRequest 
-            {                 
+            yield return new object[] { new RegisterUserRequest
+            {
                 FirstName = "Test",
                 LastName = "User",
                 Email = "test@user.com",
