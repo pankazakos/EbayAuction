@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using webapi.Contracts.Requests.Category;
+﻿using contracts.Requests.Category;
+using Microsoft.EntityFrameworkCore;
 using webapi.Database;
 using webapi.Models;
 

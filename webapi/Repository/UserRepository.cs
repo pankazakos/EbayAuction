@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using webapi.Contracts.Requests.User;
+﻿using contracts.Requests.User;
+using Microsoft.EntityFrameworkCore;
 using webapi.Database;
 using webapi.Models;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;

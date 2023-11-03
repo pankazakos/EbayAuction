@@ -1,5 +1,5 @@
-﻿using webapi.Contracts.Requests.Category;
-using webapi.Models;
+﻿using webapi.Models;
+using contracts.Requests.Category;
 
 namespace webapi.Repository
 {

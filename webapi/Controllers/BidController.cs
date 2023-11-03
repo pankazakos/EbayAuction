@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
+using contracts.Endpoints;
+using contracts.Requests.Bid;
+using contracts.Responses.bid;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Contracts.Endpoints;
-using webapi.Contracts.Mapping;
-using webapi.Contracts.Requests.Bid;
-using webapi.Contracts.Responses.bid;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities.ControllerUtils;
+using webapi.Utilities.MappingUtils;
 
 namespace webapi.Controllers
 {

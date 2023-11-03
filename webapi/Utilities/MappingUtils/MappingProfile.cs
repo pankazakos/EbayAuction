@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using webapi.Contracts.Responses.bid;
-using webapi.Contracts.Responses.Category;
-using webapi.Contracts.Responses.Item;
-using webapi.Contracts.Responses.User;
+using contracts.Responses.bid;
+using contracts.Responses.Category;
+using contracts.Responses.Item;
+using contracts.Responses.User;
 using webapi.Models;
 
 namespace webapi.Utilities.MappingUtils

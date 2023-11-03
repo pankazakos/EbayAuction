@@ -1,18 +1,13 @@
 ﻿using AutoMapper;
+using contracts.Endpoints;
+using contracts.Policies;
+using contracts.Requests.Category;
+using contracts.Responses.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.NetworkInformation;
-using webapi.Contracts.Endpoints;
-using webapi.Contracts.Mapping;
-using webapi.Contracts.Policies;
-using webapi.Contracts.Requests.Category;
-using webapi.Contracts.Responses;
-using webapi.Contracts.Responses.Category;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities.ControllerUtils;
-using static System.Net.Mime.MediaTypeNames;
-using System.Text.Json;
 
 
 namespace webapi.Controllers

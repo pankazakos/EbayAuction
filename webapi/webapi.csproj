@@ -29,4 +29,9 @@
 	  <Folder Include="wwwroot\item-images\" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Contracts\contracts.csproj" />
+	</ItemGroup>
+
 </Project>

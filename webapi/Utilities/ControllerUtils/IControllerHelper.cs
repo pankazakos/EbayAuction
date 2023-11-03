@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Contracts.Responses;
 using webapi.Models;
 
 namespace webapi.Utilities.ControllerUtils;

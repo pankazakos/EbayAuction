@@ -3,18 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
-using webapi.Contracts.Policies;
 using webapi.Database;
 using webapi.Models;
 using webapi.Repository;
 using AutoMapper;
+using contracts.Policies;
 using Microsoft.AspNetCore.Authorization;
 using webapi.Utilities.ControllerUtils;
 using webapi.Utilities.MappingUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
 using webapi.Utilities.ServiceUtils;
 
 

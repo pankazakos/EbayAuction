@@ -1,4 +1,4 @@
-﻿using webapi.Contracts.Requests.User;
+﻿using contracts.Requests.User;
 using webapi.Models;
 
 namespace webapi.Repository

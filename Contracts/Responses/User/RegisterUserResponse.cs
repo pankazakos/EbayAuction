@@ -1,6 +1,6 @@
 ﻿namespace contracts.Responses.User
 {
-    public class RegisterUserResponse
+    public class RegisterUserResponse : IUserResponse
     {
         public long Id { get; init; }
 

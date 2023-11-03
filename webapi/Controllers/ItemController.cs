@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
+using contracts.Endpoints;
+using contracts.Policies;
+using contracts.Requests.Item;
+using contracts.Responses;
+using contracts.Responses.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Models;
 using webapi.Services;
-using webapi.Contracts.Endpoints;
-using webapi.Contracts.Mapping;
-using webapi.Contracts.Policies;
-using webapi.Contracts.Responses.Item;
 using webapi.Contracts.Requests.Item;
-using webapi.Contracts.Responses;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.ControllerUtils;
+using webapi.Utilities.MappingUtils;
 
 namespace webapi.Controllers
 {

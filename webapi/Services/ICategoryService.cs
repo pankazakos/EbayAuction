@@ -1,4 +1,4 @@
-﻿using webapi.Contracts.Requests.Category;
+﻿using contracts.Requests.Category;
 using webapi.Models;
 
 namespace webapi.Services
