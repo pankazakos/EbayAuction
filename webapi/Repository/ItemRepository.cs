@@ -71,11 +71,15 @@ namespace webapi.Repository
             return newItem;
         }
 
-        public async Task<IEnumerable<Item>> ListAll(CancellationToken cancel = default)
+        public async Task<(IEnumerable<Item>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default)
         {
-            var items = await _dbContext.Items.ToListAsync(cancel);
+            var totalCount = await _dbContext.Items.CountAsync(cancel);
+            var items = await _dbContext.Items
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .ToListAsync(cancel);
 
-            return items;
+            return (items, totalCount);
         }
 
         public async Task<Item?> GetById(long id, CancellationToken cancel = default)

@@ -9,6 +9,7 @@ using webapi.Contracts.Responses.Other;
 using webapi.Contracts.Responses.User;
 using webapi.Models;
 using webapi.Contracts.Requests.User;
+using webapi.Contracts.Responses;
 using webapi.Utilities.ControllerUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
@@ -34,23 +35,12 @@ namespace webapi.Controllers
 
         [Authorize(Policy = Policies.Admin)]
         [HttpGet(UserEndpoints.All)]
-        public async Task<IActionResult> ListAll([FromQuery] int page = 1, [FromQuery] int limit = 10, CancellationToken cancel = default)
+        public async Task<IActionResult> ListAllPaged([FromQuery] int page = 1, [FromQuery] int limit = 10, CancellationToken cancel = default)
         {
-            var response = await _userService.GetAllPaged(page, limit, cancel);
-
-            var users = response.Item1.Select(user => user.MapToResponse<BasicUserResponse>(_mapper));
-
-            var castUsers = users.Cast<BasicUserResponse>();
-
-            return Ok(new PaginatedUserResponse
-            {
-                Page = page,
-                Limit = limit,
-                Total = response.Item2,
-                Users = castUsers
-            });
+            return await _controllerHelper.GetAllPagedAndRespond<User, BasicUserResponse>(
+                () => _userService.GetAllPaged(page, limit, cancel),
+                page, limit, _mapper);
         }
-
 
 
         [Authorize(Policy = Policies.Admin)]

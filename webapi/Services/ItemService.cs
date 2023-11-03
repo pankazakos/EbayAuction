@@ -64,13 +64,13 @@ namespace webapi.Services
             return createdItemWithImage;
         }
 
-        public async Task<IEnumerable<Item>> GetAll(CancellationToken cancel = default)
+        public async Task<(IEnumerable<Item>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default)
         {
-            var items = await _itemRepository.ListAll(cancel);
+            var response = await _itemRepository.GetAllPaged(page, limit, cancel);
 
             _logger.LogInformation("Retrieved all items");
 
-            return items;
+            return (response.Item1, response.Item2);
         }
 
 

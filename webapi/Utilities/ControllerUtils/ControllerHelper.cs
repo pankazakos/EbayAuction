@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using webapi.Contracts.Mapping;
 using webapi.Contracts.Responses;
 using webapi.Models;
@@ -51,8 +52,8 @@ namespace webapi.Utilities.ControllerUtils
         }
 
         public async Task<IActionResult> GetAllAndRespond<TModel, TResponse>(
-            Func<Task<IEnumerable<TModel>>> getAllFunc, IMapper mapper)
-            where TModel : IModel
+            Func<Task<IEnumerable<TModel>>> getAllFunc, IMapper mapper) 
+            where TModel : IModel 
             where TResponse : IEntityResponse
         {
             var entities = await getAllFunc();
@@ -62,6 +63,26 @@ namespace webapi.Utilities.ControllerUtils
             var castEntities = mappedEntities.Cast<TResponse>();
 
             return Ok(castEntities);
+        }
+
+        public async Task<IActionResult> GetAllPagedAndRespond<TModel, TResponse>(
+            Func<Task<(IEnumerable<TModel>, int)>> getAllPagedFunc, int page, int limit, IMapper mapper)
+            where TModel : IModel
+            where TResponse : IEntityResponse
+        {
+            var response = await getAllPagedFunc();
+
+            var mappedEntities = response.Item1.Select(entity => entity.MapToResponse<TResponse>(mapper));
+
+            var castEntities = mappedEntities.Cast<TResponse>();
+
+            return Ok(new PaginatedResponse<TResponse>
+            {
+                CastEntities = castEntities,
+                Page = page,
+                Limit = limit,
+                Total = response.Item2
+            });
         }
 
         public async Task<IActionResult> GetAndRespond<TModel, TResponse>(
