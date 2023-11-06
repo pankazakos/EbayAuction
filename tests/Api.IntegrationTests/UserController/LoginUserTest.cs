@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 using contracts.Responses.User;
+using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
@@ -38,7 +39,7 @@ namespace Api.IntegrationTests.UserController
             var responseString = await response.Content.ReadAsStringAsync();
             var jwtResponse = JsonConvert.DeserializeObject<LoginUserResponse>(responseString);
 
-            Assert.NotNull(jwtResponse);
+            jwtResponse.Should().NotBeNull();
         }
 
         [Fact]
@@ -58,7 +59,7 @@ namespace Api.IntegrationTests.UserController
             var response = await _client.PostAsync($"{Utils.BaseUrl}user/login", data);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
@@ -78,7 +79,7 @@ namespace Api.IntegrationTests.UserController
             var response = await _client.PostAsync($"{Utils.BaseUrl}user/login", data);
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

@@ -4,6 +4,7 @@ using contracts.Responses.User;
 using contracts.Requests.User;
 using System.Net.Http.Headers;
 using System.Net;
+using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
@@ -43,11 +44,11 @@ namespace Api.IntegrationTests.UserController
 
             var responseString = await response.Content.ReadAsStringAsync();
             _returnedUser = JsonConvert.DeserializeObject<RegisterUserResponse>(responseString);
-
+            
             // Assert
-            Assert.NotNull(_returnedUser);
+            _returnedUser.Should().NotBeNull();
 
-            Assert.Equal(user.Username, _returnedUser.UserName);
+            user.Username.Should().Be(_returnedUser!.UserName);
         }
 
         public static IEnumerable<object[]> IncompleteUserData()
@@ -105,7 +106,7 @@ namespace Api.IntegrationTests.UserController
             var response = await _client.PostAsync($"{Utils.BaseUrl}user", data);
 
             // Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
 

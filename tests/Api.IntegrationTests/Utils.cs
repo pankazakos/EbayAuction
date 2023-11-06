@@ -1,6 +1,7 @@
 ﻿using contracts.Requests.User;
 using Newtonsoft.Json;
 using System.Text;
+using contracts.Responses;
 using contracts.Responses.User;
 
 namespace Api.IntegrationTests
@@ -43,5 +44,10 @@ namespace Api.IntegrationTests
 
             return responseBody.AccessToken;
         }
+
+        //public static async Task<BasicUserResponse> GetOrCreateUser()
+        //{
+
+        //}
     }
 }

@@ -2,6 +2,7 @@
 using contracts.Responses.User;
 using System.Net.Http.Headers;
 using System.Net;
+using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
@@ -31,9 +32,9 @@ namespace Api.IntegrationTests.UserController
             var responseString = await response.Content.ReadAsStringAsync();
             var returnedUser = JsonConvert.DeserializeObject<BasicUserResponse>(responseString);
 
-            Assert.NotNull(returnedUser);
+            returnedUser.Should().NotBeNull();
 
-            Assert.Equal(userId, returnedUser.Id);
+            returnedUser!.Id.Should().Be(userId);
         }
 
         [Fact]
@@ -64,9 +65,9 @@ namespace Api.IntegrationTests.UserController
             var responseString = await response.Content.ReadAsStringAsync();
             var returnedUser = JsonConvert.DeserializeObject<BasicUserResponse>(responseString);
 
-            Assert.NotNull(returnedUser);
+            returnedUser.Should().NotBeNull();
 
-            Assert.Equal(username, returnedUser.Username);
+            returnedUser!.Username.Should().Be(username);
         }
 
         [Fact]
@@ -79,7 +80,7 @@ namespace Api.IntegrationTests.UserController
             var response = await _client.GetAsync($"{Utils.BaseUrl}user/{username}");
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

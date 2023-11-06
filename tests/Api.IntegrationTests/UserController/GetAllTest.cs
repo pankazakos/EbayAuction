@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using contracts.Requests.User;
 using contracts.Responses.User;
+using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
@@ -60,7 +61,7 @@ namespace Api.IntegrationTests.UserController
             var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/all");
 
             // Assert
-            Assert.Equal(HttpStatusCode.Forbidden, getAllResponse.StatusCode);
+            getAllResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
 
         [Fact]
@@ -77,7 +78,7 @@ namespace Api.IntegrationTests.UserController
             var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/all");
 
             // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, getAllResponse.StatusCode);
+            getAllResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
         [Fact]
@@ -122,7 +123,7 @@ namespace Api.IntegrationTests.UserController
             var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/usernames");
 
             // Assert
-            Assert.Equal(HttpStatusCode.Forbidden, getAllResponse.StatusCode);
+            getAllResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
 
         [Fact]
@@ -139,7 +140,7 @@ namespace Api.IntegrationTests.UserController
             var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/all");
 
             // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, getAllResponse.StatusCode);
+            getAllResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
@@ -24,7 +25,7 @@ namespace Api.IntegrationTests.UserController
             var response = await _client.DeleteAsync($"{Utils.BaseUrl}user/{invalidUserId}");
 
             // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }
