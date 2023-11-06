@@ -1,0 +1,11 @@
+node_modules
+obj
+.vs
+.vscode
+.angular
+.github
+bin
+obj
+dist
+*.user
+Properties

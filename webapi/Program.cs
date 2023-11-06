@@ -111,6 +111,15 @@ builder.Services.AddSingleton<Serilog.ILogger>(Log.Logger);
 builder.Services.AddSingleton<IAppLogHelper, AppLogHelper>();
 
 
+builder.WebHost.ConfigureKestrel((context, serverOptions) =>
+{
+    serverOptions.ListenAnyIP(7068, listenOptions =>
+    {
+        listenOptions.UseHttps("../ebayauction.pfx", "ebaypass");
+    });
+});
+
+
 // Build app
 var app = builder.Build();
 
