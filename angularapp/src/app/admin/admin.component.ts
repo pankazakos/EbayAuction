@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { baseUrl } from '../shared/types';
 import { DateTimeFormatService } from '../shared/date-time-format.service';
 import { BasicUserResponse } from '../shared/contracts/responses/user';
+import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
 
 @Component({
   selector: 'app-admin',
@@ -10,7 +11,7 @@ import { BasicUserResponse } from '../shared/contracts/responses/user';
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent {
-  users: BasicUserResponse[] = [];
+  users: PaginatedResponse<BasicUserResponse>;
   displayedColumns: string[] = [
     'id',
     'username',
@@ -36,12 +37,18 @@ export class AdminComponent {
       'Authorization',
       `Bearer ${localStorage.getItem('accessToken')}`
     );
+    this.users = {
+      castEntities: [],
+      total: 0,
+      page: 1,
+      limit: 10,
+    };
   }
 
   ngOnInit(): void {
     this.http.get(`${baseUrl}/user/all`, { headers: this.headers }).subscribe({
-      next: (response: BasicUserResponse[]) => {
-        response.map((user) => {
+      next: (response: PaginatedResponse<BasicUserResponse>) => {
+        response.castEntities.map((user) => {
           user.lastLogin =
             user.lastLogin !== null
               ? this.dateTimeFormat.formatDatetime(user.lastLogin.toString())
@@ -60,7 +67,9 @@ export class AdminComponent {
       .delete(`${baseUrl}/user/${userId}`, { headers: this.headers })
       .subscribe({
         next: () => {
-          this.users = this.users.filter((user) => user.id != userId);
+          this.users.castEntities = this.users.castEntities.filter(
+            (user) => user.id != userId
+          );
         },
         error: (error) => {
           console.error('API error: ', error);
