@@ -12,6 +12,16 @@
     fxFlex="60%"
   >
     <div id="search-input" fxflex="30%"></div>
+
+    <mat-paginator
+      class="paginator"
+      [length]="100"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+
     <div id="item-boxes" fxFlex="70%" fxFill>
       <div class="item-box" *ngFor="let item of items.castEntities">
         <div class="item-title">
@@ -51,6 +61,15 @@
         </mat-list-item>
       </div>
     </div>
+
+    <mat-paginator
+      class="paginator"
+      [length]="100"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
 
   <div id="right-margin" fxFlex="20%"></div>
