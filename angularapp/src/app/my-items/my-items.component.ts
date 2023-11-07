@@ -4,8 +4,8 @@ import {
   PublishedItemResponse,
 } from '../shared/contracts/responses/item';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { baseUrl } from '../shared/types';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 
 @Component({
   selector: 'app-my-items',
@@ -47,43 +47,37 @@ export class MyItemsComponent {
   }
 
   setInactiveItems(): void {
-    this.http
-      .get(`${baseUrl}/item/inactive`, { headers: this.headers })
-      .subscribe({
-        next: (response: BasicItemResponse[]) => {
-          this.inactiveItems = response;
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
-      } as Partial<any>);
+    this.http.get(ItemEndpoints.inactive, { headers: this.headers }).subscribe({
+      next: (response: BasicItemResponse[]) => {
+        this.inactiveItems = response;
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    } as Partial<any>);
   }
 
   setPublishedItems(): void {
-    this.http
-      .get(`${baseUrl}/item/active`, { headers: this.headers })
-      .subscribe({
-        next: (response: PublishedItemResponse[]) => {
-          this.publishedItems = response;
-        },
-        error: (error: any) => console.error(error),
-      } as Partial<any>);
+    this.http.get(ItemEndpoints.active, { headers: this.headers }).subscribe({
+      next: (response: PublishedItemResponse[]) => {
+        this.publishedItems = response;
+      },
+      error: (error: any) => console.error(error),
+    } as Partial<any>);
   }
 
   setItemsWithBids(): void {
-    this.http
-      .get(`${baseUrl}/item/bidden`, { headers: this.headers })
-      .subscribe({
-        next: (response: BasicItemResponse[]) => {
-          this.itemsWithBids = response;
-        },
-        error: (error: any) => console.error(error),
-      } as Partial<any>);
+    this.http.get(ItemEndpoints.bidden, { headers: this.headers }).subscribe({
+      next: (response: BasicItemResponse[]) => {
+        this.itemsWithBids = response;
+      },
+      error: (error: any) => console.error(error),
+    } as Partial<any>);
   }
 
   addItem(): void {
     this.http.post(
-      `${baseUrl}/item`,
+      ItemEndpoints.create,
       // { body: {} },
       { headers: this.headers }
     );

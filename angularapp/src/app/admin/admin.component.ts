@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { baseUrl } from '../shared/types';
 import { DateTimeFormatService } from '../shared/date-time-format.service';
 import { BasicUserResponse } from '../shared/contracts/responses/user';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
+import { UserEndpoints } from '../shared/contracts/endpoints/UserEndpoints';
 
 @Component({
   selector: 'app-admin',
@@ -46,7 +46,7 @@ export class AdminComponent {
   }
 
   ngOnInit(): void {
-    this.http.get(`${baseUrl}/user/all`, { headers: this.headers }).subscribe({
+    this.http.get(UserEndpoints.all, { headers: this.headers }).subscribe({
       next: (response: PaginatedResponse<BasicUserResponse>) => {
         response.castEntities.map((user) => {
           user.lastLogin =
@@ -64,7 +64,7 @@ export class AdminComponent {
 
   deleteUser(userId: number) {
     this.http
-      .delete(`${baseUrl}/user/${userId}`, { headers: this.headers })
+      .delete(UserEndpoints.getById(userId), { headers: this.headers })
       .subscribe({
         next: () => {
           this.users.castEntities = this.users.castEntities.filter(

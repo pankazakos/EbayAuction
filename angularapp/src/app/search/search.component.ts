@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { baseUrl } from '../shared/types';
 import { BasicItemResponse } from '../shared/contracts/responses/item';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 
 @Component({
   selector: 'app-search',
@@ -48,7 +48,9 @@ export class SearchComponent {
     this.items.page = pageParam;
 
     this.http
-      .get(`${baseUrl}/item?page=${this.items.page}&limit=${this.items.limit}`)
+      .get(
+        `${ItemEndpoints.all}?page=${this.items.page}&limit=${this.items.limit}`
+      )
       .subscribe({
         next: (response: PaginatedResponse<BasicItemResponse> | any) => {
           this.items = response;

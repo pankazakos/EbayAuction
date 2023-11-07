@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observer } from 'rxjs';
+import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
 import { DateTimeFormatService } from 'src/app/shared/date-time-format.service';
-import { baseUrl } from 'src/app/shared/types';
 
 @Component({
   selector: 'app-item',
@@ -25,7 +25,7 @@ export class ItemComponent {
   ngOnInit(): void {
     const itemId = this.route.snapshot.params['id'];
 
-    this.http.get(`${baseUrl}/item/${itemId}`).subscribe({
+    this.http.get(ItemEndpoints.getById(itemId)).subscribe({
       next: (response: BasicItemResponse) => {
         this.item = response;
         this.item.started = this.item.started

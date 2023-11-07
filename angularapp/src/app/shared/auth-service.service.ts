@@ -4,8 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserCredentialsRequest } from './contracts/requests/user';
 import { BehaviorSubject } from 'rxjs';
-import { UserRole, baseUrl } from './types';
+import { UserRole } from './types';
 import { LoginUserResponse } from './contracts/responses/user';
+import { UserEndpoints } from './contracts/endpoints/UserEndpoints';
 
 export interface AuthData {
   username: string;
@@ -42,7 +43,7 @@ export class AuthService {
   LoginUser(username: string, password: string) {
     const credentials: UserCredentialsRequest = { username, password };
     this.http
-      .post<LoginUserResponse>(`${baseUrl}/user/login`, credentials)
+      .post<LoginUserResponse>(UserEndpoints.login, credentials)
       .subscribe({
         next: (response) => {
           let role: UserRole =
