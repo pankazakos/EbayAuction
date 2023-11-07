@@ -69,7 +69,9 @@ namespace webapi.Services
         {
             var response = await _itemRepository.GetAllPaged(page, limit, cancel);
 
-            _logger.LogInformation("Retrieved all items");
+            var first = (page - 1) * limit + 1;
+            var last = page * limit;
+            _logger.LogInformation($"Retrieved items from {first} to {last}");
 
             return (response.Item1, response.Item2);
         }
