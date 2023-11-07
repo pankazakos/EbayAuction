@@ -4,6 +4,7 @@ import { baseUrl } from '../shared/types';
 import { BasicItemResponse } from '../shared/contracts/responses/item';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -20,28 +21,56 @@ export class SearchComponent {
   public pageLength: number = 100;
   public isLoading: boolean = true;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.fetchItems(this.items.page, this.items.limit);
+    this.fetchItems();
     this.pageLength = Math.floor(this.items.total / this.items.limit) + 1;
   }
 
-  fetchItems(page: number, limit: number): void {
-    this.http.get(`${baseUrl}/item?page=${page}&limit=${limit}`).subscribe({
-      next: (response: PaginatedResponse<BasicItemResponse> | any) => {
-        this.items = response;
-        this.isLoading = false;
-        console.log(this.items);
-      },
-      error: (error) => console.error(error),
-    });
+  fetchItems(): void {
+    const pageParamStr = this.route.snapshot.queryParamMap.get('page');
+
+    let pageParam = 1;
+    if (pageParamStr != null) {
+      const converted = Number(pageParamStr);
+      if (converted > 1) {
+        pageParam = converted;
+      }
+    }
+
+    console.log('page is: ' + Number(pageParamStr));
+
+    this.items.page = pageParam;
+
+    this.http
+      .get(`${baseUrl}/item?page=${this.items.page}&limit=${this.items.limit}`)
+      .subscribe({
+        next: (response: PaginatedResponse<BasicItemResponse> | any) => {
+          this.items = response;
+          this.isLoading = false;
+          console.log(this.items);
+        },
+        error: (error) => console.error(error),
+      });
+
+    if (this.items.page > 1) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: this.items.page },
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 
   onPageChange(event: PageEvent): void {
     this.isLoading = true;
     this.items.limit = event.pageSize;
     this.items.page = event.pageIndex + 1;
-    this.fetchItems(this.items.page, this.items.limit);
+    this.fetchItems();
   }
 }
