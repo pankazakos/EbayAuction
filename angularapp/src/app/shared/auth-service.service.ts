@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserCredentialsRequest } from './contracts/requests/user';
-import { LoginUserResponse } from './contracts/responses/other';
 import { BehaviorSubject } from 'rxjs';
 import { UserRole, baseUrl } from './types';
+import { LoginUserResponse } from './contracts/responses/user';
 
 export interface AuthData {
   username: string;

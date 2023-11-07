@@ -13,7 +13,7 @@
   >
     <div id="search-input" fxflex="30%"></div>
     <div id="item-boxes" fxFlex="70%" fxFill>
-      <div class="item-box" *ngFor="let item of items">
+      <div class="item-box" *ngFor="let item of items.castEntities">
         <div class="item-title">
           <a class="item-link" routerLink="item/{{ item.itemId }}">
             <h2>{{ item.name }}</h2>

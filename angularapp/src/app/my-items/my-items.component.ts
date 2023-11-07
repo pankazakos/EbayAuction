@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  GenericItemResponse,
+  BasicItemResponse,
   PublishedItemResponse,
 } from '../shared/contracts/responses/item';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -14,9 +14,9 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 export class MyItemsComponent {
   headers: HttpHeaders;
-  inactiveItems: GenericItemResponse[];
+  inactiveItems: BasicItemResponse[];
   publishedItems: PublishedItemResponse[];
-  itemsWithBids: GenericItemResponse[];
+  itemsWithBids: BasicItemResponse[];
 
   constructor(private http: HttpClient) {
     this.inactiveItems = [];
@@ -50,7 +50,7 @@ export class MyItemsComponent {
     this.http
       .get(`${baseUrl}api/item/inactive`, { headers: this.headers })
       .subscribe({
-        next: (response: GenericItemResponse[]) => {
+        next: (response: BasicItemResponse[]) => {
           this.inactiveItems = response;
         },
         error: (error: any) => {
@@ -74,7 +74,7 @@ export class MyItemsComponent {
     this.http
       .get(`${baseUrl}api/item/bidden`, { headers: this.headers })
       .subscribe({
-        next: (response: GenericItemResponse[]) => {
+        next: (response: BasicItemResponse[]) => {
           this.itemsWithBids = response;
         },
         error: (error: any) => console.error(error),

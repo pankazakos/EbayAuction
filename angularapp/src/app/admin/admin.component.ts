@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { baseUrl } from '../shared/types';
-import { NoPasswordUserResponse } from '../shared/contracts/responses/user';
 import { DateTimeFormatService } from '../shared/date-time-format.service';
+import { BasicUserResponse } from '../shared/contracts/responses/user';
 
 @Component({
   selector: 'app-admin',
@@ -10,7 +10,7 @@ import { DateTimeFormatService } from '../shared/date-time-format.service';
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent {
-  users: NoPasswordUserResponse[] = [];
+  users: BasicUserResponse[] = [];
   displayedColumns: string[] = [
     'id',
     'username',
@@ -42,7 +42,7 @@ export class AdminComponent {
     this.http
       .get(`${baseUrl}api/User/all`, { headers: this.headers })
       .subscribe({
-        next: (response: NoPasswordUserResponse[]) => {
+        next: (response: BasicUserResponse[]) => {
           response.map((user) => {
             user.lastLogin =
               user.lastLogin !== null

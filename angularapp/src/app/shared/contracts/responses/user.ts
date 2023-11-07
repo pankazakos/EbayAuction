@@ -1,4 +1,22 @@
-export interface RegisterUserResponse {
+import { IEntityResponse } from './IEntityResponse';
+
+interface IUserResponse extends IEntityResponse {}
+
+export interface BasicUserResponse extends IUserResponse {
+  id: number;
+  userName: string;
+  email: string;
+  firtsName: string;
+  lastName: string;
+  lastLogin: string;
+  dateJoined: Date;
+  country: string;
+  location: string;
+  isSuperuser: boolean;
+  isActive: boolean;
+}
+
+export interface RegisterUserResponse extends IUserResponse {
   id: number;
   userName: string;
   email: string;
@@ -10,16 +28,6 @@ export interface RegisterUserResponse {
   isSuperuser: boolean;
 }
 
-export interface NoPasswordUserResponse {
-  id: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  lastLogin: string;
-  dateJoined: string;
-  email: string;
-  country: string;
-  location: string;
-  isSuperuser: boolean;
-  isActive: boolean;
+export interface LoginUserResponse extends IUserResponse {
+  accessToken: string;
 }

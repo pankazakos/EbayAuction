@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observer } from 'rxjs';
-import { GenericItemResponse } from 'src/app/shared/contracts/responses/item';
+import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
 import { DateTimeFormatService } from 'src/app/shared/date-time-format.service';
 import { baseUrl } from 'src/app/shared/types';
 
@@ -12,21 +12,21 @@ import { baseUrl } from 'src/app/shared/types';
   styleUrls: ['./item.component.css'],
 })
 export class ItemComponent {
-  item: GenericItemResponse;
+  item: BasicItemResponse;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private formatter: DateTimeFormatService
   ) {
-    this.item = {} as GenericItemResponse;
+    this.item = {} as BasicItemResponse;
   }
 
   ngOnInit(): void {
     const itemId = this.route.snapshot.params['id'];
 
     this.http.get(`${baseUrl}api/item/${itemId}`).subscribe({
-      next: (response: GenericItemResponse) => {
+      next: (response: BasicItemResponse) => {
         this.item = response;
         this.item.started = this.item.started
           ? this.formatter.formatDatetime(this.item.started.toString())
