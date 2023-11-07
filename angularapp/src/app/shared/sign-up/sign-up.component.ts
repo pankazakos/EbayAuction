@@ -29,7 +29,7 @@ export class SignUpComponent {
 
     if (this.registerForm.valid) {
       this.http
-        .post<RegisterUserResponse>(`${baseUrl}api/User`, userInfo)
+        .post<RegisterUserResponse>(`${baseUrl}/user`, userInfo)
         .subscribe({
           next: (response) => {
             this.authService.LoginUser(userInfo.username, userInfo.password);

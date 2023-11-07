@@ -4,4 +4,4 @@ export enum UserRole {
   Anonymous = 'anonymous',
 }
 
-export const baseUrl: string = 'https://localhost:7068/';
+export const baseUrl: string = 'https://localhost:7068/api';

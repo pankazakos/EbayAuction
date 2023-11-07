@@ -42,7 +42,7 @@ export class AuthService {
   LoginUser(username: string, password: string) {
     const credentials: UserCredentialsRequest = { username, password };
     this.http
-      .post<LoginUserResponse>(`${baseUrl}api/User/login`, credentials)
+      .post<LoginUserResponse>(`${baseUrl}/user/login`, credentials)
       .subscribe({
         next: (response) => {
           let role: UserRole =

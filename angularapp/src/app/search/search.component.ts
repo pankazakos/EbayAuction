@@ -23,7 +23,7 @@ export class SearchComponent {
   }
 
   ngOnInit(): void {
-    this.http.get(`${baseUrl}api/Item`).subscribe({
+    this.http.get(`${baseUrl}/item`).subscribe({
       next: (response: PaginatedResponse<BasicItemResponse>) => {
         this.items = response;
         console.log(this.items);

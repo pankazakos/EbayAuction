@@ -25,7 +25,7 @@ export class ItemComponent {
   ngOnInit(): void {
     const itemId = this.route.snapshot.params['id'];
 
-    this.http.get(`${baseUrl}api/item/${itemId}`).subscribe({
+    this.http.get(`${baseUrl}/item/${itemId}`).subscribe({
       next: (response: BasicItemResponse) => {
         this.item = response;
         this.item.started = this.item.started

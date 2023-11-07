@@ -39,27 +39,25 @@ export class AdminComponent {
   }
 
   ngOnInit(): void {
-    this.http
-      .get(`${baseUrl}api/User/all`, { headers: this.headers })
-      .subscribe({
-        next: (response: BasicUserResponse[]) => {
-          response.map((user) => {
-            user.lastLogin =
-              user.lastLogin !== null
-                ? this.dateTimeFormat.formatDatetime(user.lastLogin.toString())
-                : '';
-          });
-          this.users = response;
-        },
-        error: (error: any) => {
-          console.error('API Error: ', error);
-        },
-      } as Partial<any>);
+    this.http.get(`${baseUrl}/user/all`, { headers: this.headers }).subscribe({
+      next: (response: BasicUserResponse[]) => {
+        response.map((user) => {
+          user.lastLogin =
+            user.lastLogin !== null
+              ? this.dateTimeFormat.formatDatetime(user.lastLogin.toString())
+              : '';
+        });
+        this.users = response;
+      },
+      error: (error: any) => {
+        console.error('API Error: ', error);
+      },
+    } as Partial<any>);
   }
 
   deleteUser(userId: number) {
     this.http
-      .delete(`${baseUrl}api/user/${userId}`, { headers: this.headers })
+      .delete(`${baseUrl}/user/${userId}`, { headers: this.headers })
       .subscribe({
         next: () => {
           this.users = this.users.filter((user) => user.id != userId);

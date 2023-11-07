@@ -48,7 +48,7 @@ export class MyItemsComponent {
 
   setInactiveItems(): void {
     this.http
-      .get(`${baseUrl}api/item/inactive`, { headers: this.headers })
+      .get(`${baseUrl}/item/inactive`, { headers: this.headers })
       .subscribe({
         next: (response: BasicItemResponse[]) => {
           this.inactiveItems = response;
@@ -61,7 +61,7 @@ export class MyItemsComponent {
 
   setPublishedItems(): void {
     this.http
-      .get(`${baseUrl}api/item/active`, { headers: this.headers })
+      .get(`${baseUrl}/item/active`, { headers: this.headers })
       .subscribe({
         next: (response: PublishedItemResponse[]) => {
           this.publishedItems = response;
@@ -72,7 +72,7 @@ export class MyItemsComponent {
 
   setItemsWithBids(): void {
     this.http
-      .get(`${baseUrl}api/item/bidden`, { headers: this.headers })
+      .get(`${baseUrl}/item/bidden`, { headers: this.headers })
       .subscribe({
         next: (response: BasicItemResponse[]) => {
           this.itemsWithBids = response;
@@ -83,7 +83,7 @@ export class MyItemsComponent {
 
   addItem(): void {
     this.http.post(
-      `${baseUrl}api/item`,
+      `${baseUrl}/item`,
       // { body: {} },
       { headers: this.headers }
     );
