@@ -86,15 +86,13 @@ export class SearchComponent {
       return;
     }
 
-    const nextPage = event.pageIndex + 1;
-    this.items.page = nextPage;
+    const selectedPage = event.pageIndex + 1;
+    this.items.page = selectedPage;
 
-    if (nextPage > 1) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { page: nextPage },
-        queryParamsHandling: 'merge',
-      });
-    }
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: selectedPage },
+      queryParamsHandling: 'merge',
+    });
   }
 }

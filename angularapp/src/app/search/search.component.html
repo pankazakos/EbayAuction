@@ -13,17 +13,7 @@
   >
     <div id="search-input" fxflex="30%"></div>
 
-    <div *ngIf="isLoading">
-      <mat-spinner></mat-spinner>
-    </div>
-
-    <div
-      id="display-items"
-      *ngIf="!isLoading"
-      fxLayout="column"
-      fxFlex="70%"
-      fxFill
-    >
+    <div id="display-items" fxLayout="column" fxFlex="70%" fxFill>
       <mat-paginator
         class="paginator"
         [length]="this.items.total"
@@ -34,7 +24,11 @@
       >
       </mat-paginator>
 
-      <div id="item-boxes" fxFlex="100%" fxFill>
+      <div *ngIf="isLoading">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading" id="item-boxes" fxFlex="100%" fxFill>
         <div class="item-box" *ngFor="let item of items.castEntities">
           <div class="item-title">
             <a class="item-link" routerLink="item/{{ item.itemId }}">
