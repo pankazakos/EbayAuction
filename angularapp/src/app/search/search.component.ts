@@ -5,7 +5,7 @@ import { PaginatedResponse } from '../shared/contracts/responses/PaginatedRespon
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
-import { developmentMode, timeout } from 'environment';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-search',
@@ -63,12 +63,12 @@ export class SearchComponent {
 
     this.items.page = pageParam;
 
-    if (typeof developmentMode === 'undefined') {
+    if (environment.production) {
       this.makeApiSearchCall();
     } else {
       setTimeout(() => {
         this.makeApiSearchCall();
-      }, timeout);
+      }, environment.timeout);
     }
 
     if (this.items.page > 1) {
