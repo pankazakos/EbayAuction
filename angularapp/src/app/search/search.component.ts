@@ -5,6 +5,7 @@ import { PaginatedResponse } from '../shared/contracts/responses/PaginatedRespon
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
+import { developmentMode, timeout } from 'environment';
 
 @Component({
   selector: 'app-search',
@@ -32,6 +33,21 @@ export class SearchComponent {
     this.pageLength = Math.floor(this.items.total / this.items.limit) + 1;
   }
 
+  private makeApiSearchCall(): void {
+    this.http
+      .get(
+        `${ItemEndpoints.all}?page=${this.items.page}&limit=${this.items.limit}`
+      )
+      .subscribe({
+        next: (response: PaginatedResponse<BasicItemResponse> | any) => {
+          this.items = response;
+          this.isLoading = false;
+          console.log(this.items);
+        },
+        error: (error) => console.error(error),
+      });
+  }
+
   fetchItems(): void {
     const pageParamStr = this.route.snapshot.queryParamMap.get('page');
 
@@ -47,18 +63,13 @@ export class SearchComponent {
 
     this.items.page = pageParam;
 
-    this.http
-      .get(
-        `${ItemEndpoints.all}?page=${this.items.page}&limit=${this.items.limit}`
-      )
-      .subscribe({
-        next: (response: PaginatedResponse<BasicItemResponse> | any) => {
-          this.items = response;
-          this.isLoading = false;
-          console.log(this.items);
-        },
-        error: (error) => console.error(error),
-      });
+    if (typeof developmentMode === 'undefined') {
+      this.makeApiSearchCall();
+    } else {
+      setTimeout(() => {
+        this.makeApiSearchCall();
+      }, timeout);
+    }
 
     if (this.items.page > 1) {
       this.router.navigate([], {
