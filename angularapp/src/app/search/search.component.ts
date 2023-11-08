@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BasicItemResponse } from '../shared/contracts/responses/item';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { environment } from 'src/environments/environment';
@@ -20,6 +20,9 @@ export class SearchComponent {
     limit: 10,
   };
   public isLoading: boolean = true;
+
+  @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
+  @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
 
   constructor(
     private http: HttpClient,
@@ -79,14 +82,19 @@ export class SearchComponent {
   onPageChange(event: PageEvent): void {
     this.isLoading = true;
 
-    if (event.pageSize != this.items.limit) {
-      this.items.limit = event.pageSize;
-      const page = event.pageIndex == 0 ? 1 : event.pageIndex;
-      this.fetchItems(page);
-      return;
+    if (this.paginatorTop && this.paginatorBottom) {
+      this.paginatorTop.pageIndex = event.pageIndex;
+      this.paginatorBottom.pageIndex = event.pageIndex;
     }
 
     const selectedPage = event.pageIndex + 1;
+
+    if (event.pageSize != this.items.limit) {
+      this.items.limit = event.pageSize;
+      this.fetchItems(selectedPage);
+      return;
+    }
+
     this.items.page = selectedPage;
 
     this.router.navigate([], {
