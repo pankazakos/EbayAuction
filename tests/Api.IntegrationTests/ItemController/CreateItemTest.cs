@@ -45,6 +45,10 @@ namespace Api.IntegrationTests.ItemController
 
             createdItem!.Name.Should().Be(itemData.Name);
 
+            var adminJwt = await Utils.LoginAdmin(_client);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt);
+
             await _client.DeleteAsync($"{Utils.BaseUrl}item/{createdItem.ItemId}");
         }
 
