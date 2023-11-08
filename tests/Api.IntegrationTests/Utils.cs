@@ -71,7 +71,7 @@ namespace Api.IntegrationTests
 
                 var registerBody = new StringContent(JsonConvert.SerializeObject(userInfo), Encoding.UTF8, "application/json");
 
-                var registerResponse = await client.PostAsync($"{BaseUrl}user/register", registerBody);
+                var registerResponse = await client.PostAsync($"{BaseUrl}user", registerBody);
 
                 registerResponse.EnsureSuccessStatusCode();
             }
