@@ -8,16 +8,15 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.ItemController
 {
-    public class CreateItemTest : IClassFixture<CreateItemFixture>
+    public class CreateItemTest : IClassFixture<ItemFixture>
     {
-        private readonly ApiFactory _factory;
         private readonly HttpClient _client;
         private readonly string _simpleUserJwt;
 
         public CreateItemTest()
         {
-            _factory = ApiFactory.GetInstance();
-            _client = _factory.CreateClient();
+            var api = ApiFactory.GetInstance();
+            _client = api.CreateClient();
             var userCredentials = new LoginUserRequest
             {
                 Username = "admin",
@@ -59,7 +58,5 @@ namespace Api.IntegrationTests.ItemController
 
             await _client.DeleteAsync($"{Utils.BaseUrl}item/{createdItem.ItemId}");
         }
-
-
     }
 }

@@ -7,14 +7,14 @@ using webapi.Repository;
 
 namespace Api.IntegrationTests.ItemController
 {
-    public class CreateItemFixture
+    public class ItemFixture
     {
         private readonly AuctionContext _context;
 
-        public CreateItemFixture()
+        public ItemFixture()
         {
-            var apiFactory = ApiFactory.GetInstance();
-            _context = apiFactory.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
+            var api = ApiFactory.GetInstance();
+            _context = api.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
             SeedCategories().GetAwaiter().GetResult();
             SeedDefaultSimpleUser().GetAwaiter().GetResult();
         }

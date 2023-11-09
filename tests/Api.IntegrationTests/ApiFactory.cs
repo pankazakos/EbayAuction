@@ -21,7 +21,7 @@ namespace Api.IntegrationTests
             .WithEntrypoint()
             .Build();
 
-        private static ApiFactory? _instance = null;
+        private static ApiFactory? _instance;
 
         private readonly string _connectionString;
 
@@ -38,12 +38,7 @@ namespace Api.IntegrationTests
 
         public static ApiFactory GetInstance()
         {
-            if (_instance is null)
-            {
-                _instance = new ApiFactory();
-            }
-
-            return _instance;
+            return _instance ??= new ApiFactory();
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
