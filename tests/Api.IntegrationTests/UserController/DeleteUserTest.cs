@@ -4,15 +4,29 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
+    [Collection("User collection")]
     public class DeleteUserTest
     {
         private readonly HttpClient _client;
 
         public DeleteUserTest()
         {
-            _client = new HttpClient();
-            var adminJwt = Utils.LoginAdmin(_client).GetAwaiter().GetResult();
+            _client = UserFixture.HttpClient;
+            var adminJwt = UserFixture.AdminJwt;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt);
+        }
+
+        [Fact]
+        public async Task DeleteUser_ReturnsNoContent_WhenUserExists()
+        {
+            // Arrange
+            const int userId = 2; // simple user TestUser
+
+            // Act
+            var response = await _client.DeleteAsync($"{Utils.BaseUrl}user/{userId}");
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]

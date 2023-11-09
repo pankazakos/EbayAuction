@@ -1,36 +1,32 @@
-﻿
-using contracts.Requests.Category;
-using contracts.Requests.User;
+﻿using contracts.Requests.User;
 using Microsoft.Extensions.DependencyInjection;
 using webapi.Database;
 using webapi.Repository;
 
-namespace Api.IntegrationTests.ItemController
+namespace Api.IntegrationTests.UserController
 {
-    public class ItemFixture
+    public class UserFixture
     {
         private readonly AuctionContext _context;
+        public static HttpClient HttpClient { get; private set; } = new();
+        public static string AdminJwt { get; private set; } = string.Empty;
+        public static LoginUserRequest SimpleUserCredentials { get; private set; } = new();
 
-        public ItemFixture()
+        public UserFixture()
         {
             var api = ApiFactory.GetInstance();
+            HttpClient = api.CreateClient();
             _context = api.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
-            SeedCategories().GetAwaiter().GetResult();
+
+            LoginAdmin().GetAwaiter().GetResult();
             SeedDefaultSimpleUser().GetAwaiter().GetResult();
         }
 
-        private async Task SeedCategories()
+        private static async Task LoginAdmin()
         {
-            var categoryRepository = new CategoryRepository(_context);
+            var jwt = await Utils.LoginAdmin(HttpClient);
 
-            for (var i = 1; i <= 2; i++)
-            {
-                var input = new AddCategoryRequest
-                {
-                    Name = $"category {i}"
-                };
-                await categoryRepository.Create(input);
-            }
+            AdminJwt = jwt;
         }
 
         private async Task SeedDefaultSimpleUser()
@@ -49,7 +45,8 @@ namespace Api.IntegrationTests.ItemController
             };
 
             await userRepository.Create(userInfo);
+
+            SimpleUserCredentials = new LoginUserRequest { Username = "TestUser", Password = "password" };
         }
     }
-
 }

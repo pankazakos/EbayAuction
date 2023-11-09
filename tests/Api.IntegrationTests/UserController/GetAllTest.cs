@@ -1,27 +1,25 @@
 ﻿using System.Net;
-using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Text;
-using contracts.Requests.User;
-using contracts.Responses.User;
 using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
+    [Collection("User collection")]
     public class GetAllTest
     {
         private readonly HttpClient _client;
 
         public GetAllTest()
         {
-            _client = new HttpClient();
-            var adminJwt = Utils.LoginAdmin(_client).GetAwaiter().GetResult();
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt);
+            _client = UserFixture.HttpClient;
         }
 
         [Fact]
         public async Task GetAllUsers_ReturnsOk_WhenAdminMakesRequest()
         {
+            // Arrange
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserFixture.AdminJwt);
+
             // Act
             var response = await _client.GetAsync($"{Utils.BaseUrl}user/all");
 
@@ -33,32 +31,12 @@ namespace Api.IntegrationTests.UserController
         public async Task GetAllUsers_ReturnsForbidden_WhenSimpleUserMakesRequest()
         {
             // Arrange
-            var userCredentials = new LoginUserRequest
-            {
-                Username = "panagiotis",
-                Password = "123"
-            };
+            var simpleUserJwt = await Utils.LoginUser(_client, UserFixture.SimpleUserCredentials);
 
-            var tempClient = new HttpClient();
-
-            var json = JsonConvert.SerializeObject(userCredentials);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await tempClient.PostAsync($"{Utils.BaseUrl}user/login", data);
-
-            response.EnsureSuccessStatusCode();
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            var responseBody = JsonConvert.DeserializeObject<LoginUserResponse>(responseString);
-
-            Assert.NotNull(responseBody);
-
-            var jwt = responseBody.AccessToken;
-
-            tempClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", simpleUserJwt.AccessToken);
 
             // Act
-            var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/all");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/all");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -68,14 +46,12 @@ namespace Api.IntegrationTests.UserController
         public async Task GetAllUsers_ReturnsUnauthorized_WhenAuthorizationIsInvalid()
         {
             // Arrange
-            var tempClient = new HttpClient();
-
             const string jwt = "InvalidJwt";
 
-            tempClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
             // Act
-            var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/all");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/all");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -84,6 +60,9 @@ namespace Api.IntegrationTests.UserController
         [Fact]
         public async Task GetAllUsernames_ReturnsOk_WhenAdminMakesRequest()
         {
+            // Arrange
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserFixture.AdminJwt);
+
             // Act
             var response = await _client.GetAsync($"{Utils.BaseUrl}user/usernames");
 
@@ -95,32 +74,12 @@ namespace Api.IntegrationTests.UserController
         public async Task GetAllUsernames_ReturnsForbidden_WhenSimpleUserMakesRequest()
         {
             // Arrange
-            var userCredentials = new LoginUserRequest
-            {
-                Username = "panagiotis",
-                Password = "123"
-            };
+            var simpleUserJwt = await Utils.LoginUser(_client, UserFixture.SimpleUserCredentials);
 
-            var tempClient = new HttpClient();
-
-            var json = JsonConvert.SerializeObject(userCredentials);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await tempClient.PostAsync($"{Utils.BaseUrl}user/login", data);
-
-            response.EnsureSuccessStatusCode();
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            var responseBody = JsonConvert.DeserializeObject<LoginUserResponse>(responseString);
-
-            Assert.NotNull(responseBody);
-
-            var jwt = responseBody.AccessToken;
-
-            tempClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", simpleUserJwt.AccessToken);
 
             // Act
-            var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/usernames");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/usernames");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -130,14 +89,12 @@ namespace Api.IntegrationTests.UserController
         public async Task GetAllUsernames_ReturnsUnauthorized_WhenAuthorizationIsInvalid()
         {
             // Arrange
-            var tempClient = new HttpClient();
+            const string jwt = "InvalidJwt";
 
-            var jwt = "InvalidJwt";
-
-            tempClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
             // Act
-            var getAllResponse = await tempClient.GetAsync($"{Utils.BaseUrl}user/all");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/all");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

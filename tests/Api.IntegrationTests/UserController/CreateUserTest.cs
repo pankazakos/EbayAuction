@@ -2,22 +2,19 @@
 using Newtonsoft.Json;
 using contracts.Responses.User;
 using contracts.Requests.User;
-using System.Net.Http.Headers;
 using System.Net;
 using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
-    public class CreateUserTest : IDisposable
+    [Collection("User collection")]
+    public class CreateUserTest
     {
         private readonly HttpClient _client;
-        private RegisterUserResponse? _returnedUser;
-        private readonly string _adminJwt;
 
         public CreateUserTest()
         {
-            _client = new HttpClient();
-            _adminJwt = Utils.LoginAdmin(_client).GetAwaiter().GetResult();
+            _client = UserFixture.HttpClient;
         }
 
         [Fact]
@@ -26,8 +23,8 @@ namespace Api.IntegrationTests.UserController
             // Arrange
             var user = new RegisterUserRequest
             {
-                Username = "testUser",
-                Password = "testPassword",
+                Username = "RegisterTestUser",
+                Password = "password",
                 FirstName = "Test",
                 LastName = "User",
                 Email = "test@user.com",
@@ -43,19 +40,19 @@ namespace Api.IntegrationTests.UserController
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
-            _returnedUser = JsonConvert.DeserializeObject<RegisterUserResponse>(responseString);
+            var returnedUser = JsonConvert.DeserializeObject<RegisterUserResponse>(responseString);
             
             // Assert
-            _returnedUser.Should().NotBeNull();
+            returnedUser.Should().NotBeNull();
 
-            user.Username.Should().Be(_returnedUser!.UserName);
+            user.Username.Should().Be(returnedUser!.UserName);
         }
 
         public static IEnumerable<object[]> IncompleteUserData()
         {
             yield return new object[] { new RegisterUserRequest
             {
-                Password = "testPassword",
+                Password = "password",
                 FirstName = "Test",
                 LastName = "User",
                 Email = "test@user.com",
@@ -107,18 +104,6 @@ namespace Api.IntegrationTests.UserController
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        }
-
-
-        public void Dispose()
-        {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _adminJwt);
-
-            if (_returnedUser != null)
-            {
-                var userId = _returnedUser.Id;
-                _client.DeleteAsync($"{Utils.BaseUrl}user/{userId}").GetAwaiter().GetResult();
-            }
         }
     }
 
