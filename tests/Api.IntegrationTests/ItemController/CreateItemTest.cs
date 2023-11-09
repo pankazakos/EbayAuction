@@ -35,7 +35,7 @@ namespace Api.IntegrationTests.ItemController
             {
                 Name = "test item",
                 FirstBid = 50,
-                CategoryIds = new List<int> { 1, 2 },
+                CategoryIds = new List<int> { 0, 1 },
                 Description = "test item description"
             };
 

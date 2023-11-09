@@ -16,14 +16,14 @@ namespace Api.IntegrationTests.ItemController
             var apiFactory = new ApiFactory();
             _context = apiFactory.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
             SeedCategories().GetAwaiter().GetResult();
-            //SeedDefaultSimpleUser().GetAwaiter().GetResult();
+            SeedDefaultSimpleUser().GetAwaiter().GetResult();
         }
 
         private async Task SeedCategories()
         {
             var categoryRepository = new CategoryRepository(_context);
 
-            for (var i = 0; i < 2; i++)
+            for (var i = 1; i <= 2; i++)
             {
                 var input = new AddCategoryRequest
                 {
