@@ -13,7 +13,7 @@ namespace Api.IntegrationTests.ItemController
 
         public CreateItemFixture()
         {
-            var apiFactory = new ApiFactory();
+            var apiFactory = ApiFactory.GetInstance();
             _context = apiFactory.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
             SeedCategories().GetAwaiter().GetResult();
             SeedDefaultSimpleUser().GetAwaiter().GetResult();

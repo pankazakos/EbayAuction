@@ -16,7 +16,7 @@ namespace Api.IntegrationTests.ItemController
 
         public CreateItemTest()
         {
-            _factory = new ApiFactory();
+            _factory = ApiFactory.GetInstance();
             _client = _factory.CreateClient();
             var userCredentials = new LoginUserRequest
             {
@@ -35,7 +35,7 @@ namespace Api.IntegrationTests.ItemController
             {
                 Name = "test item",
                 FirstBid = 50,
-                CategoryIds = new List<int> { 0, 1 },
+                CategoryIds = new List<int> { 1, 2 },
                 Description = "test item description"
             };
 

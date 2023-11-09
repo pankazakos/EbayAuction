@@ -14,26 +14,36 @@ namespace Api.IntegrationTests
 {
     public class ApiFactory : WebApplicationFactory<IApiMarker>
     {
-        private readonly MsSqlContainer _dbContainer;
+        private static readonly MsSqlContainer DbContainer = new MsSqlBuilder()
+            .WithPassword("zhskalComplexPass12")
+            .WithEnvironment("ACCEPT_EULA", "Y")
+            .WithExposedPort(1433)
+            .WithEntrypoint()
+            .Build();
+
+        private static ApiFactory? _instance = null;
 
         private readonly string _connectionString;
 
-        public ApiFactory()
+        private ApiFactory()
         {
             // Start the container
-            _dbContainer = new MsSqlBuilder()
-                .WithPassword("zhskalComplexPass12")
-                .WithEnvironment("ACCEPT_EULA", "Y")
-                .WithExposedPort(1433)
-                .WithEntrypoint()
-                .Build();
+            DbContainer.StartAsync().GetAwaiter().GetResult();
 
-            _dbContainer.StartAsync().GetAwaiter().GetResult();
+            DbContainer.ExecScriptAsync("CREATE DATABASE test").GetAwaiter().GetResult();
 
-            _dbContainer.ExecScriptAsync("CREATE DATABASE test").GetAwaiter().GetResult();
-
-            var hostPort = _dbContainer.GetMappedPublicPort(1433);
+            var hostPort = DbContainer.GetMappedPublicPort(1433);
             _connectionString = $"Server=localhost,{hostPort};Database=test;User Id=sa;Password=zhskalComplexPass12;";
+        }
+
+        public static ApiFactory GetInstance()
+        {
+            if (_instance is null)
+            {
+                _instance = new ApiFactory();
+            }
+
+            return _instance;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
