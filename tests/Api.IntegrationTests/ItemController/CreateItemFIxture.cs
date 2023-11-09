@@ -7,7 +7,7 @@ using webapi.Repository;
 
 namespace Api.IntegrationTests.ItemController
 {
-    public class CreateItemFixture : IDisposable
+    public class CreateItemFixture
     {
         private readonly AuctionContext _context;
 
@@ -49,11 +49,6 @@ namespace Api.IntegrationTests.ItemController
             };
 
             await userRepository.Create(userInfo);
-        }
-
-        public void Dispose()
-        {
-            // Clean up the database if necessary
         }
     }
 
