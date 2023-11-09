@@ -2,20 +2,28 @@
 using contracts.Requests.Item;
 using Newtonsoft.Json;
 using System.Text;
+using contracts.Requests.User;
 using contracts.Responses.Item;
 using FluentAssertions;
 
 namespace Api.IntegrationTests.ItemController
 {
-    public class CreateItemTest
+    public class CreateItemTest : IClassFixture<CreateItemFixture>
     {
+        private readonly ApiFactory _factory;
         private readonly HttpClient _client;
         private readonly string _simpleUserJwt;
 
         public CreateItemTest()
         {
-            _client = new HttpClient();
-            _simpleUserJwt = Utils.LoginOrCreateSimpleUser(_client).GetAwaiter().GetResult();
+            _factory = new ApiFactory();
+            _client = _factory.CreateClient();
+            var userCredentials = new LoginUserRequest
+            {
+                Username = "admin",
+                Password = "admin"
+            };
+            _simpleUserJwt = Utils.LoginUser(_client, userCredentials).GetAwaiter().GetResult().AccessToken;
         }
 
         [Fact]

@@ -1,4 +1,4 @@
-﻿namespace Api.IntegrationTests
+﻿namespace webapi
 {
     public interface IApiMarker
     {

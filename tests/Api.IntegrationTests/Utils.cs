@@ -43,6 +43,18 @@ namespace Api.IntegrationTests
             return responseBody.AccessToken;
         }
 
+        public static async Task<LoginUserResponse> LoginUser(HttpClient client, LoginUserRequest credentials)
+        {
+            var loginBody = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
+
+            var loginResponse = await client.PostAsync($"{BaseUrl}user/login", loginBody);
+
+            var responseString = await loginResponse.Content.ReadAsStringAsync();
+            var responseBody = JsonConvert.DeserializeObject<LoginUserResponse>(responseString);
+
+            return responseBody ?? new LoginUserResponse();
+        }
+
         public static async Task<string> LoginOrCreateSimpleUser(HttpClient client)
         {
             var userCredentials = new LoginUserRequest
