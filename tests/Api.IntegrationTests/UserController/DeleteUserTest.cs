@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
-    [Collection("User collection")]
+    [Collection("User Collection")]
     public class DeleteUserTest
     {
         private readonly HttpClient _client;
@@ -20,7 +20,7 @@ namespace Api.IntegrationTests.UserController
         public async Task DeleteUser_ReturnsNoContent_WhenUserExists()
         {
             // Arrange
-            const int userId = 2; // simple user TestUser
+            var userId = UserFixture.IdUserToRemove; // TestUserToRemove (id = 3)
 
             // Act
             var response = await _client.DeleteAsync($"{Utils.BaseUrl}user/{userId}");

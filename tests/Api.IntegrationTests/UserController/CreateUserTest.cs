@@ -7,7 +7,7 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
-    [Collection("User collection")]
+    [Collection("User Collection")]
     public class CreateUserTest
     {
         private readonly HttpClient _client;

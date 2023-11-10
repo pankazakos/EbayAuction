@@ -8,13 +8,14 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
+    [Collection("User Collection")]
     public class LoginUserTest
     {
         private readonly HttpClient _client;
 
         public LoginUserTest()
         {
-            _client = new HttpClient();
+            _client = UserFixture.HttpClient;
         }
 
         [Fact]

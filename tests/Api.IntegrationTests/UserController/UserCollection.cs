@@ -1,6 +1,6 @@
 ﻿namespace Api.IntegrationTests.UserController
 {
-    [CollectionDefinition("User collection")]
+    [CollectionDefinition("User Collection")]
     public class UserCollection : ICollectionFixture<UserFixture>
     {
         // This class has no code, and is never created. Its purpose is simply

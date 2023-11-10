@@ -12,6 +12,8 @@ namespace Api.IntegrationTests.UserController
         public static string AdminJwt { get; private set; } = string.Empty;
         public static LoginUserRequest SimpleUserCredentials { get; private set; } = new();
 
+        public static int IdUserToRemove { get; private set; }
+
         public UserFixture()
         {
             var api = ApiFactory.GetInstance();
@@ -20,6 +22,7 @@ namespace Api.IntegrationTests.UserController
 
             LoginAdmin().GetAwaiter().GetResult();
             SeedDefaultSimpleUser().GetAwaiter().GetResult();
+            SeedUserToRemove().GetAwaiter().GetResult();
         }
 
         private static async Task LoginAdmin()
@@ -47,6 +50,26 @@ namespace Api.IntegrationTests.UserController
             await userRepository.Create(userInfo);
 
             SimpleUserCredentials = new LoginUserRequest { Username = "TestUser", Password = "password" };
+        }
+
+        private async Task SeedUserToRemove()
+        {
+            var userRepository = new UserRepository(_context);
+
+            var userInfo = new RegisterUserRequest
+            {
+                Username = "TestUserToRemove",
+                Password = "password",
+                Email = "testUserToRemove@email.com",
+                FirstName = "firstname",
+                LastName = "lastname",
+                Country = "testCountry",
+                Location = "testLocation",
+            };
+
+            var user = await userRepository.Create(userInfo);
+
+            IdUserToRemove = user.Id;
         }
     }
 }
