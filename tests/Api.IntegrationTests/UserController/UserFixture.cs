@@ -16,7 +16,7 @@ namespace Api.IntegrationTests.UserController
 
         public UserFixture()
         {
-            var api = ApiFactory.GetInstance();
+            var api = new ApiFactory();
             HttpClient = api.CreateClient();
             _context = api.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
 

@@ -10,11 +10,14 @@ namespace Api.IntegrationTests.ItemController
     public class ItemFixture
     {
         private readonly AuctionContext _context;
+        public static HttpClient HttpClient { get; private set; } = new();
 
         public ItemFixture()
         {
-            var api = ApiFactory.GetInstance();
+            var api = new ApiFactory();
+            HttpClient = api.CreateClient();
             _context = api.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
+
             SeedCategories().GetAwaiter().GetResult();
             SeedDefaultSimpleUser().GetAwaiter().GetResult();
         }

@@ -8,6 +8,7 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.ItemController
 {
+    [Collection("Item Collection")]
     public class CreateItemTest : IClassFixture<ItemFixture>
     {
         private readonly HttpClient _client;
@@ -15,8 +16,7 @@ namespace Api.IntegrationTests.ItemController
 
         public CreateItemTest()
         {
-            var api = ApiFactory.GetInstance();
-            _client = api.CreateClient();
+            _client = ItemFixture.HttpClient;
             var userCredentials = new LoginUserRequest
             {
                 Username = "admin",

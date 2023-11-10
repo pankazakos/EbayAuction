@@ -14,31 +14,23 @@ namespace Api.IntegrationTests
 {
     public class ApiFactory : WebApplicationFactory<IApiMarker>
     {
-        private static readonly MsSqlContainer DbContainer = new MsSqlBuilder()
+        private readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
             .WithPassword("zhskalComplexPass12")
             .WithEnvironment("ACCEPT_EULA", "Y")
             .WithExposedPort(1433)
-            .WithEntrypoint()
             .Build();
-
-        private static ApiFactory? _instance;
 
         private readonly string _connectionString;
 
-        private ApiFactory()
+        public ApiFactory()
         {
             // Start the container
-            DbContainer.StartAsync().GetAwaiter().GetResult();
+            _dbContainer.StartAsync().GetAwaiter().GetResult();
 
-            DbContainer.ExecScriptAsync("CREATE DATABASE test").GetAwaiter().GetResult();
+            _dbContainer.ExecScriptAsync("CREATE DATABASE test").GetAwaiter().GetResult();
 
-            var hostPort = DbContainer.GetMappedPublicPort(1433);
+            var hostPort = _dbContainer.GetMappedPublicPort(1433);
             _connectionString = $"Server=localhost,{hostPort};Database=test;User Id=sa;Password=zhskalComplexPass12;";
-        }
-
-        public static ApiFactory GetInstance()
-        {
-            return _instance ??= new ApiFactory();
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
