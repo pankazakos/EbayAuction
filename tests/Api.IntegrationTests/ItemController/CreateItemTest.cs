@@ -76,11 +76,26 @@ namespace Api.IntegrationTests.ItemController
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
-        //[Fact]
-        //public async Task CreateItem_ReturnsBadRequest_WhenFirstBidIsNotPositive()
-        //{
+        [Fact]
+        public async Task CreateItem_ReturnsBadRequest_WhenFirstBidIsNotPositive()
+        {
+            // Arrange
+            var itemData = new AddItemRequest
+            {
+                Name = "test item",
+                FirstBid = -2,
+                CategoryIds = new List<int> { 100, 200 },
+                Description = "test item description"
+            };
 
-        //}
+            var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await _client.PostAsync($"{Utils.BaseUrl}item", addItemBody);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
 
         public static IEnumerable<object[]> IncompleteItemData()
         {
