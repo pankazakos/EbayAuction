@@ -21,7 +21,7 @@ namespace Api.IntegrationTests.UserController
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserFixture.AdminJwt);
 
             // Act
-            var response = await _client.GetAsync($"{Utils.BaseUrl}user/all");
+            var response = await _client.GetAsync($"{Utils.BaseUrl}/user/all");
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -36,7 +36,7 @@ namespace Api.IntegrationTests.UserController
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", simpleUserJwt.AccessToken);
 
             // Act
-            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/all");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}/user/all");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -51,7 +51,7 @@ namespace Api.IntegrationTests.UserController
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
             // Act
-            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/all");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}/user/all");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -64,7 +64,7 @@ namespace Api.IntegrationTests.UserController
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserFixture.AdminJwt);
 
             // Act
-            var response = await _client.GetAsync($"{Utils.BaseUrl}user/usernames");
+            var response = await _client.GetAsync($"{Utils.BaseUrl}/user/usernames");
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -79,7 +79,7 @@ namespace Api.IntegrationTests.UserController
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", simpleUserJwt.AccessToken);
 
             // Act
-            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/usernames");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}/user/usernames");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -94,7 +94,7 @@ namespace Api.IntegrationTests.UserController
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
             // Act
-            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}user/all");
+            var getAllResponse = await _client.GetAsync($"{Utils.BaseUrl}/user/all");
 
             // Assert
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

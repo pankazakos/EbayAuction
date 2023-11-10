@@ -32,7 +32,7 @@ namespace Api.IntegrationTests.UserController
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}user/login", data);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/user/login", data);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -57,7 +57,7 @@ namespace Api.IntegrationTests.UserController
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}user/login", data);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/user/login", data);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -77,7 +77,7 @@ namespace Api.IntegrationTests.UserController
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}user/login", data);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/user/login", data);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);

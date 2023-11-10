@@ -9,7 +9,7 @@ namespace Api.IntegrationTests
 {
     public static class Utils
     {
-        public const string BaseUrl = "https://localhost:7068/api/";
+        public const string BaseUrl = "https://localhost:7068/api";
 
         public static string AdminToken = string.Empty;
 
@@ -29,7 +29,7 @@ namespace Api.IntegrationTests
             var json = JsonConvert.SerializeObject(adminCredentials);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"{BaseUrl}user/login", data);
+            var response = await client.PostAsync($"{BaseUrl}/user/login", data);
 
             response.EnsureSuccessStatusCode();
 
@@ -47,7 +47,7 @@ namespace Api.IntegrationTests
         {
             var loginBody = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
 
-            var loginResponse = await client.PostAsync($"{BaseUrl}user/login", loginBody);
+            var loginResponse = await client.PostAsync($"{BaseUrl}/user/login", loginBody);
 
             var responseString = await loginResponse.Content.ReadAsStringAsync();
             var responseBody = JsonConvert.DeserializeObject<LoginUserResponse>(responseString);
@@ -65,7 +65,7 @@ namespace Api.IntegrationTests
 
             var loginBody = new StringContent(JsonConvert.SerializeObject(userCredentials), Encoding.UTF8, "application/json");
 
-            var loginResponse = await client.PostAsync($"{BaseUrl}user/login", loginBody);
+            var loginResponse = await client.PostAsync($"{BaseUrl}/user/login", loginBody);
 
             // Create user if not found
             if (loginResponse.StatusCode == HttpStatusCode.NotFound)
@@ -83,12 +83,12 @@ namespace Api.IntegrationTests
 
                 var registerBody = new StringContent(JsonConvert.SerializeObject(userInfo), Encoding.UTF8, "application/json");
 
-                var registerResponse = await client.PostAsync($"{BaseUrl}user", registerBody);
+                var registerResponse = await client.PostAsync($"{BaseUrl}/user", registerBody);
 
                 registerResponse.EnsureSuccessStatusCode();
             }
 
-            loginResponse = await client.PostAsync($"{BaseUrl}user/login", loginBody);
+            loginResponse = await client.PostAsync($"{BaseUrl}/user/login", loginBody);
 
             var responseString = await loginResponse.Content.ReadAsStringAsync();
             var responseBody = JsonConvert.DeserializeObject<LoginUserResponse>(responseString);

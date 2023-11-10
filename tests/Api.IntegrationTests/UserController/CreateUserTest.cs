@@ -36,7 +36,7 @@ namespace Api.IntegrationTests.UserController
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}user", data);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/user", data);
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
@@ -100,7 +100,7 @@ namespace Api.IntegrationTests.UserController
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}user", data);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/user", data);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

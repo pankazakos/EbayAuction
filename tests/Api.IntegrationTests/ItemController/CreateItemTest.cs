@@ -35,7 +35,7 @@ namespace Api.IntegrationTests.ItemController
 
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}item", addItemBody);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", addItemBody);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -52,7 +52,7 @@ namespace Api.IntegrationTests.ItemController
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt);
 
-            await _client.DeleteAsync($"{Utils.BaseUrl}item/{createdItem.ItemId}");
+            await _client.DeleteAsync($"{Utils.BaseUrl}/item/{createdItem.ItemId}");
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Api.IntegrationTests.ItemController
             var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}item", addItemBody);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", addItemBody);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -91,7 +91,7 @@ namespace Api.IntegrationTests.ItemController
             var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}item", addItemBody);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", addItemBody);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -128,7 +128,7 @@ namespace Api.IntegrationTests.ItemController
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}item", data);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", data);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

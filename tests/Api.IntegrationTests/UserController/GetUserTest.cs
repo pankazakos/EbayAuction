@@ -23,7 +23,7 @@ namespace Api.IntegrationTests.UserController
             const int userId = 1;
 
             // Act
-            var response = await _client.GetAsync($"{Utils.BaseUrl}user/{userId}");
+            var response = await _client.GetAsync($"{Utils.BaseUrl}/user/{userId}");
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -43,7 +43,7 @@ namespace Api.IntegrationTests.UserController
             const int userId = 9999;
 
             // Act
-            var response = await _client.GetAsync($"{Utils.BaseUrl}user/{userId}");
+            var response = await _client.GetAsync($"{Utils.BaseUrl}/user/{userId}");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -56,7 +56,7 @@ namespace Api.IntegrationTests.UserController
             var username = UserFixture.SimpleUserCredentials.Username;
 
             // Act
-            var response = await _client.GetAsync($"{Utils.BaseUrl}user/{username}");
+            var response = await _client.GetAsync($"{Utils.BaseUrl}/user/{username}");
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -76,7 +76,7 @@ namespace Api.IntegrationTests.UserController
             const string username = "nonExistingUsername";
 
             // Act
-            var response = await _client.GetAsync($"{Utils.BaseUrl}user/{username}");
+            var response = await _client.GetAsync($"{Utils.BaseUrl}/user/{username}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);

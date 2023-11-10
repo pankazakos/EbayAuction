@@ -23,7 +23,7 @@ namespace Api.IntegrationTests.UserController
             var userId = UserFixture.IdUserToRemove; // TestUserToRemove (id = 3)
 
             // Act
-            var response = await _client.DeleteAsync($"{Utils.BaseUrl}user/{userId}");
+            var response = await _client.DeleteAsync($"{Utils.BaseUrl}/user/{userId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -36,7 +36,7 @@ namespace Api.IntegrationTests.UserController
             const int invalidUserId = 9999;
 
             // Act
-            var response = await _client.DeleteAsync($"{Utils.BaseUrl}user/{invalidUserId}");
+            var response = await _client.DeleteAsync($"{Utils.BaseUrl}/user/{invalidUserId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
