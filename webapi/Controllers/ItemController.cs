@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Models;
 using webapi.Services;
-using webapi.Contracts.Requests.Item;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.ControllerUtils;
 using webapi.Utilities.MappingUtils;

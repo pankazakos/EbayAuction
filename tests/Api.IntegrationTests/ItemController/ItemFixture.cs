@@ -11,6 +11,7 @@ namespace Api.IntegrationTests.ItemController
     {
         private readonly AuctionContext _context;
         public static HttpClient HttpClient { get; private set; } = new();
+        public static string SimpleUserJwt { get; private set; } = string.Empty;
 
         public ItemFixture()
         {
@@ -52,7 +53,11 @@ namespace Api.IntegrationTests.ItemController
             };
 
             await userRepository.Create(userInfo);
+
+            var loginResponse = await Utils.LoginUser(HttpClient,
+                new LoginUserRequest { Username = "TestUser", Password = "password" });
+
+            SimpleUserJwt = loginResponse.AccessToken;
         }
     }
-
 }

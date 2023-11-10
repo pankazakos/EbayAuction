@@ -1,7 +1,6 @@
 ﻿using contracts.Requests.Item;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
-using webapi.Contracts.Requests.Item;
 using webapi.Database;
 using webapi.Models;
 using webapi.Services;

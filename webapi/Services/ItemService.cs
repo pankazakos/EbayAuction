@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using contracts.Requests.Item;
-using webapi.Contracts.Requests.Item;
 using webapi.Models;
 using webapi.Repository;
 
@@ -21,11 +20,14 @@ namespace webapi.Services
 
         public async Task<Item> Create(AddItemRequest item, string username, IFormFile? postedFile, CancellationToken cancel)
         {
-            if (item is null)
+            try
             {
-                const string message = "Invalid data to create item";
-                _logger.LogWarning(message);
-                throw new ArgumentException(message);
+                item.Validate();
+            }
+            catch(ArgumentException ex)
+            {
+                _logger.LogWarning(ex.Message);
+                throw;
             }
 
             var user = await _userRepository.GetByUsername(username, cancel);
@@ -111,26 +113,14 @@ namespace webapi.Services
 
         public async Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default)
         {
-            const string format = "yyyy-MM-dd HH:mm";
-
-            var dtInput = input.Expiration.ToString(CultureInfo.InvariantCulture);
-
-            if (!DateTime.TryParseExact(dtInput, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dtExpiration))
+            try
             {
-                const string message = "DateTime format is not correct. Correct format is: \"yyyy-MM-dd HH:mm\" ";
-                _logger.LogWarning(message);
-                throw new ArgumentException(message);
+                input.Validate();
             }
-
-            var now = DateTime.Now.ToString(format);
-
-            DateTime.TryParse(now, out var dtNow);
-
-            if (dtExpiration <= dtNow)
+            catch (ArgumentException ex)
             {
-                const string message = "Ends datetime cannot be set to a datetime earlier than the current datetime";
-                _logger.LogWarning(message);
-                throw new ArgumentException(message);
+                _logger.LogWarning(ex.Message);
+                throw;
             }
 
             var item = await _itemRepository.Activate(id, input.Expiration, cancel);
