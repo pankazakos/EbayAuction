@@ -51,7 +51,7 @@ namespace Api.IntegrationTests.ItemController
         }
 
         [Fact]
-        public async Task CreateItem_ReturnsItem_WhenInputIsCorrectImage()
+        public async Task CreateItem_ReturnsItem_WhenInputContainsImage()
         {
             // Arrange
             var itemData = new AddItemRequest
@@ -62,26 +62,29 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item with image description"
             };
 
-            var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
-            addItemBody.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            var itemJson = JsonConvert.SerializeObject(itemData);
+            var itemContent = new StringContent(itemJson, Encoding.UTF8, "application/json");
+            itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
-                Name = "item"
+                Name = "\"itemJson\""
             };
 
-            var form = new MultipartFormDataContent();
+            var form = new MultipartFormDataContent
+            {
+                HeaderEncodingSelector = null
+            };
+            form.Add(itemContent);
 
             const string baseDirectory = "../../..";
-
             var filePathRelativeToAssembly = Path.Combine(baseDirectory, "assets/images/sample-laptop.jpg");
 
             var fileContent = new ByteArrayContent(await File.ReadAllBytesAsync(filePathRelativeToAssembly));
             fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
-                Name = "File",
-                FileName = "sample-laptop.jpg"
+                Name = "\"image\"",
+                FileName = "\"sample-laptop.jpg\""
             };
-            form.Add(addItemBody, "item");
-            form.Add(fileContent, "File");
+            form.Add(fileContent, "file");
 
             // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}/item", form);
@@ -94,7 +97,6 @@ namespace Api.IntegrationTests.ItemController
             var createdItem = JsonConvert.DeserializeObject<AddItemResponse>(responseString);
 
             createdItem.Should().NotBeNull();
-
             createdItem!.Name.Should().Be(itemData.Name);
         }
 

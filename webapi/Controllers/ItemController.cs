@@ -35,7 +35,7 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpPost(ItemEndpoints.Create)]
-        public async Task<IActionResult> Create([FromForm] string itemJson, [FromForm] IFormFile image, CancellationToken cancel = default)
+        public async Task<IActionResult> Create([FromForm] string itemJson, [FromForm] IFormFile? image, CancellationToken cancel = default)
         {
             var item = JsonConvert.DeserializeObject<AddItemRequest>(itemJson);
             if (item == null)
@@ -45,7 +45,7 @@ namespace webapi.Controllers
 
             var username = _controllerHelper.UsernameClaim;
 
-            if (!Request.HasFormContentType)
+            if (image is null)
             {
                 return await _controllerHelper.CreateAndRespond<Item, AddItemResponse>(
                     () => _itemService.Create(item, username, cancel: cancel), _mapper);

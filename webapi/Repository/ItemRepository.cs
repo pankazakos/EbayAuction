@@ -45,7 +45,10 @@ namespace webapi.Repository
 
                     if (postedFile != null && imageFilename != null)
                     {
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "item-images", imageFilename);
+                        var directoryPath = Path.Combine("C:\\ProgramData", "EbayAuction", "wwwroot", "item-images");
+                        Directory.CreateDirectory(directoryPath); // Create the directory if it doesn't exist
+
+                        var filePath = Path.Combine(directoryPath, imageFilename);
 
                         await using (var stream = new FileStream(filePath, FileMode.Create))
                         {
