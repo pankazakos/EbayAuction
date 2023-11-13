@@ -32,11 +32,20 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item description"
             };
 
-            var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "application/json");
+            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "\"itemJson\""
+            };
 
+            var form = new MultipartFormDataContent
+            {
+                HeaderEncodingSelector = null
+            };
+            form.Add(itemContent);
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", addItemBody);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", form);
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -62,8 +71,7 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item with image description"
             };
 
-            var itemJson = JsonConvert.SerializeObject(itemData);
-            var itemContent = new StringContent(itemJson, Encoding.UTF8, "application/json");
+            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
             itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"itemJson\""
@@ -113,10 +121,20 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item description"
             };
 
-            var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "application/json");
+            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "\"itemJson\""
+            };
+
+            var form = new MultipartFormDataContent
+            {
+                HeaderEncodingSelector = null
+            };
+            form.Add(itemContent);
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", addItemBody);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", form);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -134,10 +152,20 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item description"
             };
 
-            var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "application/json");
+            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "\"itemJson\""
+            };
+
+            var form = new MultipartFormDataContent
+            {
+                HeaderEncodingSelector = null
+            };
+            form.Add(itemContent);
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", addItemBody);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", form);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -167,14 +195,23 @@ namespace Api.IntegrationTests.ItemController
 
         [Theory]
         [MemberData(nameof(IncompleteItemData))]
-        public async Task CreateItem_ReturnsBadRequest_WhenInputIsIncomplete(AddItemRequest item)
+        public async Task CreateItem_ReturnsBadRequest_WhenInputIsIncomplete(AddItemRequest itemData)
         {
             // Arrange
-            var json = JsonConvert.SerializeObject(item);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "\"itemJson\""
+            };
+
+            var form = new MultipartFormDataContent
+            {
+                HeaderEncodingSelector = null
+            };
+            form.Add(itemContent);
 
             // Act
-            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", data);
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", form);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
