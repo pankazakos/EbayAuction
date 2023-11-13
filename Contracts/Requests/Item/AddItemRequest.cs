@@ -10,8 +10,6 @@
 
         public string Description { get; init; } = string.Empty;
 
-        public string? ImageFilename { get; init; }
-
         public void Validate()
         {
             RequestUtils.EnsureStringContent(nameof(Name), Name);

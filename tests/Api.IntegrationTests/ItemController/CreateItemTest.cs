@@ -5,6 +5,7 @@ using System.Text;
 using contracts.Responses.Item;
 using FluentAssertions;
 using System.Net;
+using System.Reflection;
 
 namespace Api.IntegrationTests.ItemController
 {
@@ -47,13 +48,56 @@ namespace Api.IntegrationTests.ItemController
             createdItem.Should().NotBeNull();
 
             createdItem!.Name.Should().Be(itemData.Name);
-
-            var adminJwt = await Utils.LoginAdmin(_client);
-
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt);
-
-            await _client.DeleteAsync($"{Utils.BaseUrl}/item/{createdItem.ItemId}");
         }
+
+        [Fact]
+        public async Task CreateItem_ReturnsItem_WhenInputIsCorrectImage()
+        {
+            // Arrange
+            var itemData = new AddItemRequest
+            {
+                Name = "test item with image",
+                FirstBid = 30,
+                CategoryIds = new List<int> { 1, 2 },
+                Description = "test item with image description"
+            };
+
+            var addItemBody = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            addItemBody.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "item"
+            };
+
+            var form = new MultipartFormDataContent();
+
+            const string baseDirectory = "../../..";
+
+            var filePathRelativeToAssembly = Path.Combine(baseDirectory, "assets/images/sample-laptop.jpg");
+
+            var fileContent = new ByteArrayContent(await File.ReadAllBytesAsync(filePathRelativeToAssembly));
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "File",
+                FileName = "sample-laptop.jpg"
+            };
+            form.Add(addItemBody, "item");
+            form.Add(fileContent, "File");
+
+            // Act
+            var response = await _client.PostAsync($"{Utils.BaseUrl}/item", form);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            var createdItem = JsonConvert.DeserializeObject<AddItemResponse>(responseString);
+
+            createdItem.Should().NotBeNull();
+
+            createdItem!.Name.Should().Be(itemData.Name);
+        }
+
 
         [Fact]
         public async Task CreateItem_ReturnsBadRequest_WhenCategoriesDoNotExist()

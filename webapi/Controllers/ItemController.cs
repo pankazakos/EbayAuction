@@ -34,7 +34,7 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpPost(ItemEndpoints.Create)]
-        public async Task<IActionResult> Create([FromBody] AddItemRequest item, CancellationToken cancel = default)
+        public async Task<IActionResult> Create([FromForm] AddItemRequest item, [FromForm] IFormFile image, CancellationToken cancel = default)
         {
             var username = _controllerHelper.UsernameClaim;
 
@@ -44,17 +44,8 @@ namespace webapi.Controllers
                     () => _itemService.Create(item, username, cancel: cancel), _mapper);
             }
 
-            var formCollection = await Request.ReadFormAsync(cancel);
-
-            if (formCollection.Files.Count <= 0)
-            {
-                return BadRequest("No file uploaded.");
-            }
-
-            var postedFile = formCollection.Files[0];
-
             return await _controllerHelper.CreateAndRespond<Item, AddItemResponse>(
-                () => _itemService.Create(item, username, postedFile, cancel), _mapper);
+                () => _itemService.Create(item, username, image, cancel), _mapper);
         }
 
 

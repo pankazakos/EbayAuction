@@ -12,6 +12,8 @@ namespace Api.IntegrationTests.ItemController
         private readonly AuctionContext _context;
         public static HttpClient HttpClient { get; private set; } = new();
         public static string SimpleUserJwt { get; private set; } = string.Empty;
+        public static string AdminJwt { get; private set; } = string.Empty;
+
 
         public ItemFixture()
         {
@@ -19,6 +21,7 @@ namespace Api.IntegrationTests.ItemController
             HttpClient = api.CreateClient();
             _context = api.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
 
+            AdminJwt = Utils.LoginAdmin(HttpClient).GetAwaiter().GetResult();
             SeedCategories().GetAwaiter().GetResult();
             SeedDefaultSimpleUser().GetAwaiter().GetResult();
         }
