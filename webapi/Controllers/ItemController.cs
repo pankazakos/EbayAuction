@@ -6,6 +6,7 @@ using contracts.Responses;
 using contracts.Responses.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using webapi.Models;
 using webapi.Services;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
@@ -34,8 +35,14 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpPost(ItemEndpoints.Create)]
-        public async Task<IActionResult> Create([FromForm] AddItemRequest item, [FromForm] IFormFile image, CancellationToken cancel = default)
+        public async Task<IActionResult> Create([FromForm] string itemJson, [FromForm] IFormFile image, CancellationToken cancel = default)
         {
+            var item = JsonConvert.DeserializeObject<AddItemRequest>(itemJson);
+            if (item == null)
+            {
+                return BadRequest("Invalid item data");
+            }
+
             var username = _controllerHelper.UsernameClaim;
 
             if (!Request.HasFormContentType)
