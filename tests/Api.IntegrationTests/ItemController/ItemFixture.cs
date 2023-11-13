@@ -1,7 +1,11 @@
 ﻿
 using contracts.Requests.Category;
+using contracts.Requests.Item;
 using contracts.Requests.User;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using webapi;
 using webapi.Database;
 using webapi.Repository;
 
@@ -11,7 +15,8 @@ namespace Api.IntegrationTests.ItemController
     {
         private readonly AuctionContext _context;
         public static HttpClient HttpClient { get; private set; } = new();
-        public static string SimpleUserJwt { get; private set; } = string.Empty;
+        public static string SimpleMainUserJwt { get; private set; } = string.Empty;
+        public static string SecondSimpleUserJwt { get; private set; } = string.Empty;
         public static string AdminJwt { get; private set; } = string.Empty;
 
 
@@ -23,7 +28,10 @@ namespace Api.IntegrationTests.ItemController
 
             AdminJwt = Utils.LoginAdmin(HttpClient).GetAwaiter().GetResult();
             SeedCategories().GetAwaiter().GetResult();
-            SeedDefaultSimpleUser().GetAwaiter().GetResult();
+            SeedSimpleUsers().GetAwaiter().GetResult();
+
+            var configuration = api.Services.GetRequiredService<IConfiguration>();
+            SeedItemsOfSimpleUser(configuration).GetAwaiter().GetResult();
         }
 
         private async Task SeedCategories()
@@ -40,7 +48,7 @@ namespace Api.IntegrationTests.ItemController
             }
         }
 
-        private async Task SeedDefaultSimpleUser()
+        private async Task SeedSimpleUsers()
         {
             var userRepository = new UserRepository(_context);
 
@@ -60,7 +68,59 @@ namespace Api.IntegrationTests.ItemController
             var loginResponse = await Utils.LoginUser(HttpClient,
                 new LoginUserRequest { Username = "TestUser", Password = "password" });
 
-            SimpleUserJwt = loginResponse.AccessToken;
+            SimpleMainUserJwt = loginResponse.AccessToken;
+
+            var secondUser = new RegisterUserRequest
+            {
+                Username = "second TestUser",
+                Password = "password",
+                Email = "secondTestUser@email.com",
+                FirstName = "firstname",
+                LastName = "lastname",
+                Country = "testCountry",
+                Location = "testLocation",
+            };
+
+            await userRepository.Create(secondUser);
+
+            loginResponse = await Utils.LoginUser(HttpClient,
+                new LoginUserRequest { Username = "second TestUser", Password = "password" });
+
+            SecondSimpleUserJwt = loginResponse.AccessToken;
+        }
+
+        private async Task SeedItemsOfSimpleUser(IConfiguration configuration)
+        {
+            var categoryRepository = new CategoryRepository(_context);
+            var userRepository = new UserRepository(_context);
+            var itemRepository = new ItemRepository(_context, categoryRepository, configuration);
+
+            var itemData = new AddItemRequest
+            {
+                Name = "default test item",
+                CategoryIds = new List<int> { 1, 2 },
+                FirstBid = 20,
+                Description = "description of default test item"
+            };
+
+            var itemData2 = new AddItemRequest
+            {
+                Name = "default test item",
+                CategoryIds = new List<int> { 1, 2 },
+                FirstBid = 20,
+                Description = "description of default test item"
+            };
+
+            var seller = await userRepository.GetByUsername("TestUser");
+
+            if (seller is null)
+            {
+                throw new InvalidOperationException($"Cannot find user TestUser");
+            }
+
+            await itemRepository.Create(itemData, seller);
+
+            await itemRepository.Create(itemData2, seller);
         }
     }
 }

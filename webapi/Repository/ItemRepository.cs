@@ -1,27 +1,24 @@
 ﻿using contracts.Requests.Item;
 using Microsoft.EntityFrameworkCore;
-using Swashbuckle.AspNetCore.Swagger;
 using webapi.Database;
 using webapi.Models;
-using webapi.Services;
 
 namespace webapi.Repository
 {
     public class ItemRepository : IItemRepository
     {
         private readonly IAuctionContext _dbContext;
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly IConfiguration _configuration;
 
-
-        public ItemRepository(IAuctionContext context, ICategoryService categoryService, IConfiguration configuration)
+        public ItemRepository(IAuctionContext context, ICategoryRepository categoryRepository, IConfiguration configuration)
         {
             _dbContext = context;
-            _categoryService = categoryService;
+            _categoryRepository = categoryRepository;
             _configuration = configuration;
         }
 
-        public async Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile, string? fullPathToFile, CancellationToken cancel = default)
+        public async Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile = null, string? fileName = null, CancellationToken cancel = default)
         {
             var newItem = new Item
             {
@@ -42,11 +39,22 @@ namespace webapi.Repository
             {
                 try
                 {
-                    var categories = await _categoryService.FilterWithIds(item.CategoryIds, cancel);
+                    var categories = await _categoryRepository.FilterWithIds(item.CategoryIds, cancel);
 
                     newItem.Categories = categories.ToList();
 
-                    if (postedFile != null && fullPathToFile != null)
+                    var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
+
+                    if (directoryPath is null)
+                    {
+                        throw new InvalidOperationException("Cannot find FileStorage:BasePath value in configuration");
+                    }
+
+                    Directory.CreateDirectory(directoryPath); // Create the directory if it doesn't exist
+
+                    var fullPathToFile = directoryPath + fileName;
+
+                    if (postedFile != null && fileName != null)
                     {
                         await using (var stream = new FileStream(fullPathToFile, FileMode.Create))
                         {

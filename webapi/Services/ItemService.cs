@@ -10,14 +10,12 @@ namespace webapi.Services
         private readonly IItemRepository _itemRepository;
         private readonly IUserRepository _userRepository;
         private readonly ILogger<ItemService> _logger;
-        private readonly IConfiguration _configuration;
 
-        public ItemService(IItemRepository itemRepository, IUserRepository userRepository, ILogger<ItemService> logger, IConfiguration configuration)
+        public ItemService(IItemRepository itemRepository, IUserRepository userRepository, ILogger<ItemService> logger)
         {
             _itemRepository = itemRepository;
             _userRepository = userRepository;
             _logger = logger;
-            _configuration = configuration;
         }
 
         public async Task<Item> Create(AddItemRequest item, string username, IFormFile? postedFile, CancellationToken cancel)
@@ -60,22 +58,9 @@ namespace webapi.Services
                 throw new ArgumentException(message);
             }
 
-            var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
-
-            if (directoryPath is null)
-            {
-                const string message = "Cannot find FileStorage:BasePath value in configuration";
-                _logger.LogError(message);
-                throw new InvalidOperationException(message);
-            }
-
-            Directory.CreateDirectory(directoryPath); // Create the directory if it doesn't exist
-
             var fileName = Guid.NewGuid() + fileExtension;
 
-            var fullPathToFile = directoryPath + fileName;
-
-            var createdItemWithImage = await _itemRepository.Create(item, user, postedFile, fullPathToFile, cancel);
+            var createdItemWithImage = await _itemRepository.Create(item, user, postedFile, fileName, cancel);
 
             _logger.LogInformation("Item {itemId} created", createdItemWithImage.ItemId);
 
@@ -110,7 +95,7 @@ namespace webapi.Services
         }
 
 
-        public async Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel)
+        public async Task<IEnumerable<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel)
         {
             var userItems = await _itemRepository.GetItemsOfUserBasedOnStatus(userId, active, cancel);
 
@@ -123,7 +108,7 @@ namespace webapi.Services
 
             _logger.LogWarning("No {status} items found for user {userId}", status, userId);
 
-            throw new InvalidOperationException($"No {status} items found for user {userId}");
+            return userItems;
         }
 
         public async Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default)

@@ -11,7 +11,7 @@ namespace webapi.Services
 
         public Task<Item?> GetById(long id, CancellationToken cancel = default);
 
-        public Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel = default);
+        public Task<IEnumerable<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel = default);
 
         public Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default);
 

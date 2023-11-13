@@ -56,9 +56,7 @@ namespace webapi.Controllers
         }
 
 
-        [Authorize]
-        [HttpGet(ItemEndpoints.MyItems)]
-        public async Task<IActionResult> ListMyItems(bool active, CancellationToken cancel = default)
+        private async Task<IActionResult> ListMyItems(bool active, CancellationToken cancel = default)
         {
             var username = _controllerHelper.UsernameClaim;
 
@@ -69,16 +67,8 @@ namespace webapi.Controllers
                 return _controllerHelper.NotFoundRespond<User>();
             }
 
-            var items = await _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel);
-
-            List<IEntityResponse> mappedItems = new();
-
-            foreach (var item in items)
-            {
-                mappedItems.Add(item.MapToResponse<AddItemResponse>(_mapper));
-            }
-
-            return Ok(mappedItems);
+            return await _controllerHelper.GetAllAndRespond<Item, BasicItemResponse>(
+                () => _itemService.GetItemsOfUserBasedOnStatus(user.Id, active, cancel), _mapper);
         }
 
 

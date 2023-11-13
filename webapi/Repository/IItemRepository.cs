@@ -5,7 +5,7 @@ namespace webapi.Repository
 {
     public interface IItemRepository
     {
-        public Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile = null, string? fullPathToFile = null, CancellationToken cancel = default);
+        public Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile = null, string? fileName = null, CancellationToken cancel = default);
 
         public Task<(IEnumerable<Item>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default);
 

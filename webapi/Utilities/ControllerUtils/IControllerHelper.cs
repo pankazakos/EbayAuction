@@ -16,7 +16,7 @@ public interface IControllerHelper
         where TResponse : IEntityResponse;
 
     Task<IActionResult> GetAllAndRespond<TModel, TResponse>(
-        Func<Task<IEnumerable<TModel>>> getAllPagedFunc, IMapper mapper)
+        Func<Task<IEnumerable<TModel>>> getAllFunc, IMapper mapper)
         where TModel : IModel
         where TResponse : IEntityResponse;
 

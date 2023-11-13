@@ -5,7 +5,6 @@ using System.Text;
 using contracts.Responses.Item;
 using FluentAssertions;
 using System.Net;
-using System.Reflection;
 
 namespace Api.IntegrationTests.ItemController
 {
@@ -17,7 +16,7 @@ namespace Api.IntegrationTests.ItemController
         public CreateItemTest()
         {
             _client = ItemFixture.HttpClient;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ItemFixture.SimpleUserJwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ItemFixture.SimpleMainUserJwt);
         }
 
         [Fact]
