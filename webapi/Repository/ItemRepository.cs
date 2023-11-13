@@ -11,14 +11,17 @@ namespace webapi.Repository
     {
         private readonly IAuctionContext _dbContext;
         private readonly ICategoryService _categoryService;
+        private readonly IConfiguration _configuration;
 
-        public ItemRepository(IAuctionContext context, ICategoryService categoryService)
+
+        public ItemRepository(IAuctionContext context, ICategoryService categoryService, IConfiguration configuration)
         {
             _dbContext = context;
             _categoryService = categoryService;
+            _configuration = configuration;
         }
 
-        public async Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile, string? imageFilename, CancellationToken cancel = default)
+        public async Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile, string? fullPathToFile, CancellationToken cancel = default)
         {
             var newItem = new Item
             {
@@ -43,19 +46,14 @@ namespace webapi.Repository
 
                     newItem.Categories = categories.ToList();
 
-                    if (postedFile != null && imageFilename != null)
+                    if (postedFile != null && fullPathToFile != null)
                     {
-                        var directoryPath = Path.Combine("C:\\ProgramData", "EbayAuction", "wwwroot", "item-images");
-                        Directory.CreateDirectory(directoryPath); // Create the directory if it doesn't exist
-
-                        var filePath = Path.Combine(directoryPath, imageFilename);
-
-                        await using (var stream = new FileStream(filePath, FileMode.Create))
+                        await using (var stream = new FileStream(fullPathToFile, FileMode.Create))
                         {
                             await postedFile.CopyToAsync(stream, cancel);
                         }
 
-                        newItem.ImageGuid = Path.GetFileNameWithoutExtension(imageFilename);
+                        newItem.ImageGuid = Path.GetFileNameWithoutExtension(fullPathToFile);
                     }
 
                     _dbContext.Items.Add(newItem);

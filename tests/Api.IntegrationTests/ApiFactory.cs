@@ -45,7 +45,8 @@ namespace Api.IntegrationTests
                     {"Jwt:Key", "636457aca8cbebba01fb52fb7a60377d7cc53dea"},
                     {"Jwt:Issuer", "AuctionsWebApp"},
                     {"Jwt:Audience", "MyWebApp"},
-                    {"AllowedHosts", "*"}
+                    {"AllowedHosts", "*"},
+                    {"FileStorage:BasePath", "/var/www/EbayAuction/wwwroot/item-images/"}
                 });
             });
 

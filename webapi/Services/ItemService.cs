@@ -10,12 +10,14 @@ namespace webapi.Services
         private readonly IItemRepository _itemRepository;
         private readonly IUserRepository _userRepository;
         private readonly ILogger<ItemService> _logger;
+        private readonly IConfiguration _configuration;
 
-        public ItemService(IItemRepository itemRepository, IUserRepository userRepository, ILogger<ItemService> logger)
+        public ItemService(IItemRepository itemRepository, IUserRepository userRepository, ILogger<ItemService> logger, IConfiguration configuration)
         {
             _itemRepository = itemRepository;
             _userRepository = userRepository;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<Item> Create(AddItemRequest item, string username, IFormFile? postedFile, CancellationToken cancel)
@@ -24,7 +26,7 @@ namespace webapi.Services
             {
                 item.Validate();
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 _logger.LogWarning(ex.Message);
                 throw;
@@ -58,9 +60,22 @@ namespace webapi.Services
                 throw new ArgumentException(message);
             }
 
+            var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
+
+            if (directoryPath is null)
+            {
+                const string message = "Cannot find FileStorage:BasePath value in configuration";
+                _logger.LogError(message);
+                throw new InvalidOperationException(message);
+            }
+
+            Directory.CreateDirectory(directoryPath); // Create the directory if it doesn't exist
+
             var fileName = Guid.NewGuid() + fileExtension;
 
-            var createdItemWithImage = await _itemRepository.Create(item, user, postedFile, fileName, cancel);
+            var fullPathToFile = directoryPath + fileName;
+
+            var createdItemWithImage = await _itemRepository.Create(item, user, postedFile, fullPathToFile, cancel);
 
             _logger.LogInformation("Item {itemId} created", createdItemWithImage.ItemId);
 
