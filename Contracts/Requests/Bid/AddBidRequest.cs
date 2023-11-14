@@ -1,6 +1,6 @@
 ﻿namespace contracts.Requests.Bid
 {
-    public class AddBidRequest : IRequest
+    public class AddBidRequest : IAppRequest
     {
         public long ItemId { get; init; }
 

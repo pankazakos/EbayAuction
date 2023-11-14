@@ -28,8 +28,7 @@ namespace Api.IntegrationTests.UserController
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            var returnedUser = JsonConvert.DeserializeObject<BasicUserResponse>(responseString);
+            var returnedUser = await Utils.ConvertResponseData<BasicUserResponse>(response);
 
             returnedUser.Should().NotBeNull();
 
@@ -61,8 +60,7 @@ namespace Api.IntegrationTests.UserController
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            var returnedUser = JsonConvert.DeserializeObject<BasicUserResponse>(responseString);
+            var returnedUser = await Utils.ConvertResponseData<BasicUserResponse>(response);
 
             returnedUser.Should().NotBeNull();
 

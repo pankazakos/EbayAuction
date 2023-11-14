@@ -1,6 +1,4 @@
-﻿using System.Text;
-using Newtonsoft.Json;
-using contracts.Responses.User;
+﻿using contracts.Responses.User;
 using contracts.Requests.User;
 using System.Net;
 using FluentAssertions;
@@ -32,15 +30,13 @@ namespace Api.IntegrationTests.UserController
                 Location = "Test Location"
             };
 
-            var json = JsonConvert.SerializeObject(user);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = Utils.ConvertRequestData(user, Utils.ContentType.Json);
 
             // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}/user", data);
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            var returnedUser = JsonConvert.DeserializeObject<RegisterUserResponse>(responseString);
+            var returnedUser = await Utils.ConvertResponseData<RegisterUserResponse>(response);
             
             // Assert
             returnedUser.Should().NotBeNull();
@@ -96,8 +92,7 @@ namespace Api.IntegrationTests.UserController
         public async Task Create_ReturnsBadRequest_WhenUserInfoIsIncomplete(RegisterUserRequest user)
         {
             // Arrange
-            var json = JsonConvert.SerializeObject(user);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = Utils.ConvertRequestData(user, Utils.ContentType.Json);
 
             // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}/user", data);

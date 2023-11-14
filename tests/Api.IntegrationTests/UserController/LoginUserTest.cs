@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using contracts.Requests.User;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
 using System.Text;
 using contracts.Responses.User;
 using FluentAssertions;
@@ -28,8 +27,7 @@ namespace Api.IntegrationTests.UserController
                 Password = "admin"
             };
 
-            var json = JsonConvert.SerializeObject(userCredentials);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = Utils.ConvertRequestData(userCredentials, Utils.ContentType.Json);
 
             // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}/user/login", data);
@@ -37,8 +35,7 @@ namespace Api.IntegrationTests.UserController
             // Assert
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            var jwtResponse = JsonConvert.DeserializeObject<LoginUserResponse>(responseString);
+            var jwtResponse = Utils.ConvertResponseData<LoginUserResponse>(response);
 
             jwtResponse.Should().NotBeNull();
         }
@@ -53,8 +50,7 @@ namespace Api.IntegrationTests.UserController
                 Password = "NonExistingPassword"
             };
 
-            var json = JsonConvert.SerializeObject(userCredentials);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = Utils.ConvertRequestData(userCredentials, Utils.ContentType.Json);
 
             // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}/user/login", data);
@@ -73,8 +69,7 @@ namespace Api.IntegrationTests.UserController
                 Password = "NonExistingPassword"
             };
 
-            var json = JsonConvert.SerializeObject(userCredentials);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var data = Utils.ConvertRequestData(userCredentials, Utils.ContentType.Json);
 
             // Act
             var response = await _client.PostAsync($"{Utils.BaseUrl}/user/login", data);

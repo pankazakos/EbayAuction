@@ -1,6 +1,6 @@
 ﻿namespace contracts.Requests.User
 {
-    public class RegisterUserRequest : IRequest
+    public class RegisterUserRequest : IAppRequest
     {
         public string Username { get; init; } = string.Empty;
 

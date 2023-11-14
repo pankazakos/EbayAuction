@@ -1,11 +1,8 @@
-﻿
-using contracts.Requests.Category;
+﻿using contracts.Requests.Category;
 using contracts.Requests.Item;
 using contracts.Requests.User;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using webapi;
 using webapi.Database;
 using webapi.Repository;
 
@@ -95,20 +92,36 @@ namespace Api.IntegrationTests.ItemController
             var userRepository = new UserRepository(_context);
             var itemRepository = new ItemRepository(_context, categoryRepository, configuration);
 
-            var itemData = new AddItemRequest
+            var firstItem = new AddItemRequest
             {
-                Name = "default test item",
+                Name = "first test item",
                 CategoryIds = new List<int> { 1, 2 },
                 FirstBid = 20,
                 Description = "description of default test item"
             };
 
-            var itemData2 = new AddItemRequest
+            var secondItem = new AddItemRequest
             {
-                Name = "default test item",
+                Name = "second test item",
                 CategoryIds = new List<int> { 1, 2 },
                 FirstBid = 20,
                 Description = "description of default test item"
+            };
+
+            var itemToActivate = new AddItemRequest
+            {
+                Name = "test item to activate",
+                CategoryIds = new List<int> { 1 },
+                FirstBid = 20,
+                Description = "description of test item to activate"
+            };
+
+            var itemToDelete = new AddItemRequest
+            {
+                Name = "test item to delete",
+                CategoryIds = new List<int> { 1 },
+                FirstBid = 20,
+                Description = "description of test item to delete"
             };
 
             var seller = await userRepository.GetByUsername("TestUser");
@@ -118,9 +131,13 @@ namespace Api.IntegrationTests.ItemController
                 throw new InvalidOperationException($"Cannot find user TestUser");
             }
 
-            await itemRepository.Create(itemData, seller);
+            await itemRepository.Create(firstItem, seller);
 
-            await itemRepository.Create(itemData2, seller);
+            await itemRepository.Create(secondItem, seller);
+
+            await itemRepository.Create(itemToActivate, seller);
+
+            await itemRepository.Create(itemToDelete, seller);
         }
     }
 }

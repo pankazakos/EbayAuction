@@ -1,6 +1,6 @@
 ﻿namespace contracts.Requests.Category
 {
-    public class AddCategoryRequest : IRequest
+    public class AddCategoryRequest : IAppRequest
     {
         public string Name { get; init; } = string.Empty;
 

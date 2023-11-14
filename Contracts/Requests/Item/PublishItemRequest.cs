@@ -2,7 +2,7 @@
 
 namespace contracts.Requests.Item
 {
-    public class PublishItemRequest : IRequest
+    public class PublishItemRequest : IAppRequest
     {
         public DateTime Expiration { get; init; }
         public void Validate()

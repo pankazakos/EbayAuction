@@ -1,6 +1,6 @@
 ﻿namespace contracts.Requests
 {
-    internal interface IRequest
+    public interface IAppRequest
     {
         public void Validate();
     }

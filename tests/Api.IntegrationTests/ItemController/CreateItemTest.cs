@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using contracts.Requests.Item;
 using Newtonsoft.Json;
-using System.Text;
 using contracts.Responses.Item;
 using FluentAssertions;
 using System.Net;
@@ -9,7 +8,7 @@ using System.Net;
 namespace Api.IntegrationTests.ItemController
 {
     [Collection("Item Collection")]
-    public class CreateItemTest : IClassFixture<ItemFixture>
+    public class CreateItemTest
     {
         private readonly HttpClient _client;
 
@@ -31,7 +30,7 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item description"
             };
 
-            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            var itemContent = Utils.ConvertRequestData(itemData, Utils.ContentType.TextPlain);
             itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"itemJson\""
@@ -70,7 +69,7 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item with image description"
             };
 
-            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            var itemContent = Utils.ConvertRequestData(itemData, Utils.ContentType.TextPlain);
             itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"itemJson\""
@@ -120,7 +119,7 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item description"
             };
 
-            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            var itemContent = Utils.ConvertRequestData(itemData, Utils.ContentType.TextPlain);
             itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"itemJson\""
@@ -151,7 +150,7 @@ namespace Api.IntegrationTests.ItemController
                 Description = "test item description"
             };
 
-            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            var itemContent = Utils.ConvertRequestData(itemData, Utils.ContentType.TextPlain);
             itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"itemJson\""
@@ -197,7 +196,7 @@ namespace Api.IntegrationTests.ItemController
         public async Task CreateItem_ReturnsBadRequest_WhenInputIsIncomplete(AddItemRequest itemData)
         {
             // Arrange
-            var itemContent = new StringContent(JsonConvert.SerializeObject(itemData), Encoding.UTF8, "text/plain");
+            var itemContent = Utils.ConvertRequestData(itemData, Utils.ContentType.TextPlain);
             itemContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "\"itemJson\""

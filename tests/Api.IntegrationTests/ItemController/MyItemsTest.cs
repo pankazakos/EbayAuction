@@ -2,12 +2,11 @@
 using System.Net.Http.Headers;
 using contracts.Responses.Item;
 using FluentAssertions;
-using Newtonsoft.Json;
 
 namespace Api.IntegrationTests.ItemController
 {
     [Collection("Item Collection")]
-    public class MyItemsTest : IClassFixture<ItemFixture>
+    public class MyItemsTest
     {
         private readonly HttpClient _client;
         public MyItemsTest()
@@ -25,9 +24,7 @@ namespace Api.IntegrationTests.ItemController
 
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var items = JsonConvert.DeserializeObject<IEnumerable<BasicItemResponse>>(responseString);
+            var items = await Utils.ConvertResponseData<IEnumerable<BasicItemResponse>>(response);
 
             // Assert
             if (items is null)
@@ -50,9 +47,7 @@ namespace Api.IntegrationTests.ItemController
 
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            var items = JsonConvert.DeserializeObject<IEnumerable<BasicItemResponse>>(responseString);
+            var items = await Utils.ConvertResponseData<IEnumerable<BasicItemResponse>>(response);
 
             // Assert
             if (items is null)

@@ -2,7 +2,7 @@
 using contracts.Requests.User;
 using Newtonsoft.Json;
 using System.Text;
-using contracts.Responses;
+using contracts.Requests;
 using contracts.Responses.User;
 
 namespace Api.IntegrationTests
@@ -12,6 +12,28 @@ namespace Api.IntegrationTests
         public const string BaseUrl = "https://localhost:7068/api";
 
         public static string AdminToken = string.Empty;
+
+        public enum ContentType
+        {
+            Json,       // Represents "application/json"
+            TextPlain   // Represents "text/plain"
+        }
+
+        public static StringContent ConvertRequestData(IAppRequest requestData, ContentType type)
+        {
+            var json = JsonConvert.SerializeObject(requestData);
+            var data = new StringContent(json, Encoding.UTF8, type == ContentType.Json ? "application/json" : "text/plain");
+
+            return data;
+        }
+
+        public static async Task<T?> ConvertResponseData<T>(HttpResponseMessage response)
+        {
+            var responseString = await response.Content.ReadAsStringAsync();
+            var responseData = JsonConvert.DeserializeObject<T>(responseString);
+
+            return responseData;
+        }
 
         public static async Task<string> LoginAdmin(HttpClient client)
         {
