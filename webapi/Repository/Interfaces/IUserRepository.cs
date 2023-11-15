@@ -1,7 +1,7 @@
 ﻿using contracts.Requests.User;
 using webapi.Models;
 
-namespace webapi.Repository
+namespace webapi.Repository.Interfaces
 {
     public interface IUserRepository
     {

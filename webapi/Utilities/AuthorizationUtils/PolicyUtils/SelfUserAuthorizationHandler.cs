@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using webapi.Services;
+using webapi.Services.Interfaces;
 
 namespace webapi.Utilities.AuthorizationUtils.PolicyUtils
 {

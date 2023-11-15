@@ -1,7 +1,7 @@
 ﻿using contracts.Requests.Item;
 using webapi.Models;
 
-namespace webapi.Services
+namespace webapi.Services.Interfaces
 {
     public interface IItemService
     {

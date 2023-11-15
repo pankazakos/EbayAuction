@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
 using contracts.Requests.Item;
 using webapi.Models;
-using webapi.Repository;
+using webapi.Repository.Interfaces;
+using webapi.Services.Interfaces;
 
 namespace webapi.Services
 {

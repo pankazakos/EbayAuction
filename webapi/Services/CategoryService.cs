@@ -1,7 +1,8 @@
 ﻿using contracts.Requests.Category;
 using webapi.Database;
 using webapi.Models;
-using webapi.Repository;
+using webapi.Repository.Interfaces;
+using webapi.Services.Interfaces;
 
 namespace webapi.Services
 {

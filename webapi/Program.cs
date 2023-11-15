@@ -15,7 +15,8 @@ using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using Serilog;
 using webapi.Utilities.ServiceUtils;
-
+using webapi.Repository.Interfaces;
+using webapi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

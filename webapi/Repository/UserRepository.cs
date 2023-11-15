@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using webapi.Database;
 using webapi.Models;
+using webapi.Repository.Interfaces;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 
 namespace webapi.Repository

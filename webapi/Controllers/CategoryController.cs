@@ -6,7 +6,7 @@ using contracts.Responses.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Models;
-using webapi.Services;
+using webapi.Services.Interfaces;
 using webapi.Utilities.ControllerUtils;
 
 

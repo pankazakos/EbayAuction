@@ -5,11 +5,11 @@ using contracts.Requests.User;
 using contracts.Responses.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using webapi.Services;
 using webapi.Models;
 using webapi.Utilities.ControllerUtils;
 using webapi.Utilities.AuthorizationUtils.PasswordUtils;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
+using webapi.Services.Interfaces;
 
 namespace webapi.Controllers
 {

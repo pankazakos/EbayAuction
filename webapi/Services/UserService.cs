@@ -1,6 +1,7 @@
 ﻿using contracts.Requests.User;
 using webapi.Models;
-using webapi.Repository;
+using webapi.Repository.Interfaces;
+using webapi.Services.Interfaces;
 
 namespace webapi.Services
 {

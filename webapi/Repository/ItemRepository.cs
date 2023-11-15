@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using webapi.Database;
 using webapi.Models;
+using webapi.Repository.Interfaces;
 
 namespace webapi.Repository
 {

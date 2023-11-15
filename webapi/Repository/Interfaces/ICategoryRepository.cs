@@ -1,9 +1,9 @@
-﻿using contracts.Requests.Category;
-using webapi.Models;
+﻿using webapi.Models;
+using contracts.Requests.Category;
 
-namespace webapi.Services
+namespace webapi.Repository.Interfaces
 {
-    public interface ICategoryService
+    public interface ICategoryRepository
     {
         public Task<Category?> GetById(int id, CancellationToken cancel = default);
 
@@ -13,7 +13,6 @@ namespace webapi.Services
 
         public Task<Category> Create(AddCategoryRequest input, CancellationToken cancel = default);
 
-        public Task Delete(int id, CancellationToken cancel = default);
-
+        public Task Delete(Category category, CancellationToken cancel = default);
     }
 }
