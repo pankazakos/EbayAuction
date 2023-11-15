@@ -5,10 +5,16 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.ItemController
 {
-    [Collection("Item Collection")]
-    public class GetItemsTest
+    public class GetItemsTest : IClassFixture<ItemFixture>
     {
-        private readonly HttpClient _client = ItemFixture.HttpClient;
+        private readonly ItemFixture _fixture;
+        private readonly HttpClient _client;
+
+        public GetItemsTest(ItemFixture fixture)
+        {
+            _fixture = fixture;
+            _client = _fixture.HttpClient;
+        }
 
         [Fact]
         public async Task GetItemById_ReturnsItem_WhenIdExists()

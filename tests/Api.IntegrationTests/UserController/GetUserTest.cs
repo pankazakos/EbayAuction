@@ -6,14 +6,15 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
-    [Collection("User Collection")]
-    public class GetUserTest
+    public class GetUserTest : IClassFixture<UserFixture>
     {
+        private readonly UserFixture _fixture;
         private readonly HttpClient _client;
-        public GetUserTest()
+        public GetUserTest(UserFixture fixture)
         {
-            _client = UserFixture.HttpClient;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserFixture.AdminJwt);
+            _fixture = fixture;
+            _client = _fixture.HttpClient;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _fixture.AdminJwt);
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace Api.IntegrationTests.UserController
         public async Task GetUserByUsername_ReturnsUser_WhenUserExists()
         {
             // Arrange
-            var username = UserFixture.SimpleUserCredentials.Username;
+            var username = _fixture.SimpleUserCredentials.Username;
 
             // Act
             var response = await _client.GetAsync($"{Utils.BaseUrl}/user/{username}");

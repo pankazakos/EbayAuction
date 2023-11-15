@@ -4,21 +4,22 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
-    [Collection("User Collection")]
-    public class GetAllTest
+    public class GetAllTest : IClassFixture<UserFixture>
     {
+        private readonly UserFixture _fixture;
         private readonly HttpClient _client;
 
-        public GetAllTest()
+        public GetAllTest(UserFixture fixture)
         {
-            _client = UserFixture.HttpClient;
+            _fixture = fixture;
+            _client = _fixture.HttpClient;
         }
 
         [Fact]
         public async Task GetAllUsers_ReturnsOk_WhenAdminMakesRequest()
         {
             // Arrange
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserFixture.AdminJwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _fixture.AdminJwt);
 
             // Act
             var response = await _client.GetAsync($"{Utils.BaseUrl}/user/all");
@@ -31,7 +32,7 @@ namespace Api.IntegrationTests.UserController
         public async Task GetAllUsers_ReturnsForbidden_WhenSimpleUserMakesRequest()
         {
             // Arrange
-            var simpleUserJwt = await Utils.LoginUser(_client, UserFixture.SimpleUserCredentials);
+            var simpleUserJwt = await Utils.LoginUser(_client, _fixture.SimpleUserCredentials);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", simpleUserJwt.AccessToken);
 
@@ -61,7 +62,7 @@ namespace Api.IntegrationTests.UserController
         public async Task GetAllUsernames_ReturnsOk_WhenAdminMakesRequest()
         {
             // Arrange
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", UserFixture.AdminJwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _fixture.AdminJwt);
 
             // Act
             var response = await _client.GetAsync($"{Utils.BaseUrl}/user/usernames");
@@ -74,7 +75,7 @@ namespace Api.IntegrationTests.UserController
         public async Task GetAllUsernames_ReturnsForbidden_WhenSimpleUserMakesRequest()
         {
             // Arrange
-            var simpleUserJwt = await Utils.LoginUser(_client, UserFixture.SimpleUserCredentials);
+            var simpleUserJwt = await Utils.LoginUser(_client, _fixture.SimpleUserCredentials);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", simpleUserJwt.AccessToken);
 

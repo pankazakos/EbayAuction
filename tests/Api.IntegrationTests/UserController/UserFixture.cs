@@ -8,11 +8,9 @@ namespace Api.IntegrationTests.UserController
     public class UserFixture
     {
         private readonly AuctionContext _context;
-        public static HttpClient HttpClient { get; private set; } = new();
-        public static string AdminJwt { get; private set; } = string.Empty;
-        public static LoginUserRequest SimpleUserCredentials { get; private set; } = new();
-
-        public static int IdUserToRemove { get; private set; }
+        public HttpClient HttpClient { get; }
+        public string AdminJwt { get; private set; } 
+        public LoginUserRequest SimpleUserCredentials { get; private set; } = new();
 
         public UserFixture()
         {
@@ -20,16 +18,8 @@ namespace Api.IntegrationTests.UserController
             HttpClient = api.CreateClient();
             _context = api.Services.CreateScope().ServiceProvider.GetRequiredService<AuctionContext>();
 
-            LoginAdmin().GetAwaiter().GetResult();
+            AdminJwt = Utils.LoginAdmin(HttpClient).GetAwaiter().GetResult();
             SeedDefaultSimpleUser().GetAwaiter().GetResult();
-            SeedUserToRemove().GetAwaiter().GetResult();
-        }
-
-        private static async Task LoginAdmin()
-        {
-            var jwt = await Utils.LoginAdmin(HttpClient);
-
-            AdminJwt = jwt;
         }
 
         private async Task SeedDefaultSimpleUser()
@@ -50,26 +40,6 @@ namespace Api.IntegrationTests.UserController
             await userRepository.Create(userInfo);
 
             SimpleUserCredentials = new LoginUserRequest { Username = "TestUser", Password = "password" };
-        }
-
-        private async Task SeedUserToRemove()
-        {
-            var userRepository = new UserRepository(_context);
-
-            var userInfo = new RegisterUserRequest
-            {
-                Username = "TestUserToRemove",
-                Password = "password",
-                Email = "testUserToRemove@email.com",
-                FirstName = "firstname",
-                LastName = "lastname",
-                Country = "testCountry",
-                Location = "testLocation",
-            };
-
-            var user = await userRepository.Create(userInfo);
-
-            IdUserToRemove = user.Id;
         }
     }
 }

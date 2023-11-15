@@ -31,14 +31,8 @@ namespace webapi.Controllers
         [HttpGet(CategoryEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id, CancellationToken cancel = default)
         {
-            var category = await _categoryService.GetById(id, cancel);
-
-            if (category is null)
-            {
-                return _controllerHelper.NotFoundRespond<Category>();
-            }
-
-            return Ok(category);
+            return await _controllerHelper.GetAndRespond<Category?, BasicCategoryResponse>(
+                () => _categoryService.GetById(id, cancel), _mapper);
         }
 
 
@@ -51,18 +45,10 @@ namespace webapi.Controllers
 
         [Authorize(Policy = Policies.Admin)]
         [HttpPost(CategoryEndpoints.Create)]
-        public async Task<IActionResult> Create([FromBody] AddCategoryRequest body, CancellationToken cancel = default)
+        public async Task<IActionResult> Create([FromBody] AddCategoryRequest request, CancellationToken cancel = default)
         {
-            try
-            {
-                var category = await _categoryService.Create(body, cancel);
-
-                return Created(nameof(category), category);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await _controllerHelper.CreateAndRespond<Category, BasicCategoryResponse>(
+                () => _categoryService.Create(request, cancel), _mapper);
         }
 
 

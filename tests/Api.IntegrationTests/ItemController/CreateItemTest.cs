@@ -7,15 +7,16 @@ using System.Net;
 
 namespace Api.IntegrationTests.ItemController
 {
-    [Collection("Item Collection")]
-    public class CreateItemTest
+    public class CreateItemTest : IClassFixture<ItemFixture>
     {
+        private readonly ItemFixture _fixture;
         private readonly HttpClient _client;
 
-        public CreateItemTest()
+        public CreateItemTest(ItemFixture fixture)
         {
-            _client = ItemFixture.HttpClient;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ItemFixture.SimpleMainUserJwt);
+            _fixture = fixture;
+            _client = _fixture.HttpClient;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _fixture.SimpleMainUserJwt);
         }
 
         [Fact]

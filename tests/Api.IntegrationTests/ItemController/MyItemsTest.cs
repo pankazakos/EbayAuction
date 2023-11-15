@@ -5,14 +5,15 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.ItemController
 {
-    [Collection("Item Collection")]
-    public class MyItemsTest
+    public class MyItemsTest : IClassFixture<ItemFixture>
     {
+        private readonly ItemFixture _fixture;
         private readonly HttpClient _client;
-        public MyItemsTest()
+        public MyItemsTest(ItemFixture fixture)
         {
-            _client = ItemFixture.HttpClient;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ItemFixture.SimpleMainUserJwt);
+            _fixture = fixture;
+            _client = _fixture.HttpClient;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _fixture.SimpleMainUserJwt);
         }
 
 
@@ -40,7 +41,7 @@ namespace Api.IntegrationTests.ItemController
         public async Task Inactive_ReturnsEmptyList_WhenItemsDoNotExist()
         {
             // Arrange
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ItemFixture.AdminJwt);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _fixture.AdminJwt);
 
             // Act
             var response = await _client.GetAsync($"{Utils.BaseUrl}/item/inactive");

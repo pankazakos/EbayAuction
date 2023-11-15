@@ -115,6 +115,11 @@ namespace webapi.Repository
                 throw new ArgumentException("Cannot find item with given id.");
             }
 
+            if (item.Active)
+            {
+                throw new InvalidOperationException("Cannot activate an already published item");
+            }
+
             item.Started = DateTime.Now;
             item.Ends = expiration;
             item.Active = true;

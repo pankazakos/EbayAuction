@@ -5,10 +5,23 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.ItemController
 {
-    [Collection("Item Collection")]
-    public class ActivateItemTest
+    public class ActivateItemTest : IClassFixture<ItemFixture>
     {
-        private readonly HttpClient _client = ItemFixture.HttpClient;
+        private readonly ItemFixture _fixture;
+        private readonly HttpClient _client;
+        private const long ItemId = 1;
+        private readonly StringContent _data;
+
+        public ActivateItemTest(ItemFixture itemFixture)
+        {
+            _fixture = itemFixture;
+            _client = _fixture.HttpClient;
+            var activateRequest = new PublishItemRequest
+            {
+                Expiration = DateTime.Now.AddMinutes(10)
+            };
+            _data = Utils.ConvertRequestData(activateRequest, Utils.ContentType.Json);
+        }
 
         [Fact]
         public async Task Activate_ReturnsUnauthorized_WhenNoAuthorizationIsProvided()
@@ -16,17 +29,8 @@ namespace Api.IntegrationTests.ItemController
             // Arrange
             _client.DefaultRequestHeaders.Authorization = null;
 
-            const long itemId = 3;
-
-            var activateRequest = new PublishItemRequest
-            {
-                Expiration = DateTime.Now.AddMinutes(10)
-            };
-
-            var data = Utils.ConvertRequestData(activateRequest, Utils.ContentType.Json);
-
             // Act
-            var response = await _client.PutAsync($"{Utils.BaseUrl}/item/activate/{itemId}", data);
+            var response = await _client.PutAsync($"{Utils.BaseUrl}/item/activate/{ItemId}", _data);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -37,19 +41,10 @@ namespace Api.IntegrationTests.ItemController
         {
             // Arrange
             _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", ItemFixture.SecondSimpleUserJwt);
-
-            const long itemId = 3;
-
-            var activateRequest = new PublishItemRequest
-            {
-                Expiration = DateTime.Now.AddMinutes(10)
-            };
-
-            var data = Utils.ConvertRequestData(activateRequest, Utils.ContentType.Json);
+                new AuthenticationHeaderValue("Bearer", _fixture.SecondSimpleUserJwt);
 
             // Act
-            var response = await _client.PutAsync($"{Utils.BaseUrl}/item/activate/{itemId}", data);
+            var response = await _client.PutAsync($"{Utils.BaseUrl}/item/activate/{ItemId}", _data);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
@@ -60,19 +55,10 @@ namespace Api.IntegrationTests.ItemController
         {
             // Arrange
             _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", ItemFixture.SimpleMainUserJwt);
-
-            const long itemId = 3;
-
-            var activateRequest = new PublishItemRequest
-            {
-                Expiration = DateTime.Now.AddMinutes(10)
-            };
-
-            var data = Utils.ConvertRequestData(activateRequest, Utils.ContentType.Json);
+                new AuthenticationHeaderValue("Bearer", _fixture.SimpleMainUserJwt);
 
             // Act
-            var response = await _client.PutAsync($"{Utils.BaseUrl}/item/activate/{itemId}", data);
+            var response = await _client.PutAsync($"{Utils.BaseUrl}/item/activate/{ItemId}", _data);
 
             // Assert
             response.EnsureSuccessStatusCode();

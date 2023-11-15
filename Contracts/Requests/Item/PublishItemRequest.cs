@@ -7,13 +7,13 @@ namespace contracts.Requests.Item
         public DateTime Expiration { get; init; }
         public void Validate()
         {
-            const string format = "yyyy-MM-dd HH:mm";
+            const string format = "yyyy-MM-ddTHH:mm";
 
-            var dtInput = Expiration.ToString(CultureInfo.InvariantCulture);
+            var dtInput = Expiration.ToString(format, CultureInfo.InvariantCulture);
 
             if (!DateTime.TryParseExact(dtInput, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out var dtExpiration))
             {
-                throw new ArgumentException("DateTime format is not correct. Correct format is: \"yyyy-MM-dd HH:mm\" ");
+                throw new ArgumentException("DateTime format is not correct. Correct format is: \"yyyy-MM-ddTHH:mm\" ");
             }
 
             var now = DateTime.Now.ToString(format);

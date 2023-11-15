@@ -2,7 +2,6 @@
 using contracts.Endpoints;
 using contracts.Policies;
 using contracts.Requests.Item;
-using contracts.Responses;
 using contracts.Responses.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ using webapi.Models;
 using webapi.Services;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.ControllerUtils;
-using webapi.Utilities.MappingUtils;
 
 namespace webapi.Controllers
 {
@@ -102,9 +100,9 @@ namespace webapi.Controllers
         {
             try
             {
-                var item = await _itemService.Activate(id, input, cancel);
+                await _itemService.Activate(id, input, cancel);
 
-                return Ok(item);
+                return Ok($"Item {id} was successfully published");
             }
             catch (ArgumentException ex)
             {

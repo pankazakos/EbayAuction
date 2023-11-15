@@ -123,11 +123,18 @@ namespace webapi.Services
                 throw;
             }
 
-            var item = await _itemRepository.Activate(id, input.Expiration, cancel);
+            try
+            {
+                var item = await _itemRepository.Activate(id, input.Expiration, cancel);
 
-            _logger.LogInformation("Activated item {itemId}", item.ItemId);
-
-            return item;
+                _logger.LogInformation("Published item {itemId}", item.ItemId);
+                return item;
+            }
+            catch (InvalidOperationException)
+            {
+                _logger.LogWarning("Item {itemId} is already published", id);
+                throw;
+            }
         }
 
         public async Task Delete(long id, CancellationToken cancel = default)

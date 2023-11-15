@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using webapi.Models;
 using webapi.Services;
 
 namespace webapi.Utilities.AuthorizationUtils.PolicyUtils
@@ -7,10 +6,12 @@ namespace webapi.Utilities.AuthorizationUtils.PolicyUtils
     public class ItemOwnerAuthorizationHandler : AuthorizationHandler<ItemOwnerRequirement>
     {
         private readonly IItemService _itemService;
+        private readonly IUserService _userService;
 
-        public ItemOwnerAuthorizationHandler(IItemService itemService)
+        public ItemOwnerAuthorizationHandler(IItemService itemService, IUserService userService)
         {
             _itemService = itemService;
+            _userService = userService;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, ItemOwnerRequirement requirement)
@@ -25,7 +26,7 @@ namespace webapi.Utilities.AuthorizationUtils.PolicyUtils
                     return;
                 }
 
-                var item = await _itemService.GetById(int.Parse(itemId));
+                var item = await _itemService.GetById(int.Parse(itemId!));
 
                 if (item is null)
                 {
@@ -35,7 +36,21 @@ namespace webapi.Utilities.AuthorizationUtils.PolicyUtils
 
                 var claimUsername = context.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
 
-                if (claimUsername == item.Seller.Username)
+                if (claimUsername is null)
+                {
+                    context.Fail();
+                    return;
+                }
+
+                var user = await _userService.GetByUsername(claimUsername!);
+
+                if (user is null)
+                {
+                    context.Fail();
+                    return;
+                }
+
+                if (user!.Id == item!.SellerId)
                 {
                     context.Succeed(requirement);
                     return;

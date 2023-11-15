@@ -4,15 +4,16 @@ using FluentAssertions;
 
 namespace Api.IntegrationTests.UserController
 {
-    [Collection("User Collection")]
-    public class DeleteUserTest
+    public class DeleteUserTest : IClassFixture<UserFixture>
     {
+        private readonly UserFixture _fixture;
         private readonly HttpClient _client;
 
-        public DeleteUserTest()
+        public DeleteUserTest(UserFixture fixture)
         {
-            _client = UserFixture.HttpClient;
-            var adminJwt = UserFixture.AdminJwt;
+            _fixture = fixture;
+            _client = _fixture.HttpClient;
+            var adminJwt = _fixture.AdminJwt;
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt);
         }
 
@@ -20,7 +21,7 @@ namespace Api.IntegrationTests.UserController
         public async Task DeleteUser_ReturnsNoContent_WhenUserExists()
         {
             // Arrange
-            var userId = UserFixture.IdUserToRemove; // TestUserToRemove (id = 3)
+            var userId = 2; // TestUser (id = 2)
 
             // Act
             var response = await _client.DeleteAsync($"{Utils.BaseUrl}/user/{userId}");
