@@ -1,6 +1,6 @@
 ﻿namespace contracts.Responses.bid
 {
-    public class AddBidResponse : IBidResponse
+    public class BasicBidResponse : IBidResponse
     {
         public long BidId { get; init; }
 

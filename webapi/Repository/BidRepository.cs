@@ -1,18 +1,51 @@
-﻿using webapi.Models;
+﻿using contracts.Requests.Bid;
+using Microsoft.EntityFrameworkCore;
+using webapi.Database;
+using webapi.Models;
 using webapi.Repository.Interfaces;
 
 namespace webapi.Repository
 {
     public class BidRepository : IBidRepository
     {
-        public Task<Bid> Create(long itemId, CancellationToken cancel = default)
+        private readonly IAuctionContext _dbContext;
+
+        public BidRepository(IAuctionContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
 
-        public Task<IEnumerable<Bid>> GetItemBids(long itemId, CancellationToken cancel = default)
+        public async Task<Bid> Create(AddBidRequest input, User bidder, Item item, CancellationToken cancel = default)
         {
-            throw new NotImplementedException();
+            var bid = new Bid
+            {
+                Time = DateTime.Now,
+                Amount = input.Amount,
+                ItemId = input.ItemId,
+                BidderId = bidder.Id,
+                Bidder = bidder,
+                Item = item,
+            };
+
+            item.Currently = bid.Amount;
+
+            _dbContext.Bids.Add(bid);
+
+            try
+            {
+                await _dbContext.SaveChangesAsync(cancel);
+            }
+            catch (Exception)
+            {
+                _dbContext.Bids.Remove(bid);
+            }
+
+            return bid;
+        }
+
+        public async Task<IEnumerable<Bid>> GetItemBids(long itemId, CancellationToken cancel = default)
+        {
+            return await _dbContext.Bids.Where(b => b.ItemId == itemId).ToListAsync(cancel);
         }
     }
 }

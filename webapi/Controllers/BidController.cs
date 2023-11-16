@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Models;
 using webapi.Services.Interfaces;
 using webapi.Utilities.ControllerUtils;
-using webapi.Utilities.MappingUtils;
 
 namespace webapi.Controllers
 {
@@ -28,21 +27,20 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpPost(BidEndpoints.Create)]
-        public async Task<IActionResult> CreateBid([FromBody] AddBidRequest body, CancellationToken cancel = default)
+        public async Task<IActionResult> CreateBid([FromBody] AddBidRequest request, CancellationToken cancel = default)
         {
-            return await _controllerHelper.CreateAndRespond<Bid, AddBidResponse>(
-                () => _bidService.Create(body.ItemId, cancel), _mapper);
+            var username = _controllerHelper.UsernameClaim;
+
+            return await _controllerHelper.CreateAndRespond<Bid, BasicBidResponse>(
+                () => _bidService.Create(request, username, cancel), _mapper);
         }
 
 
         [HttpGet(BidEndpoints.GetItemBids)]
         public async Task<IActionResult> GetItemBids([FromQuery] long itemId, CancellationToken cancel = default)
         {
-            var bids = await _bidService.GetItemBids(itemId, cancel);
-
-            var mappedBids = bids.Select(bid => bid.MapToResponse<AddBidResponse>(_mapper)).ToList();
-
-            return Ok(mappedBids);
+            return await _controllerHelper.GetAllAndRespond<Bid, BasicBidResponse>(
+                () => _bidService.GetItemBids(itemId, cancel), _mapper);
         }
     }
 }

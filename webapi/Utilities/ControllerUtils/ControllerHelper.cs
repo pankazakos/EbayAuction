@@ -44,6 +44,10 @@ namespace webapi.Utilities.ControllerUtils
             {
                 return BadRequest(ex.Message);
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception)
             {
                 return StatusCode(500, "An error occurred while saving the data to the database. Please try again later.");
@@ -55,7 +59,15 @@ namespace webapi.Utilities.ControllerUtils
             where TModel : IModel 
             where TResponse : IEntityResponse
         {
-            var entities = await getAllFunc();
+            IEnumerable<TModel> entities;
+            try
+            {
+                entities = await getAllFunc();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             var mappedEntities = entities.Select(entity => entity.MapToResponse<TResponse>(mapper));
 
