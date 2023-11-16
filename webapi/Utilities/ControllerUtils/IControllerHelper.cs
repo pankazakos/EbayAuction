@@ -20,8 +20,8 @@ public interface IControllerHelper
         where TModel : IModel
         where TResponse : IEntityResponse;
 
-    Task<IActionResult> GetAllPagedAndRespond<TModel, TResponse>(
-        Func<Task<(IEnumerable<TModel>, int)>> getAllPagedFunc, int page, int limit, IMapper mapper)
+    Task<IActionResult> GetPagedAndRespond<TModel, TResponse>(
+        Func<Task<(IEnumerable<TModel>, int)>> getPagedFunc, int page, int limit, IMapper mapper)
         where TModel : IModel
         where TResponse : IEntityResponse;
 

@@ -68,13 +68,24 @@ namespace webapi.Services
             return createdItemWithImage;
         }
 
-        public async Task<(IEnumerable<Item>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default)
+        public async Task<(IEnumerable<Item>, int)> Search(ItemSearchQuery query, CancellationToken cancel = default)
         {
-            var response = await _itemRepository.GetAllPaged(page, limit, cancel);
+            try
+            {
+                query.Validate();
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex.Message);
+                throw;
+            }
 
-            var first = (page - 1) * limit + 1;
-            var last = page * limit;
-            _logger.LogInformation($"Retrieved items from {first} to {last}");
+            var response = await _itemRepository.Search(query, cancel);
+
+            var first = (query.Page - 1) * query.Limit + 1;
+            var last = query.Page * query.Limit;
+            _logger.LogInformation("Search items: page={page}, limit={limit}, title={title}, categories={categories}, minPrice={minPrice}, maxPrice={maxPrice}", 
+                query.Page, query.Limit, query.Title, query.Categories, query.MinPrice, query.MaxPrice);
 
             return (response.Item1, response.Item2);
         }

@@ -76,12 +76,25 @@ namespace webapi.Utilities.ControllerUtils
             return Ok(castEntities);
         }
 
-        public async Task<IActionResult> GetAllPagedAndRespond<TModel, TResponse>(
-            Func<Task<(IEnumerable<TModel>, int)>> getAllPagedFunc, int page, int limit, IMapper mapper)
+        public async Task<IActionResult> GetPagedAndRespond<TModel, TResponse>(
+            Func<Task<(IEnumerable<TModel>, int)>> getPagedFunc, int page, int limit, IMapper mapper)
             where TModel : IModel
             where TResponse : IEntityResponse
         {
-            var response = await getAllPagedFunc();
+            (IEnumerable<TModel>, int) response;
+
+            try
+            {
+                response = await getPagedFunc();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             var mappedEntities = response.Item1.Select(entity => entity.MapToResponse<TResponse>(mapper));
 

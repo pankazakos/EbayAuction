@@ -7,7 +7,7 @@ namespace webapi.Repository.Interfaces
     {
         public Task<Item> Create(AddItemRequest item, User seller, IFormFile? postedFile = null, string? fileName = null, CancellationToken cancel = default);
 
-        public Task<(IEnumerable<Item>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default);
+        public Task<(IEnumerable<Item>, int)> Search(ItemSearchQuery query, CancellationToken cancel = default);
 
         public Task<Item?> GetById(long id, CancellationToken cancel = default);
 

@@ -1,4 +1,5 @@
-﻿using contracts.Requests.Category;
+﻿using contracts.Requests.Bid;
+using contracts.Requests.Category;
 using contracts.Requests.Item;
 using contracts.Requests.User;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ namespace Api.IntegrationTests.ItemController
         private readonly ItemRepository _itemRepository;
         private readonly CategoryRepository _categoryRepository;
         private readonly UserRepository _userRepository;
+        private readonly BidRepository _bidRepository;
         public HttpClient HttpClient { get; }
         public string SimpleMainUserJwt { get; private set; } = string.Empty;
         public string SecondSimpleUserJwt { get; private set; } = string.Empty;
@@ -29,6 +31,7 @@ namespace Api.IntegrationTests.ItemController
             _userRepository = new UserRepository(context);
             _categoryRepository = new CategoryRepository(context);
             _itemRepository = new ItemRepository(context, _categoryRepository, configuration);
+            _bidRepository = new BidRepository(context);
 
             AdminJwt = Utils.LoginAdmin(HttpClient).GetAwaiter().GetResult();
             SeedCategories().GetAwaiter().GetResult();
@@ -108,10 +111,23 @@ namespace Api.IntegrationTests.ItemController
             };
 
             var seller = await _userRepository.GetByUsername("TestUser") 
-                         ?? throw new InvalidOperationException($"Cannot find user TestUser");
+                         ?? throw new InvalidOperationException("Cannot find user TestUser");
+
+            var bidder = await _userRepository.GetByUsername("second TestUser") ??
+                         throw new InvalidOperationException("Cannot find user second TestUser");
 
             await _itemRepository.Create(firstItem, seller);
             await _itemRepository.Create(secondItem, seller);
+
+            var bid = new AddBidRequest
+            {
+                ItemId = 2,
+                Amount = 30.5f
+            };
+
+            var item2 = await _itemRepository.GetById(2) ?? throw new InvalidOperationException("Cannot find item 2");
+
+            await _bidRepository.Create(bid, bidder, item2);
         }
     }
 }

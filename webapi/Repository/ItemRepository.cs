@@ -81,12 +81,38 @@ namespace webapi.Repository
             return newItem;
         }
 
-        public async Task<(IEnumerable<Item>, int)> GetAllPaged(int page, int limit, CancellationToken cancel = default)
+        public async Task<(IEnumerable<Item>, int)> Search(ItemSearchQuery query, CancellationToken cancel = default)
         {
-            var totalCount = await _dbContext.Items.CountAsync(cancel);
-            var items = await _dbContext.Items
-                .Skip((page - 1) * limit)
-                .Take(limit)
+            var baseQuery = _dbContext.Items.AsQueryable();
+
+            // Apply filters based on the query parameters
+            if (!string.IsNullOrEmpty(query.Title))
+            {
+                baseQuery = baseQuery.Where(item => item.Name.Contains(query.Title));
+            }
+
+            if (query.Categories.Any())
+            {
+                baseQuery = baseQuery.Where(item => item.Categories.Any(category => query.Categories.Contains(category.Name)));
+            }
+
+
+            if (query.MinPrice > 0)
+            {
+                baseQuery = baseQuery.Where(item => item.Currently >= query.MinPrice);
+            }
+
+            if (query.MaxPrice > 0)
+            {
+                baseQuery = baseQuery.Where(item => item.Currently <= query.MaxPrice);
+            }
+
+            var totalCount = await baseQuery.CountAsync(cancel);
+
+            // Apply pagination
+            var items = await baseQuery
+                .Skip((query.Page - 1) * query.Limit)
+                .Take(query.Limit)
                 .ToListAsync(cancel);
 
             return (items, totalCount);

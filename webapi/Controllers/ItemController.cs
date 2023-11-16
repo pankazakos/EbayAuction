@@ -119,11 +119,11 @@ namespace webapi.Controllers
         }
 
 
-        [HttpGet(ItemEndpoints.All)]
-        public async Task<IActionResult> ListAllPaged([FromQuery] int page = 1, [FromQuery] int limit = 10, CancellationToken cancel = default)
+        [HttpGet(ItemEndpoints.Search)]
+        public async Task<IActionResult> Search([FromQuery] ItemSearchQuery query, CancellationToken cancel = default)
         {
-            return await _controllerHelper.GetAllPagedAndRespond<Item, BasicItemResponse>(
-                () => _itemService.GetAllPaged(page, limit, cancel), page, limit, _mapper);
+            return await _controllerHelper.GetPagedAndRespond<Item, BasicItemResponse>(
+                () => _itemService.Search(query, cancel), query.Page, query.Limit, _mapper);
         }
 
 

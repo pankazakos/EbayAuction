@@ -6,9 +6,7 @@
 
         public const string Create = "";
 
-        public const string All = "";
-
-        public const string MyItems = "MyItems";
+        public const string Search = "";
 
         public const string Inactive = "Inactive";
 

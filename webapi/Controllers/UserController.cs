@@ -34,7 +34,7 @@ namespace webapi.Controllers
         [HttpGet(UserEndpoints.All)]
         public async Task<IActionResult> ListAllPaged([FromQuery] int page = 1, [FromQuery] int limit = 10, CancellationToken cancel = default)
         {
-            return await _controllerHelper.GetAllPagedAndRespond<User, BasicUserResponse>(
+            return await _controllerHelper.GetPagedAndRespond<User, BasicUserResponse>(
                 () => _userService.GetAllPaged(page, limit, cancel),
                 page, limit, _mapper);
         }

@@ -25,5 +25,13 @@
                 throw new ArgumentException($"{fieldName} must be greater than 0");
             }
         }
+
+        public static void EnsureNonNegativeNumber(string fieldName, int value)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException($"{fieldName} must be greater than 0");
+            }
+        }
     }
 }

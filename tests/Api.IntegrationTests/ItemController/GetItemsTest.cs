@@ -49,7 +49,7 @@ namespace Api.IntegrationTests.ItemController
         }
 
         [Fact]
-        public async Task GetAllPaged_ReturnsDefaultNumberOfItems_WhenNoParametersAreGiven()
+        public async Task Search_ReturnsDefaultNumberOfItems_WhenNoParametersAreGiven()
         {
             // Arrange
             //const int page = 1;
@@ -72,7 +72,7 @@ namespace Api.IntegrationTests.ItemController
         }
 
         [Fact]
-        public async Task GetAllPaged_ReturnsCorrectNumberOfItems_WhenPagingParametersAreGiven()
+        public async Task Search_ReturnsCorrectNumberOfItems_WhenPagingParametersAreGiven()
         {
             // Arrange
             const int page = 2;
@@ -95,7 +95,40 @@ namespace Api.IntegrationTests.ItemController
         }
 
         [Fact]
-        public async Task GetAllPaged_ReturnsEmptyList_WhenPageDoesNotExist()
+        public async Task Search_ReturnsCorrectNumberOfItems_WhenMultipleParametersAreGiven()
+        {
+            // Arrange
+            const int page = 1;
+            const int limit = 10;
+            const string title = "second"; // find "second test item"
+            var categories = new List<string> { "category 1", "category 2" };
+            const int minPrice = 20;
+            const int maxPrice = 50;
+
+            // Act
+            var response = await _client.GetAsync(
+                $"{Utils.BaseUrl}/item?page={page}&limit={limit}" +
+                $"&title={title}&categories={categories[0]}&categories={categories[1]}" +
+                $"&minPrice={minPrice}&maxPrice={maxPrice}");
+
+            var responseData = await Utils.ConvertResponseData<PaginatedResponse<BasicItemResponse>>(response);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+
+            Assert.NotNull(responseData);
+
+            var items = responseData.CastEntities.ToList();
+
+            items.Count.Should().BeLessOrEqualTo(limit);
+
+            Assert.NotNull(items.FirstOrDefault());
+
+            items.FirstOrDefault()!.ItemId.Should().Be(2); // second item (id = 2)
+        }
+
+        [Fact]
+        public async Task Search_ReturnsEmptyList_WhenPageDoesNotExist()
         {
             // Arrange
             const int page = 9999;
