@@ -5,7 +5,7 @@
   justify-content: center;
 }
 
-#search-section {
+#search-box-section {
   width: 70%;
   display: flex;
   justify-content: center;
@@ -27,6 +27,10 @@
 
 .hidden-button {
   display: none;
+}
+
+.filter-button {
+  margin-left: 1rem;
 }
 
 .item-box {

@@ -11,7 +11,7 @@
     fxLayoutAlign="space-evenly center"
     fxFlex="60%"
   >
-    <div id="search-section">
+    <div id="search-box-section">
       <div class="search-box" fxLayout="row">
         <div class="search-icon-button" fxFlex="10%">
           <button mat-icon-button (click)="makeApiSearchCall()">
@@ -39,17 +39,30 @@
       </div>
     </div>
 
-    <div id="display-items" fxLayout="column" fxFlex="70%" fxFill>
-      <mat-paginator
-        #paginatorTop
-        class="paginator"
-        [length]="this.items.total"
-        [pageSize]="this.items.limit"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        (page)="onPageChange($event)"
-        aria-label="Select page"
-      >
-      </mat-paginator>
+    <div id="items-section" fxLayout="column" fxFlex="70%" fxFill>
+      <div class="items-top-toolbar" fxLayout="row">
+        <div class="filter-button">
+          <button mat-raised-button (click)="showFiltersDialog()">
+            <div>filters</div>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="tune"
+            ></mat-icon>
+          </button>
+        </div>
+
+        <mat-paginator
+          #paginatorTop
+          class="paginator"
+          [length]="this.items.total"
+          [pageSize]="this.items.limit"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          (page)="onPageChange($event)"
+          aria-label="Select page"
+        >
+        </mat-paginator>
+      </div>
 
       <div id="main-spinner" *ngIf="isLoading">
         <mat-spinner></mat-spinner>

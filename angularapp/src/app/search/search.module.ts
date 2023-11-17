@@ -3,9 +3,10 @@ import { SearchComponent } from './search.component';
 import { ItemComponent } from './item/item.component';
 import { RouterModule } from '@angular/router';
 import { CommonImportsModule } from '../common-imports/common-imports.module';
+import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
 
 @NgModule({
-  declarations: [SearchComponent, ItemComponent],
+  declarations: [SearchComponent, ItemComponent, FiltersDialogComponent],
   imports: [CommonImportsModule, RouterModule],
   exports: [SearchComponent],
 })

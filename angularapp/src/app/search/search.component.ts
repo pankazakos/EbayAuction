@@ -6,6 +6,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
 
 @Component({
   selector: 'app-search',
@@ -28,7 +30,8 @@ export class SearchComponent {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +71,7 @@ export class SearchComponent {
       });
   }
 
-  fetchItems(page: number): void {
+  private fetchItems(page: number): void {
     if (page !== this.items.page) {
       this.items.page = page;
     }
@@ -82,6 +85,10 @@ export class SearchComponent {
         this.makeApiSearchCall();
       }, environment.timeout);
     }
+  }
+
+  public showFiltersDialog() {
+    this.dialog.open(FiltersDialogComponent, { width: '50vw', height: '50vh' });
   }
 
   onPageChange(event: PageEvent): void {
