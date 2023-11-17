@@ -5,6 +5,30 @@
   justify-content: center;
 }
 
+#search-section {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+}
+
+.search-box {
+  width: 50%;
+  box-sizing: border-box;
+  border: 2px solid #bebebe;
+}
+
+.search-icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #bebebe;
+}
+
+.hidden-button {
+  display: none;
+}
+
 .item-box {
   flex-basis: 100%; /* Default for xs: 1x4 */
   box-sizing: border-box;

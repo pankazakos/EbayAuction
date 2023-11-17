@@ -4,7 +4,7 @@ const itemBaseUrl = `${baseUrl}/item`;
 
 export const ItemEndpoints: Readonly<{
   create: string;
-  all: string;
+  search: string;
   myItems: string;
   inactive: string;
   active: string;
@@ -14,7 +14,7 @@ export const ItemEndpoints: Readonly<{
   delete: (id: number) => string;
 }> = {
   create: `${itemBaseUrl}`,
-  all: `${itemBaseUrl}`,
+  search: `${itemBaseUrl}`,
   myItems: `${itemBaseUrl}/myitems`,
   inactive: `${itemBaseUrl}/inactive`,
   active: `${itemBaseUrl}/active`,

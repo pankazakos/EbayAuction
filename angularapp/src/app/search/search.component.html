@@ -11,7 +11,33 @@
     fxLayoutAlign="space-evenly center"
     fxFlex="60%"
   >
-    <div id="search-input" fxflex="30%"></div>
+    <div id="search-section">
+      <div class="search-box" fxLayout="row">
+        <div class="search-icon-button" fxFlex="10%">
+          <button mat-icon-button (click)="makeApiSearchCall()">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="search"
+            ></mat-icon>
+          </button>
+        </div>
+        <div class="search-input" fxFlex="90%">
+          <form (ngSubmit)="makeApiSearchCall()">
+            <mat-form-field>
+              <mat-label>Search</mat-label>
+              <input
+                matInput
+                placeholder="search for item titles"
+                name="search-input"
+                [(ngModel)]="searchTerm"
+              />
+            </mat-form-field>
+            <button class="hidden-button" type="submit"></button>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <div id="display-items" fxLayout="column" fxFlex="70%" fxFill>
       <mat-paginator

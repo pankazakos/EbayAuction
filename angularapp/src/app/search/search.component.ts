@@ -20,6 +20,7 @@ export class SearchComponent {
     limit: 10,
   };
   public isLoading: boolean = true;
+  searchTerm: string = '';
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -48,10 +49,14 @@ export class SearchComponent {
     });
   }
 
-  private makeApiSearchCall(): void {
+  public makeApiSearchCall(): void {
+    console.log(this.searchTerm);
+
     this.http
       .get(
-        `${ItemEndpoints.all}?page=${this.items.page}&limit=${this.items.limit}`
+        `${ItemEndpoints.search}?page=${this.items.page}&limit=${
+          this.items.limit
+        }${this.searchTerm && `&title=${this.searchTerm}`}`
       )
       .subscribe({
         next: (response: PaginatedResponse<BasicItemResponse> | any) => {
