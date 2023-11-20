@@ -12,6 +12,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -28,6 +31,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatDividerModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSliderModule,
+    MatChipsModule,
+    MatSelectModule,
   ],
   exports: [
     MatIconModule,
@@ -43,6 +49,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatDividerModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSliderModule,
+    MatChipsModule,
+    MatSelectModule,
   ],
 })
 export class MaterialUiModule {}

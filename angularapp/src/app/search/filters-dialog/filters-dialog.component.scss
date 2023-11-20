@@ -1,0 +1,38 @@
+#filters-dialog-main-container {
+  padding: 3rem;
+}
+
+// #filter-dialog-container-content {
+// }
+
+// #select-price-range {
+// }
+
+// #select-categories {
+// }
+
+#price-range-slider {
+  width: 20rem;
+}
+
+#price-range-slider .mat-mdc-slider {
+  width: 20rem;
+}
+
+#price-range-inputs {
+  width: 100%;
+}
+
+#inner-price-range-inputs {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.price-range-from {
+  margin-right: 1rem;
+}
+
+.price-range-to {
+  margin-left: 1rem;
+}

@@ -1,1 +1,82 @@
-<p>filters-dialog works!</p>
+<div
+  id="filters-dialog-main-container"
+  fxLayout="row"
+  fxFlexAlign="center center"
+>
+  <div fxFlex="20%"></div>
+  <div
+    id="filters-container-content"
+    fxLayout="column"
+    fxLayoutAlign="space-between none"
+    fxFlex="60%"
+  >
+    <div id="select-price-range" fxFlex="50%" fxLayout="column">
+      <h2>Price range</h2>
+      <mat-chip-listbox
+        aria-label="price range selection"
+        [(ngModel)]="selectedPriceRange"
+        (change)="onPriceRangeChange($event)"
+      >
+        <mat-chip-option *ngFor="let range of priceRanges" [value]="range.id">{{
+          range.id
+        }}</mat-chip-option>
+      </mat-chip-listbox>
+      <div id="price-range-slider">
+        <mat-slider
+          min="{{ sliderMinPrice }}"
+          max="{{ sliderMaxPrice }}"
+          [disabled]="disabledSlider"
+        >
+          <input [(ngModel)]="valueMin" matSliderStartThumb />
+          <input [(ngModel)]="valueMax" matSliderEndThumb />
+        </mat-slider>
+      </div>
+      <div id="price-range-inputs" fxLayout="row">
+        <div id="inner-price-range-inputs">
+          <mat-form-field floatLabel="always">
+            <mat-label>From</mat-label>
+            <input
+              matInput
+              type="number"
+              class="price-range-from"
+              placeholder="0"
+              [(ngModel)]="valueMin"
+              min="0"
+              max="{{ inputMaxPrice }}"
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always">
+            <mat-label>To</mat-label>
+            <input
+              matInput
+              type="number"
+              class="price-range-to"
+              placeholder="0"
+              [(ngModel)]="valueMax"
+              min="0"
+              max="{{ inputMaxPrice }}"
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
+      </div>
+      <div id="select-categories" fxFlex="50%" fxLayout="column" fxFill>
+        <h2>Categories</h2>
+        <mat-form-field>
+          <mat-label>Categories</mat-label>
+          <mat-select [(ngModel)]="selectedCategoryNames" multiple>
+            <mat-option
+              *ngFor="let category of categories"
+              [value]="category.name"
+            >
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="20%"></div>
+</div>
