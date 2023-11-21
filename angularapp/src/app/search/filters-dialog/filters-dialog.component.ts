@@ -5,6 +5,8 @@ import { baseUrl } from 'src/app/shared/types';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FiltersService } from '../filters.service';
 
 @Component({
   selector: 'app-filters-dialog',
@@ -32,7 +34,11 @@ export class FiltersDialogComponent {
   selectedCategoryNames: string[] = [];
   filteredCategoryNames: string[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private filterService: FiltersService,
+    private dialogRef: MatDialogRef<FiltersDialogComponent>
+  ) {}
 
   ngOnInit(): void {
     this.http.get(`${baseUrl}/category/all`).subscribe({
@@ -116,5 +122,20 @@ export class FiltersDialogComponent {
     this.filteredCategoryNames.splice(indexToAddback, 0, category);
 
     console.log('filtered: ' + this.filteredCategoryNames);
+  }
+
+  applyFilters(): void {
+    this.filterService.updatePriceRange({
+      valueFrom: this.valueMin,
+      valueTo: this.valueMax,
+    });
+
+    this.filterService.updateFilteredCategoryNames(this.filteredCategoryNames);
+
+    this.dialogRef.close();
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 }

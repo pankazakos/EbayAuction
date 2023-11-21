@@ -7,6 +7,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
+import { FiltersService } from './filters.service';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
 
 @Component({
@@ -23,6 +24,11 @@ export class SearchComponent {
   };
   public isLoading: boolean = true;
   searchTerm: string = '';
+  filteredCategoryNames: string[] = [];
+  priceRange: { valueFrom: number; valueTo: number } = {} as {
+    valueFrom: number;
+    valueTo: number;
+  };
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -31,7 +37,8 @@ export class SearchComponent {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private filterService: FiltersService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +57,18 @@ export class SearchComponent {
       }
       this.fetchItems(page);
     });
+
+    this.filterService.priceRange$.subscribe((priceRange) => {
+      this.priceRange = priceRange;
+      this.isLoading = true;
+      this.fetchItems(1);
+    });
+
+    this.filterService.filteredCategoryNames$.subscribe((names) => {
+      this.filteredCategoryNames = names;
+      this.isLoading = true;
+      this.fetchItems(1);
+    });
   }
 
   public makeApiSearchCall(): void {
@@ -59,7 +78,10 @@ export class SearchComponent {
       .get(
         `${ItemEndpoints.search}?page=${this.items.page}&limit=${
           this.items.limit
-        }${this.searchTerm && `&title=${this.searchTerm}`}`
+        }${this.searchTerm && `&title=${this.searchTerm}`}${
+          this.priceRange &&
+          `&minPrice=${this.priceRange.valueFrom}&maxPrice=${this.priceRange.valueTo}`
+        }`
       )
       .subscribe({
         next: (response: PaginatedResponse<BasicItemResponse> | any) => {

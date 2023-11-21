@@ -3,6 +3,13 @@
   fxLayout="row"
   fxFlexAlign="center center"
 >
+  <button mat-icon-button class="close-button" (click)="closeDialog()">
+    <mat-icon
+      aria-hidden="false"
+      aria-label="close icon"
+      fontIcon="close"
+    ></mat-icon>
+  </button>
   <div fxFlex="20%"></div>
   <div
     id="filters-container-content"
@@ -100,4 +107,12 @@
     </div>
   </div>
   <div fxFlex="20%"></div>
+  <button
+    class="apply-filters-button"
+    mat-raised-button
+    color="primary"
+    (click)="applyFilters()"
+  >
+    Apply
+  </button>
 </div>
