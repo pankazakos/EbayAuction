@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FiltersService } from '../filters.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-filters-dialog',
@@ -36,7 +37,8 @@ export class FiltersDialogComponent {
 
   constructor(
     private http: HttpClient,
-    private filterService: FiltersService,
+    private route: ActivatedRoute,
+    private router: Router,
     private dialogRef: MatDialogRef<FiltersDialogComponent>
   ) {}
 
@@ -125,14 +127,28 @@ export class FiltersDialogComponent {
   }
 
   applyFilters(): void {
-    this.filterService.updatePriceRange({
-      valueFrom: this.valueMin,
-      valueTo: this.valueMax,
+    this.closeDialog();
+
+    const categoryParams: {
+      category: string[];
+    } = {
+      category: [],
+    };
+
+    for (const categoryName of this.selectedCategoryNames) {
+      categoryParams.category.push(categoryName);
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        minPrice: this.valueMin,
+        maxPrice: this.valueMax,
+        ...categoryParams,
+      },
+      queryParamsHandling: 'merge',
     });
-
-    this.filterService.updateselectedCategoryNames(this.selectedCategoryNames);
-
-    this.dialogRef.close();
   }
 
   closeDialog(): void {

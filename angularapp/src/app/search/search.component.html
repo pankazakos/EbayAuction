@@ -14,23 +14,23 @@
     <div id="search-box-section">
       <div class="search-box" fxLayout="row">
         <div class="search-icon-button" fxFlex="10%">
-          <button mat-icon-button (click)="makeApiSearchCall()">
+          <button mat-icon-button (click)="onSearchSubmit()">
             <mat-icon
               aria-hidden="false"
-              aria-label="Example home icon"
+              aria-label="search icon"
               fontIcon="search"
             ></mat-icon>
           </button>
         </div>
         <div class="search-input" fxFlex="90%">
-          <form (ngSubmit)="makeApiSearchCall()">
+          <form (ngSubmit)="onSearchSubmit()">
             <mat-form-field>
               <mat-label>Search</mat-label>
               <input
                 matInput
                 placeholder="search for item titles"
                 name="search-input"
-                [(ngModel)]="searchTerm"
+                [(ngModel)]="title"
               />
             </mat-form-field>
             <button class="hidden-button" type="submit"></button>

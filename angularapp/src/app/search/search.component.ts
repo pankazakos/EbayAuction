@@ -24,6 +24,10 @@ export class SearchComponent {
   };
   public isLoading: boolean = true;
   searchTerm: string = '';
+  title: string = '';
+  minPrice: number = 0;
+  maxPrice: number = 0;
+  categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
   priceRange: { valueFrom: number; valueTo: number } = {} as {
     valueFrom: number;
@@ -37,8 +41,7 @@ export class SearchComponent {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog,
-    private filterService: FiltersService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -55,35 +58,59 @@ export class SearchComponent {
         }
         this.items.page = page;
       }
-      this.fetchItems(page);
-    });
 
-    this.filterService.priceRange$.subscribe((priceRange) => {
-      this.priceRange = priceRange;
-      this.isLoading = true;
-      this.fetchItems(1);
-    });
+      if (queryParams.has('title')) {
+        const title = queryParams.get('title');
 
-    this.filterService.selectedCategoryNames$.subscribe((names) => {
-      this.selectedCategoryNames = names;
-      this.isLoading = true;
-      this.fetchItems(1);
+        if (title != null) {
+          this.title = title;
+        }
+
+        console.log('title: ' + this.title);
+      }
+
+      if (queryParams.has('minPrice')) {
+        const minPrice = queryParams.get('minPrice');
+
+        if (minPrice != null) {
+          this.minPrice = Number(minPrice);
+        }
+
+        console.log('Min price: ' + this.minPrice);
+      }
+
+      if (queryParams.has('maxPrice')) {
+        const maxPrice = queryParams.get('maxPrice');
+
+        if (maxPrice != null) {
+          this.maxPrice = Number(maxPrice);
+        }
+
+        console.log('Max price: ' + this.maxPrice);
+      }
+
+      if (queryParams.has('category')) {
+        const categoryNames = queryParams.getAll('category');
+        this.categoryQuery = categoryNames
+          .map((categoryName) => `categories=${categoryName}`)
+          .join('&');
+      }
+
+      this.fetchItems({
+        page: 1,
+      });
     });
   }
 
-  public makeApiSearchCall(): void {
-    let categoryQuery = this.selectedCategoryNames
-      .map((categoryName) => `categories=${categoryName}`)
-      .join('&');
-
+  private makeApiSearchCall(): void {
     this.http
       .get(
         `${ItemEndpoints.search}?page=${this.items.page}&limit=${
           this.items.limit
-        }${this.searchTerm && `&title=${this.searchTerm}`}${
+        }${this.title && `&title=${this.title}`}${
           this.priceRange &&
-          `&minPrice=${this.priceRange.valueFrom}&maxPrice=${this.priceRange.valueTo}`
-        }${this.selectedCategoryNames && `&${categoryQuery}`}`
+          `&minPrice=${this.minPrice}&maxPrice=${this.maxPrice}`
+        }${this.selectedCategoryNames && `&${this.categoryQuery}`}`
       )
       .subscribe({
         next: (response: PaginatedResponse<BasicItemResponse> | any) => {
@@ -95,12 +122,10 @@ export class SearchComponent {
       });
   }
 
-  private fetchItems(page: number): void {
-    if (page !== this.items.page) {
-      this.items.page = page;
+  private fetchItems(params: { page: number }): void {
+    if (params.page !== this.items.page) {
+      this.items.page = params.page;
     }
-
-    console.log('page is: ' + this.items.page);
 
     if (environment.production) {
       this.makeApiSearchCall();
@@ -115,7 +140,15 @@ export class SearchComponent {
     this.dialog.open(FiltersDialogComponent, { width: '50vw', height: '60vh' });
   }
 
-  onPageChange(event: PageEvent): void {
+  public onSearchSubmit(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: this.items.page, title: this.title },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  public onPageChange(event: PageEvent): void {
     this.isLoading = true;
 
     if (this.paginatorTop && this.paginatorBottom) {
@@ -127,7 +160,7 @@ export class SearchComponent {
 
     if (event.pageSize != this.items.limit) {
       this.items.limit = event.pageSize;
-      this.fetchItems(selectedPage);
+      this.fetchItems({ page: selectedPage });
       return;
     }
 
