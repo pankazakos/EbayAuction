@@ -5,8 +5,8 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class FiltersService {
-  private filteredCategoryNamesSubject = new BehaviorSubject<string[]>([]);
-  filteredCategoryNames$ = this.filteredCategoryNamesSubject.asObservable();
+  private selectedCategoryNamesSubject = new BehaviorSubject<string[]>([]);
+  selectedCategoryNames$ = this.selectedCategoryNamesSubject.asObservable();
 
   private priceRangeSubject = new BehaviorSubject<{
     valueFrom: number;
@@ -19,8 +19,8 @@ export class FiltersService {
 
   constructor() {}
 
-  updateFilteredCategoryNames(names: string[]) {
-    this.filteredCategoryNamesSubject.next(names);
+  updateselectedCategoryNames(names: string[]) {
+    this.selectedCategoryNamesSubject.next(names);
   }
 
   updatePriceRange(priceRange: { valueFrom: number; valueTo: number }) {

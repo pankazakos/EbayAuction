@@ -24,7 +24,7 @@ export class SearchComponent {
   };
   public isLoading: boolean = true;
   searchTerm: string = '';
-  filteredCategoryNames: string[] = [];
+  selectedCategoryNames: string[] = [];
   priceRange: { valueFrom: number; valueTo: number } = {} as {
     valueFrom: number;
     valueTo: number;
@@ -64,15 +64,17 @@ export class SearchComponent {
       this.fetchItems(1);
     });
 
-    this.filterService.filteredCategoryNames$.subscribe((names) => {
-      this.filteredCategoryNames = names;
+    this.filterService.selectedCategoryNames$.subscribe((names) => {
+      this.selectedCategoryNames = names;
       this.isLoading = true;
       this.fetchItems(1);
     });
   }
 
   public makeApiSearchCall(): void {
-    console.log(this.searchTerm);
+    let categoryQuery = this.selectedCategoryNames
+      .map((categoryName) => `categories=${categoryName}`)
+      .join('&');
 
     this.http
       .get(
@@ -81,7 +83,7 @@ export class SearchComponent {
         }${this.searchTerm && `&title=${this.searchTerm}`}${
           this.priceRange &&
           `&minPrice=${this.priceRange.valueFrom}&maxPrice=${this.priceRange.valueTo}`
-        }`
+        }${this.selectedCategoryNames && `&${categoryQuery}`}`
       )
       .subscribe({
         next: (response: PaginatedResponse<BasicItemResponse> | any) => {

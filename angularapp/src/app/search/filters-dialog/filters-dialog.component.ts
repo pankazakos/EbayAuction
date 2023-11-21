@@ -130,7 +130,7 @@ export class FiltersDialogComponent {
       valueTo: this.valueMax,
     });
 
-    this.filterService.updateFilteredCategoryNames(this.filteredCategoryNames);
+    this.filterService.updateselectedCategoryNames(this.selectedCategoryNames);
 
     this.dialogRef.close();
   }
