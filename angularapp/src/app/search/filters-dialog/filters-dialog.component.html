@@ -64,16 +64,37 @@
       </div>
       <div id="select-categories" fxFlex="50%" fxLayout="column" fxFill>
         <h2>Categories</h2>
+        <mat-chip-listbox class="category-chips">
+          <mat-chip
+            *ngFor="let category of selectedCategoryNames"
+            [removable]="true"
+            (removed)="removeCategory(category)"
+          >
+            {{ category }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-listbox>
+
         <mat-form-field>
-          <mat-label>Categories</mat-label>
-          <mat-select [(ngModel)]="selectedCategoryNames" multiple>
+          <mat-label>Select Categories</mat-label>
+          <input
+            type="text"
+            placeholder="Type to search"
+            matInput
+            [formControl]="categoryFormControl"
+            [matAutocomplete]="auto"
+            (keydown.enter)="onAutocompleteEnterKeyPress()"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="onCategorySelected($event)"
+          >
             <mat-option
-              *ngFor="let category of categories"
-              [value]="category.name"
+              *ngFor="let category of filteredCategoryNames"
+              [value]="category"
+              >{{ category }}</mat-option
             >
-              {{ category.name }}
-            </mat-option>
-          </mat-select>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
     </div>

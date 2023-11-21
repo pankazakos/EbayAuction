@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { baseUrl } from 'src/app/shared/types';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
+import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-filters-dialog',
@@ -18,51 +20,101 @@ export class FiltersDialogComponent {
     { id: '$5000 and up', values: { from: 5000, to: 100000 } },
     { id: 'custom', values: { from: 0, to: 100000 } },
   ];
-  selectedPriceRange = this.priceRanges[1].id;
-  sliderMinPrice = 0;
-  sliderMaxPrice = 1000;
-  valueMin = 0;
-  valueMax = 0;
+  selectedPriceRange = this.priceRanges[0].id;
+  sliderMinPrice = this.priceRanges[0].values.from;
+  sliderMaxPrice = this.priceRanges[0].values.to;
+  valueMin = this.priceRanges[0].values.from;
+  valueMax = this.priceRanges[0].values.to;
   inputMaxPrice = 1000;
   disabledSlider = false;
-  categories: BasicCategoryResponse[];
-  selectedCategoryNames: string[];
+  categoryFormControl = new FormControl();
+  categories: BasicCategoryResponse[] = [];
+  selectedCategoryNames: string[] = [];
+  filteredCategoryNames: string[] = [];
 
-  constructor(private http: HttpClient) {
-    this.categories = [];
-    this.selectedCategoryNames = [];
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.http.get(`${baseUrl}/category/all`).subscribe({
       next: (response: BasicCategoryResponse[] | any) => {
         this.categories = response;
+        this.filteredCategoryNames = this.categories.map(
+          (category) => category.name
+        );
       },
       error: (error) => console.log(error),
+    });
+
+    this.categoryFormControl.valueChanges.subscribe((value) => {
+      this.filterCategories(value);
     });
   }
 
   onPriceRangeChange(event: MatChipListboxChange) {
     const selectedOption = event.value;
-    this.priceRanges.forEach((element) => {
-      if (selectedOption == element.id) {
-        if (element.id == 'custom') {
+    this.priceRanges.forEach((range) => {
+      if (selectedOption == range.id) {
+        if (range.id == 'custom') {
           this.disabledSlider = true;
           this.sliderMinPrice = 0;
           this.sliderMaxPrice = 0;
-          this.valueMin = element.values.from;
-          this.valueMax = 1000;
-          this.inputMaxPrice = element.values.to;
+          this.valueMin = range.values.from;
+          this.valueMax = 2000;
+          this.inputMaxPrice = range.values.to;
           return;
         }
         this.disabledSlider = false;
-        this.sliderMinPrice = element.values.from;
-        this.sliderMaxPrice = element.values.to;
-        this.inputMaxPrice = element.values.to;
-        this.valueMin = element.values.from;
-        this.valueMax = element.values.to;
+        this.sliderMinPrice = range.values.from;
+        this.sliderMaxPrice = range.values.to;
+        this.inputMaxPrice = range.values.to;
+        this.valueMin = range.values.from;
+        this.valueMax = range.values.to;
         return;
       }
     });
+  }
+
+  onCategorySelected(event: MatAutocompleteSelectedEvent): void {
+    const selectedCategory = event.option.value;
+    this.selectedCategoryNames.push(selectedCategory);
+
+    this.categoryFormControl.setValue(''); // remove from form and display in chip
+  }
+
+  onAutocompleteEnterKeyPress(): void {
+    if (this.filteredCategoryNames.length > 0) {
+      const firstMatchingOption = this.filteredCategoryNames[0];
+      this.categoryFormControl.setValue(firstMatchingOption);
+      this.onCategorySelected({
+        option: { value: firstMatchingOption },
+      } as MatAutocompleteSelectedEvent);
+    }
+  }
+
+  filterCategories(value: string) {
+    console.log('filtering method');
+
+    const filterValue = value.toLowerCase();
+    this.filteredCategoryNames = this.categories
+      .filter((category) => !this.selectedCategoryNames.includes(category.name))
+      .map((category) => category.name)
+      .filter((category) => category.toLowerCase().includes(filterValue));
+  }
+
+  removeCategory(category: string): void {
+    const index = this.selectedCategoryNames.indexOf(category);
+    if (index >= 0) {
+      this.selectedCategoryNames.splice(index, 1);
+    }
+
+    const indexToAddback = this.categories.findIndex(
+      (cat) => cat.name == category
+    );
+
+    console.log('IndexToAddBack: ' + indexToAddback);
+
+    this.filteredCategoryNames.splice(indexToAddback, 0, category);
+
+    console.log('filtered: ' + this.filteredCategoryNames);
   }
 }

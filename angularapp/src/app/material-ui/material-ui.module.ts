@@ -13,8 +13,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSliderModule } from '@angular/material/slider';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipsModule, MatChipListbox } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSliderModule,
     MatChipsModule,
     MatSelectModule,
+    MatAutocompleteModule,
   ],
   exports: [
     MatIconModule,
@@ -52,6 +54,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSliderModule,
     MatChipsModule,
     MatSelectModule,
+    MatAutocompleteModule,
   ],
 })
 export class MaterialUiModule {}

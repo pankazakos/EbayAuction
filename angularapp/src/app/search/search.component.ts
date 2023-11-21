@@ -88,7 +88,7 @@ export class SearchComponent {
   }
 
   public showFiltersDialog() {
-    this.dialog.open(FiltersDialogComponent, { width: '50vw', height: '50vh' });
+    this.dialog.open(FiltersDialogComponent, { width: '50vw', height: '60vh' });
   }
 
   onPageChange(event: PageEvent): void {
