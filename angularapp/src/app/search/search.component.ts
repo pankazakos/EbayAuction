@@ -44,68 +44,33 @@ export class SearchComponent {
     private dialog: MatDialog
   ) {}
 
-  // private getQueryParam(
-  //   queryParams: ParamMap,
-  //   param: string,
-  //   type: string
-  // ): void {
-  //   if (queryParams.has(param)) {
-  //     const parameter = queryParams.get(param);
-
-  //     if (parameter != null) {
-  //       if (type == 'str') {
-
-  //       } else if (type == 'number') {
-
-  //       } else {
-  //         console.error(`getQueryParam: unsupported type ${type}`);
-  //       }
-  //     }
-  //   }
-  // }
+  private setQueryParameter(
+    paramName: string,
+    queryParams: ParamMap,
+    setter: (value: string) => void
+  ): void {
+    if (queryParams.has(paramName)) {
+      const value = queryParams.get(paramName);
+      if (value != null) {
+        setter(value);
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
-      let page = 1;
-
-      if (queryParams.has('page')) {
-        const pageParam = queryParams.get('page');
-
-        if (pageParam != null) {
-          this.items.page = page;
-        }
-      }
-
-      if (queryParams.has('title')) {
-        const title = queryParams.get('title');
-
-        if (title != null) {
-          this.title = title;
-        }
-      }
-
-      if (queryParams.has('minPrice')) {
-        const minPrice = queryParams.get('minPrice');
-
-        if (minPrice != null) {
-          this.minPrice = Number(minPrice);
-        }
-      }
-
-      if (queryParams.has('maxPrice')) {
-        const maxPrice = queryParams.get('maxPrice');
-
-        if (maxPrice != null) {
-          this.maxPrice = Number(maxPrice);
-        }
-      }
-
-      if (queryParams.has('category')) {
-        const categoryNames = queryParams.getAll('category');
-        this.categoryQuery = categoryNames
-          .map((categoryName) => `categories=${categoryName}`)
-          .join('&');
-      }
+      this.setQueryParameter('page', queryParams, (value) => {
+        this.items.page = parseInt(value);
+      });
+      this.setQueryParameter('title', queryParams, (value) => {
+        this.title = value;
+      });
+      this.setQueryParameter('minPrice', queryParams, (value) => {
+        this.minPrice = Number(value);
+      });
+      this.setQueryParameter('maxPrice', queryParams, (value) => {
+        this.maxPrice = Number(value);
+      });
 
       this.fetchItems();
     });
