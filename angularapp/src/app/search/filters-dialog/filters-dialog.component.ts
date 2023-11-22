@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { baseUrl } from 'src/app/shared/types';
@@ -6,7 +6,6 @@ import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/catego
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FiltersService } from '../filters.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -15,6 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./filters-dialog.component.scss'],
 })
 export class FiltersDialogComponent {
+  @Input() isLoading: boolean = false;
+
   priceRanges = [
     { id: 'up to $50', values: { from: 0, to: 50 } },
     { id: '$50 - $250', values: { from: 50, to: 250 } },
@@ -23,7 +24,6 @@ export class FiltersDialogComponent {
     { id: '$5000 and up', values: { from: 5000, to: 100000 } },
     { id: 'custom', values: { from: 0, to: 100000 } },
   ];
-  selectedPriceRange = this.priceRanges[0].id;
   sliderMinPrice = this.priceRanges[0].values.from;
   sliderMaxPrice = this.priceRanges[0].values.to;
   valueMin = this.priceRanges[0].values.from;

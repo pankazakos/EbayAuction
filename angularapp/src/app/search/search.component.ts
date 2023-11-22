@@ -7,8 +7,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
-import { FiltersService } from './filters.service';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
+import { __param } from 'tslib';
 
 @Component({
   selector: 'app-search',
@@ -44,6 +44,26 @@ export class SearchComponent {
     private dialog: MatDialog
   ) {}
 
+  // private getQueryParam(
+  //   queryParams: ParamMap,
+  //   param: string,
+  //   type: string
+  // ): void {
+  //   if (queryParams.has(param)) {
+  //     const parameter = queryParams.get(param);
+
+  //     if (parameter != null) {
+  //       if (type == 'str') {
+
+  //       } else if (type == 'number') {
+
+  //       } else {
+  //         console.error(`getQueryParam: unsupported type ${type}`);
+  //       }
+  //     }
+  //   }
+  // }
+
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
       let page = 1;
@@ -52,11 +72,8 @@ export class SearchComponent {
         const pageParam = queryParams.get('page');
 
         if (pageParam != null) {
-          if (Number(pageParam) > 1) {
-            page = Number(pageParam);
-          }
+          this.items.page = page;
         }
-        this.items.page = page;
       }
 
       if (queryParams.has('title')) {
@@ -65,8 +82,6 @@ export class SearchComponent {
         if (title != null) {
           this.title = title;
         }
-
-        console.log('title: ' + this.title);
       }
 
       if (queryParams.has('minPrice')) {
@@ -75,8 +90,6 @@ export class SearchComponent {
         if (minPrice != null) {
           this.minPrice = Number(minPrice);
         }
-
-        console.log('Min price: ' + this.minPrice);
       }
 
       if (queryParams.has('maxPrice')) {
@@ -85,8 +98,6 @@ export class SearchComponent {
         if (maxPrice != null) {
           this.maxPrice = Number(maxPrice);
         }
-
-        console.log('Max price: ' + this.maxPrice);
       }
 
       if (queryParams.has('category')) {
@@ -96,9 +107,7 @@ export class SearchComponent {
           .join('&');
       }
 
-      this.fetchItems({
-        page: 1,
-      });
+      this.fetchItems();
     });
   }
 
@@ -108,7 +117,8 @@ export class SearchComponent {
         `${ItemEndpoints.search}?page=${this.items.page}&limit=${
           this.items.limit
         }${this.title && `&title=${this.title}`}${
-          this.priceRange &&
+          this.minPrice !== null &&
+          this.maxPrice !== null &&
           `&minPrice=${this.minPrice}&maxPrice=${this.maxPrice}`
         }${this.selectedCategoryNames && `&${this.categoryQuery}`}`
       )
@@ -122,11 +132,7 @@ export class SearchComponent {
       });
   }
 
-  private fetchItems(params: { page: number }): void {
-    if (params.page !== this.items.page) {
-      this.items.page = params.page;
-    }
-
+  private fetchItems(): void {
     if (environment.production) {
       this.makeApiSearchCall();
     } else {
@@ -141,6 +147,7 @@ export class SearchComponent {
   }
 
   public onSearchSubmit(): void {
+    this.isLoading = true;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: this.items.page, title: this.title },
@@ -160,7 +167,8 @@ export class SearchComponent {
 
     if (event.pageSize != this.items.limit) {
       this.items.limit = event.pageSize;
-      this.fetchItems({ page: selectedPage });
+      this.items.page = selectedPage;
+      this.fetchItems();
       return;
     }
 

@@ -21,7 +21,6 @@
       <h2>Price range</h2>
       <mat-chip-listbox
         aria-label="price range selection"
-        [(ngModel)]="selectedPriceRange"
         (change)="onPriceRangeChange($event)"
       >
         <mat-chip-option *ngFor="let range of priceRanges" [value]="range.id">{{
