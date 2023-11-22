@@ -5,12 +5,7 @@
   fxFill
 >
   <div id="left-margin" fxFlex="20%"></div>
-  <div
-    id="search-body"
-    fxLayout="column"
-    fxLayoutAlign="space-evenly center"
-    fxFlex="60%"
-  >
+  <div id="search-body" fxFlex="60%">
     <div id="search-box-section">
       <div class="search-box" fxLayout="row">
         <div class="search-icon-button" fxFlex="10%">
@@ -39,7 +34,7 @@
       </div>
     </div>
 
-    <div id="items-section" fxLayout="column" fxFlex="70%" fxFill>
+    <div id="items-section" fxLayout="column">
       <div class="items-top-toolbar" fxLayout="row">
         <div class="filter-button">
           <button mat-raised-button (click)="showFiltersDialog()">
