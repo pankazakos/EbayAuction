@@ -72,6 +72,13 @@ export class SearchComponent {
         this.maxPrice = Number(value);
       });
 
+      if (queryParams.has('category')) {
+        const categoryNames = queryParams.getAll('category');
+        this.categoryQuery = categoryNames
+          .map((categoryName) => `categories=${categoryName}`)
+          .join('&');
+      }
+
       this.fetchItems();
     });
   }
