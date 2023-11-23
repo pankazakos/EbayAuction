@@ -64,43 +64,51 @@
       </div>
 
       <div *ngIf="!isLoading" id="item-boxes" fxFlex="100%" fxFill>
-        <div class="item-box" *ngFor="let item of items.castEntities">
-          <div class="item-title">
-            <a class="item-link" routerLink="item/{{ item.itemId }}">
-              <h2>{{ item.name }}</h2>
-            </a>
-          </div>
-          <mat-list-item>
-            <div class="field-wrapper">
-              <div class="field-label">Currently:</div>
-              <div class="field-value">{{ item.currently }}$</div>
-            </div>
-          </mat-list-item>
-          <mat-list-item>
-            <div class="field-wrapper">
-              <div class="field-label">BuyPrice:</div>
-              <div class="field-value">
-                {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
-              </div>
-            </div>
-          </mat-list-item>
-          <mat-list-item>
-            <div class="field-wrapper">
-              <div class="field-label">FirstBid:</div>
-              <div class="field-value">
-                {{ item.firstBid }}
-              </div>
-            </div>
-          </mat-list-item>
-          <mat-list-item>
-            <div class="field-wrapper">
-              <div class="field-label">Number of bids:</div>
-              <div class="field-value">
-                {{ item.numBids }}
-              </div>
-            </div>
-          </mat-list-item>
-        </div>
+        <mat-card class="item-card" *ngFor="let item of items.castEntities">
+          <a class="item-link" routerLink="item/{{ item.itemId }}">
+            <mat-card-header>
+              <mat-card-title>
+                <div class="item-title">
+                  <h2>{{ item.name }}</h2>
+                </div></mat-card-title
+              >
+            </mat-card-header>
+            <mat-card-content>
+              <p>
+                <mat-list-item>
+                  <div class="field-wrapper">
+                    <div class="field-label">Currently:</div>
+                    <div class="field-value">{{ item.currently }}$</div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="field-wrapper">
+                    <div class="field-label">BuyPrice:</div>
+                    <div class="field-value">
+                      {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
+                    </div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="field-wrapper">
+                    <div class="field-label">FirstBid:</div>
+                    <div class="field-value">
+                      {{ item.firstBid }}
+                    </div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="field-wrapper">
+                    <div class="field-label">Number of bids:</div>
+                    <div class="field-value">
+                      {{ item.numBids }}
+                    </div>
+                  </div>
+                </mat-list-item>
+              </p>
+            </mat-card-content>
+          </a>
+        </mat-card>
       </div>
 
       <mat-paginator
