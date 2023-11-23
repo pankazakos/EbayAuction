@@ -70,6 +70,11 @@ mat-card-header {
   justify-content: center;
 }
 
+.item-image {
+  max-height: fit-content;
+  max-width: 100%;
+}
+
 #main-spinner {
   display: flex;
   justify-content: center;

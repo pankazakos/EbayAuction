@@ -27,6 +27,7 @@ export class SearchComponent {
   maxPrice: number = 0;
   categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
+  imageSrc: string = '';
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -95,6 +96,18 @@ export class SearchComponent {
           this.items = response;
           this.isLoading = false;
           console.log(this.items);
+          this.http
+            .get(
+              `${ItemEndpoints.getImage(this.items.castEntities[5].imageGuid)}`,
+              {
+                responseType: 'blob',
+              }
+            )
+            .subscribe((imageData) => {
+              const blob = new Blob([imageData], { type: 'image/jpeg' });
+              const imageUrl = URL.createObjectURL(blob);
+              this.imageSrc = imageUrl;
+            });
         },
         error: (error) => {
           console.error(error);
