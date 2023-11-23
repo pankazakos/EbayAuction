@@ -22,6 +22,10 @@ namespace webapi.Database
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
+            modelBuilder.Entity<Category>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
             modelBuilder.Entity<Item>()
                 .HasMany(i => i.Categories)
                 .WithMany(c => c.Items)

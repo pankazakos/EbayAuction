@@ -12,8 +12,8 @@ using webapi.Database;
 namespace webapi.Migrations
 {
     [DbContext(typeof(AuctionContext))]
-    [Migration("20231101123752_Initial")]
-    partial class Initial
+    [Migration("20231123142126_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,9 +78,12 @@ namespace webapi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
