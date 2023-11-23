@@ -14,7 +14,7 @@ export interface BasicItemResponse extends IItemResponse {
   active: boolean;
   description: string;
   sellerId: number;
-  imageUrl: string;
+  imageGuid: string;
 }
 
 export interface AddItemResponse extends IItemResponse {

@@ -8,6 +8,8 @@
 
         public const string Search = "";
 
+        public const string GetImage = "{guid}";
+
         public const string Inactive = "Inactive";
 
         public const string Active = "Active";

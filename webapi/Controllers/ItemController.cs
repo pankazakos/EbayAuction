@@ -6,6 +6,7 @@ using contracts.Responses.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 using webapi.Models;
 using webapi.Services.Interfaces;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
@@ -124,6 +125,25 @@ namespace webapi.Controllers
         {
             return await _controllerHelper.GetPagedAndRespond<Item, BasicItemResponse>(
                 () => _itemService.Search(query, cancel), query.Page, query.Limit, _mapper);
+        }
+
+        [HttpGet(ItemEndpoints.GetImage)]
+        public async Task<IActionResult> Image([FromRoute] string guid, CancellationToken cancel = default)
+        {
+            try
+            {
+                var content = await _itemService.GetImage(guid, cancel);
+                return new FileContentResult(content, "image/jpeg");
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 

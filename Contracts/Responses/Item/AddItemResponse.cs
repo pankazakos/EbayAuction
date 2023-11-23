@@ -20,6 +20,6 @@
 
         public int SellerId { get; init; }
 
-        public string? ImageUrl { get; init; }
+        public string? ImageGuid { get; init; }
     }
 }

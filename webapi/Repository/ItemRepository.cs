@@ -1,4 +1,6 @@
-﻿using contracts.Requests.Item;
+﻿using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
+using contracts.Requests.Item;
 using Microsoft.EntityFrameworkCore;
 using webapi.Database;
 using webapi.Models;
@@ -131,6 +133,27 @@ namespace webapi.Repository
             var items = await _dbContext.Items.Where(i => i.Active == active && i.SellerId == userId).ToListAsync(cancel);
 
             return items;
+        }
+
+        public async Task<byte[]> GetImage(string guid, CancellationToken cancel = default)
+        {
+            var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
+
+            if (directoryPath is null)
+            {
+                throw new InvalidOperationException("Cannot find FileStorage:BasePath value in configuration");
+            }
+
+            var fullPathToFile = directoryPath + guid + ".jpg";
+
+            if (!File.Exists(fullPathToFile))
+            {
+                throw new InvalidOperationException("File does not exist");
+            }
+
+            var imageBytes = await File.ReadAllBytesAsync(fullPathToFile, cancel);
+
+            return imageBytes;
         }
 
         public async Task<Item> Activate(long id, DateTime expiration, CancellationToken cancel = default)

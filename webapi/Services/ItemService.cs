@@ -82,8 +82,6 @@ namespace webapi.Services
 
             var response = await _itemRepository.Search(query, cancel);
 
-            var first = (query.Page - 1) * query.Limit + 1;
-            var last = query.Page * query.Limit;
             _logger.LogInformation("Search items: page={page}, limit={limit}, title={title}, categories={categories}, minPrice={minPrice}, maxPrice={maxPrice}", 
                 query.Page, query.Limit, query.Title, query.Categories, query.MinPrice, query.MaxPrice);
 
@@ -121,6 +119,13 @@ namespace webapi.Services
             _logger.LogWarning("No {status} items found for user {userId}", status, userId);
 
             return userItems;
+        }
+
+        public async Task<byte[]> GetImage(string guid, CancellationToken cancel = default)
+        {
+            var content = await _itemRepository.GetImage(guid, cancel);
+
+            return content;
         }
 
         public async Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default)
