@@ -4,11 +4,7 @@
   fxFlexAlign="center center"
 >
   <button mat-icon-button class="close-button" (click)="closeDialog()">
-    <mat-icon
-      aria-hidden="false"
-      aria-label="close icon"
-      fontIcon="close"
-    ></mat-icon>
+    <mat-icon aria-label="close icon" fontIcon="close"></mat-icon>
   </button>
   <div fxFlex="20%"></div>
   <div
@@ -23,9 +19,12 @@
         aria-label="price range selection"
         (change)="onPriceRangeChange($event)"
       >
-        <mat-chip-option *ngFor="let range of priceRanges" [value]="range.id">{{
-          range.id
-        }}</mat-chip-option>
+        <mat-chip-option
+          *ngFor="let range of priceRanges; let first = first"
+          [value]="range.id"
+          [selected]="first"
+          >{{ range.id }}</mat-chip-option
+        >
       </mat-chip-listbox>
       <div id="price-range-slider">
         <mat-slider

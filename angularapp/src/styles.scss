@@ -32,6 +32,6 @@ body {
   overflow-y: auto;
 }
 
-app-item {
+.main-container > :first-of-type:not(router-outlet) {
   flex-grow: 1;
 }

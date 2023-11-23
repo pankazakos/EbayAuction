@@ -14,8 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./filters-dialog.component.scss'],
 })
 export class FiltersDialogComponent {
-  @Input() isLoading: boolean = false;
-
   priceRanges = [
     { id: 'up to $50', values: { from: 0, to: 50 } },
     { id: '$50 - $250', values: { from: 50, to: 250 } },

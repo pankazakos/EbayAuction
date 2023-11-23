@@ -14,8 +14,9 @@
   justify-content: center;
 }
 
-/* #items-section {
-} */
+#items-section {
+  width: 100%;
+}
 
 .search-box {
   width: 50%;
@@ -44,10 +45,12 @@
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .item-box {
-  flex-basis: 100%;
+  /* flex-basis: 100%; */
   box-sizing: border-box;
   padding: 3rem;
   background-color: rgb(229, 229, 233);

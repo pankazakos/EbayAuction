@@ -8,7 +8,6 @@ import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
-import { __param } from 'tslib';
 
 @Component({
   selector: 'app-search',
@@ -23,16 +22,11 @@ export class SearchComponent {
     limit: 10,
   };
   public isLoading: boolean = true;
-  searchTerm: string = '';
   title: string = '';
   minPrice: number = 0;
   maxPrice: number = 0;
   categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
-  priceRange: { valueFrom: number; valueTo: number } = {} as {
-    valueFrom: number;
-    valueTo: number;
-  };
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -59,6 +53,8 @@ export class SearchComponent {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
+      this.isLoading = true;
+
       this.setQueryParameter('page', queryParams, (value) => {
         this.items.page = parseInt(value);
       });
@@ -92,7 +88,7 @@ export class SearchComponent {
           this.minPrice !== null &&
           this.maxPrice !== null &&
           `&minPrice=${this.minPrice}&maxPrice=${this.maxPrice}`
-        }${this.selectedCategoryNames && `&${this.categoryQuery}`}`
+        }&${this.categoryQuery}`
       )
       .subscribe({
         next: (response: PaginatedResponse<BasicItemResponse> | any) => {
@@ -100,7 +96,11 @@ export class SearchComponent {
           this.isLoading = false;
           console.log(this.items);
         },
-        error: (error) => console.error(error),
+        error: (error) => {
+          console.error(error);
+          this.isLoading = false;
+          alert('An error occured while searching for items');
+        },
       });
   }
 
@@ -115,11 +115,15 @@ export class SearchComponent {
   }
 
   public showFiltersDialog() {
-    this.dialog.open(FiltersDialogComponent, { width: '50vw', height: '60vh' });
+    this.dialog.open(FiltersDialogComponent, {
+      width: '50vw',
+      height: '60vh',
+      autoFocus: false,
+      restoreFocus: false,
+    });
   }
 
   public onSearchSubmit(): void {
-    this.isLoading = true;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page: this.items.page, title: this.title },
