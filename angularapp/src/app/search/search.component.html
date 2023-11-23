@@ -64,7 +64,10 @@
       </div>
 
       <div *ngIf="!isLoading" id="item-boxes" fxFlex="100%" fxFill>
-        <mat-card class="item-card" *ngFor="let item of items.castEntities">
+        <mat-card
+          class="item-card"
+          *ngFor="let item of items.castEntities; let i = index"
+        >
           <a class="item-link" routerLink="item/{{ item.itemId }}">
             <mat-card-header>
               <mat-card-title>
@@ -73,23 +76,25 @@
                 </div></mat-card-title
               >
             </mat-card-header>
-            <img
-              mat-card-image
-              class="item-image"
-              [src]="imageSrc"
-              alt="item photo"
-            />
+            <div class="card-image">
+              <img
+                mat-card-image
+                class="item-image"
+                [src]="imageSrcs[i]"
+                alt="item photo"
+              />
+            </div>
             <mat-card-content>
               <p>
                 <mat-list-item>
                   <div class="field-wrapper">
-                    <div class="field-label">Currently:</div>
+                    <div class="field-label">Current price:</div>
                     <div class="field-value">{{ item.currently }}$</div>
                   </div>
                 </mat-list-item>
                 <mat-list-item>
                   <div class="field-wrapper">
-                    <div class="field-label">BuyPrice:</div>
+                    <div class="field-label">Buy at:</div>
                     <div class="field-value">
                       {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
                     </div>
@@ -97,7 +102,7 @@
                 </mat-list-item>
                 <mat-list-item>
                   <div class="field-wrapper">
-                    <div class="field-label">FirstBid:</div>
+                    <div class="field-label">Starting bid:</div>
                     <div class="field-value">
                       {{ item.firstBid }}
                     </div>
