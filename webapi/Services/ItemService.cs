@@ -121,7 +121,7 @@ namespace webapi.Services
             return userItems;
         }
 
-        public async Task<byte[]> GetImage(string guid, CancellationToken cancel = default)
+        public async Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default)
         {
             var content = await _itemRepository.GetImage(guid, cancel);
 

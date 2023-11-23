@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Http;
 using webapi.Models;
 using webapi.Services.Interfaces;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
@@ -133,8 +134,12 @@ namespace webapi.Controllers
             try
             {
                 var content = await _itemService.GetImage(guid, cancel);
-                return new FileContentResult(content, "image/jpeg");
 
+                var stream = await content.ReadAsStreamAsync(cancel);
+
+                var mediaType = content.Headers.ContentType!.MediaType!;
+
+                return new FileStreamResult(stream, mediaType);
             }
             catch (ArgumentException ex)
             {
@@ -143,6 +148,10 @@ namespace webapi.Controllers
             catch (InvalidOperationException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 

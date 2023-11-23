@@ -135,7 +135,7 @@ namespace webapi.Repository
             return items;
         }
 
-        public async Task<byte[]> GetImage(string guid, CancellationToken cancel = default)
+        public async Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default)
         {
             var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
 
@@ -144,16 +144,31 @@ namespace webapi.Repository
                 throw new InvalidOperationException("Cannot find FileStorage:BasePath value in configuration");
             }
 
-            var fullPathToFile = directoryPath + guid + ".jpg";
+            var extensions = new[] { ".jpg", ".jpeg", ".png" };
 
-            if (!File.Exists(fullPathToFile))
+            string? fullPathToFile = null;
+
+            foreach (var ext in extensions)
+            {
+                var testPath = Path.Combine(directoryPath, guid + ext);
+                if (File.Exists(testPath))
+                {
+                    fullPathToFile = testPath;
+                    break;
+                }
+            }
+
+            if (fullPathToFile is null)
             {
                 throw new InvalidOperationException("File does not exist");
             }
 
             var imageBytes = await File.ReadAllBytesAsync(fullPathToFile, cancel);
 
-            return imageBytes;
+            var content = new ByteArrayContent(imageBytes);
+            content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+
+            return content;
         }
 
         public async Task<Item> Activate(long id, DateTime expiration, CancellationToken cancel = default)
