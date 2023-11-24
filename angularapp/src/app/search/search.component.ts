@@ -8,6 +8,7 @@ import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-search',
@@ -36,7 +37,8 @@ export class SearchComponent {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   private setQueryParameter(
@@ -52,31 +54,11 @@ export class SearchComponent {
     }
   }
 
-  ngOnInit(): void {
-    this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
-      this.isLoading = true;
-
-      this.setQueryParameter('page', queryParams, (value) => {
-        this.items.page = parseInt(value);
-      });
-      this.setQueryParameter('title', queryParams, (value) => {
-        this.title = value;
-      });
-      this.setQueryParameter('minPrice', queryParams, (value) => {
-        this.minPrice = Number(value);
-      });
-      this.setQueryParameter('maxPrice', queryParams, (value) => {
-        this.maxPrice = Number(value);
-      });
-
-      if (queryParams.has('category')) {
-        const categoryNames = queryParams.getAll('category');
-        this.categoryQuery = categoryNames
-          .map((categoryName) => `categories=${categoryName}`)
-          .join('&');
-      }
-
-      this.fetchItems();
+  private openNoItemsFoundSnackBar(): void {
+    this.snackBar.open('No Items found', 'close', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 1500,
     });
   }
 
@@ -100,6 +82,11 @@ export class SearchComponent {
             src: '',
             isLoading: true,
           });
+
+          if (this.items.castEntities.length === 0) {
+            this.openNoItemsFoundSnackBar();
+          }
+
           this.items.castEntities.map((item, i) => {
             this.http
               .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
@@ -140,6 +127,34 @@ export class SearchComponent {
         this.makeApiSearchCall();
       }, environment.timeout);
     }
+  }
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
+      this.isLoading = true;
+
+      this.setQueryParameter('page', queryParams, (value) => {
+        this.items.page = parseInt(value);
+      });
+      this.setQueryParameter('title', queryParams, (value) => {
+        this.title = value;
+      });
+      this.setQueryParameter('minPrice', queryParams, (value) => {
+        this.minPrice = Number(value);
+      });
+      this.setQueryParameter('maxPrice', queryParams, (value) => {
+        this.maxPrice = Number(value);
+      });
+
+      if (queryParams.has('category')) {
+        const categoryNames = queryParams.getAll('category');
+        this.categoryQuery = categoryNames
+          .map((categoryName) => `categories=${categoryName}`)
+          .join('&');
+      }
+
+      this.fetchItems();
+    });
   }
 
   public showFiltersDialog() {
