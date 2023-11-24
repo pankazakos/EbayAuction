@@ -15,7 +15,6 @@ import { FilterService } from '../filter.service';
   styleUrls: ['./filters-dialog.component.scss'],
 })
 export class FiltersDialogComponent {
-  disabledSlider = false;
   categoryFormControl = new FormControl();
   categories: BasicCategoryResponse[] = [];
   selectedCategoryNames: string[] = [];
@@ -50,20 +49,21 @@ export class FiltersDialogComponent {
     this.filterService.priceRanges.forEach((range) => {
       if (selectedOption == range.id) {
         if (range.id == 'custom') {
-          this.disabledSlider = true;
           this.filterService.sliderMinPrice = 0;
           this.filterService.sliderMaxPrice = 0;
           this.filterService.minPrice = range.values.from;
           this.filterService.maxPrice = 2000;
           this.filterService.selected = range.id;
+          this.filterService.disabledSlider = true;
           return;
         }
-        this.disabledSlider = false;
         this.filterService.sliderMinPrice = range.values.from;
         this.filterService.sliderMaxPrice = range.values.to;
         this.filterService.minPrice = range.values.from;
         this.filterService.maxPrice = range.values.to;
         this.filterService.selected = range.id;
+        this.filterService.disabledSlider = false;
+
         return;
       }
     });

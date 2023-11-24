@@ -30,7 +30,7 @@
         <mat-slider
           min="{{ this.filterService.sliderMinPrice }}"
           max="{{ this.filterService.sliderMaxPrice }}"
-          [disabled]="disabledSlider"
+          [disabled]="this.filterService.disabledSlider"
         >
           <input
             [(ngModel)]="this.filterService.minPrice"

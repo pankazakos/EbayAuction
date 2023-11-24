@@ -16,6 +16,7 @@ export class FilterService {
   selected: string;
   sliderMinPrice: number;
   sliderMaxPrice: number;
+  disabledSlider: boolean;
 
   constructor() {
     this.priceRanges = [
@@ -31,5 +32,6 @@ export class FilterService {
     this.selected = this.priceRanges[0].id;
     this.sliderMinPrice = this.priceRanges[0].values.from;
     this.sliderMaxPrice = this.priceRanges[0].values.to;
+    this.disabledSlider = false;
   }
 }
