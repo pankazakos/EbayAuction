@@ -20,20 +20,23 @@
         (change)="onPriceRangeChange($event)"
       >
         <mat-chip-option
-          *ngFor="let range of priceRanges; let first = first"
+          *ngFor="let range of this.filterService.priceRanges"
           [value]="range.id"
-          [selected]="first"
+          [selected]="this.filterService.selected == range.id"
           >{{ range.id }}</mat-chip-option
         >
       </mat-chip-listbox>
       <div id="price-range-slider">
         <mat-slider
-          min="{{ sliderMinPrice }}"
-          max="{{ sliderMaxPrice }}"
+          min="{{ this.filterService.sliderMinPrice }}"
+          max="{{ this.filterService.sliderMaxPrice }}"
           [disabled]="disabledSlider"
         >
-          <input [(ngModel)]="valueMin" matSliderStartThumb />
-          <input [(ngModel)]="valueMax" matSliderEndThumb />
+          <input
+            [(ngModel)]="this.filterService.minPrice"
+            matSliderStartThumb
+          />
+          <input [(ngModel)]="this.filterService.maxPrice" matSliderEndThumb />
         </mat-slider>
       </div>
       <div id="price-range-inputs" fxLayout="row">
@@ -45,9 +48,9 @@
               type="number"
               class="price-range-from"
               placeholder="0"
-              [(ngModel)]="valueMin"
+              [(ngModel)]="this.filterService.minPrice"
               min="0"
-              max="{{ inputMaxPrice }}"
+              max="{{ this.filterService.maxPrice }}"
             />
             <span matTextPrefix>$&nbsp;</span>
           </mat-form-field>
@@ -59,9 +62,9 @@
               type="number"
               class="price-range-to"
               placeholder="0"
-              [(ngModel)]="valueMax"
+              [(ngModel)]="this.filterService.maxPrice"
               min="0"
-              max="{{ inputMaxPrice }}"
+              max="{{ this.filterService.maxPrice }}"
             />
             <span matTextPrefix>$&nbsp;</span>
           </mat-form-field>

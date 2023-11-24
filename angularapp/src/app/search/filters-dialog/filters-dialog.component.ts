@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FilterService } from '../filter.service';
 
 @Component({
   selector: 'app-filters-dialog',
@@ -14,19 +15,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./filters-dialog.component.scss'],
 })
 export class FiltersDialogComponent {
-  priceRanges = [
-    { id: 'up to $50', values: { from: 0, to: 50 } },
-    { id: '$50 - $250', values: { from: 50, to: 250 } },
-    { id: '$250 - $1000', values: { from: 250, to: 1000 } },
-    { id: '$1000 - $5000', values: { from: 1000, to: 5000 } },
-    { id: '$5000 and up', values: { from: 5000, to: 100000 } },
-    { id: 'custom', values: { from: 0, to: 100000 } },
-  ];
-  sliderMinPrice = this.priceRanges[0].values.from;
-  sliderMaxPrice = this.priceRanges[0].values.to;
-  valueMin = this.priceRanges[0].values.from;
-  valueMax = this.priceRanges[0].values.to;
-  inputMaxPrice = 1000;
   disabledSlider = false;
   categoryFormControl = new FormControl();
   categories: BasicCategoryResponse[] = [];
@@ -37,7 +25,8 @@ export class FiltersDialogComponent {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dialogRef: MatDialogRef<FiltersDialogComponent>
+    private dialogRef: MatDialogRef<FiltersDialogComponent>,
+    public filterService: FilterService
   ) {}
 
   ngOnInit(): void {
@@ -58,23 +47,23 @@ export class FiltersDialogComponent {
 
   onPriceRangeChange(event: MatChipListboxChange) {
     const selectedOption = event.value;
-    this.priceRanges.forEach((range) => {
+    this.filterService.priceRanges.forEach((range) => {
       if (selectedOption == range.id) {
         if (range.id == 'custom') {
           this.disabledSlider = true;
-          this.sliderMinPrice = 0;
-          this.sliderMaxPrice = 0;
-          this.valueMin = range.values.from;
-          this.valueMax = 2000;
-          this.inputMaxPrice = range.values.to;
+          this.filterService.sliderMinPrice = 0;
+          this.filterService.sliderMaxPrice = 0;
+          this.filterService.minPrice = range.values.from;
+          this.filterService.maxPrice = 2000;
+          this.filterService.selected = range.id;
           return;
         }
         this.disabledSlider = false;
-        this.sliderMinPrice = range.values.from;
-        this.sliderMaxPrice = range.values.to;
-        this.inputMaxPrice = range.values.to;
-        this.valueMin = range.values.from;
-        this.valueMax = range.values.to;
+        this.filterService.sliderMinPrice = range.values.from;
+        this.filterService.sliderMaxPrice = range.values.to;
+        this.filterService.minPrice = range.values.from;
+        this.filterService.maxPrice = range.values.to;
+        this.filterService.selected = range.id;
         return;
       }
     });
@@ -141,8 +130,8 @@ export class FiltersDialogComponent {
       relativeTo: this.route,
       queryParams: {
         page: 1,
-        minPrice: this.valueMin,
-        maxPrice: this.valueMax,
+        minPrice: this.filterService.minPrice,
+        maxPrice: this.filterService.maxPrice,
         ...categoryParams,
       },
       queryParamsHandling: 'merge',
