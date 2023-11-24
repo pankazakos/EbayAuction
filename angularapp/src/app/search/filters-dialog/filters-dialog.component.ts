@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatChipListboxChange } from '@angular/material/chips';
 import { baseUrl } from 'src/app/shared/types';
@@ -17,8 +17,6 @@ import { FilterService } from '../filter.service';
 export class FiltersDialogComponent {
   categoryFormControl = new FormControl();
   categories: BasicCategoryResponse[] = [];
-  selectedCategoryNames: string[] = [];
-  filteredCategoryNames: string[] = [];
 
   constructor(
     private http: HttpClient,
@@ -32,7 +30,7 @@ export class FiltersDialogComponent {
     this.http.get(`${baseUrl}/category/all`).subscribe({
       next: (response: BasicCategoryResponse[] | any) => {
         this.categories = response;
-        this.filteredCategoryNames = this.categories.map(
+        this.filterService.filteredCategoryNames = this.categories.map(
           (category) => category.name
         );
       },
@@ -71,14 +69,14 @@ export class FiltersDialogComponent {
 
   onCategorySelected(event: MatAutocompleteSelectedEvent): void {
     const selectedCategory = event.option.value;
-    this.selectedCategoryNames.push(selectedCategory);
+    this.filterService.selectedCategoryNames.push(selectedCategory);
 
     this.categoryFormControl.setValue(''); // remove from form and display in chip
   }
 
   onAutocompleteEnterKeyPress(): void {
-    if (this.filteredCategoryNames.length > 0) {
-      const firstMatchingOption = this.filteredCategoryNames[0];
+    if (this.filterService.filteredCategoryNames.length > 0) {
+      const firstMatchingOption = this.filterService.filteredCategoryNames[0];
       this.categoryFormControl.setValue(firstMatchingOption);
       this.onCategorySelected({
         option: { value: firstMatchingOption },
@@ -90,16 +88,19 @@ export class FiltersDialogComponent {
     console.log('filtering method');
 
     const filterValue = value.toLowerCase();
-    this.filteredCategoryNames = this.categories
-      .filter((category) => !this.selectedCategoryNames.includes(category.name))
+    this.filterService.filteredCategoryNames = this.categories
+      .filter(
+        (category) =>
+          !this.filterService.selectedCategoryNames.includes(category.name)
+      )
       .map((category) => category.name)
       .filter((category) => category.toLowerCase().includes(filterValue));
   }
 
   removeCategory(category: string): void {
-    const index = this.selectedCategoryNames.indexOf(category);
+    const index = this.filterService.selectedCategoryNames.indexOf(category);
     if (index >= 0) {
-      this.selectedCategoryNames.splice(index, 1);
+      this.filterService.selectedCategoryNames.splice(index, 1);
     }
 
     const indexToAddback = this.categories.findIndex(
@@ -108,9 +109,13 @@ export class FiltersDialogComponent {
 
     console.log('IndexToAddBack: ' + indexToAddback);
 
-    this.filteredCategoryNames.splice(indexToAddback, 0, category);
+    this.filterService.filteredCategoryNames.splice(
+      indexToAddback,
+      0,
+      category
+    );
 
-    console.log('filtered: ' + this.filteredCategoryNames);
+    console.log('filtered: ' + this.filterService.filteredCategoryNames);
   }
 
   applyFilters(): void {
@@ -122,7 +127,7 @@ export class FiltersDialogComponent {
       category: [],
     };
 
-    for (const categoryName of this.selectedCategoryNames) {
+    for (const categoryName of this.filterService.selectedCategoryNames) {
       categoryParams.category.push(categoryName);
     }
 
