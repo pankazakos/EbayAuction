@@ -21,13 +21,13 @@ export class SearchComponent {
     page: 1,
     limit: 10,
   };
-  public isLoading: boolean = true;
+  isLoading: boolean = true;
   title: string = '';
   minPrice: number = 0;
   maxPrice: number = 0;
   categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
-  imageSrcs: string[] = [];
+  images: { src: string; isLoading: boolean }[] = [];
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -96,6 +96,10 @@ export class SearchComponent {
           this.items = response;
           this.isLoading = false;
           console.log(this.items);
+          this.images = new Array(this.items.limit).fill({
+            src: '',
+            isLoading: true,
+          });
           this.items.castEntities.map((item, i) => {
             this.http
               .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
@@ -103,9 +107,16 @@ export class SearchComponent {
               })
               .subscribe({
                 next: (imageData: Blob) => {
-                  const blob = new Blob([imageData], { type: 'image/jpeg' });
-                  const imageUrl = URL.createObjectURL(blob);
-                  this.imageSrcs[i] = imageUrl;
+                  setTimeout(() => {
+                    const blob = new Blob([imageData], {
+                      type: 'image/jpeg',
+                    });
+                    const imageUrl = URL.createObjectURL(blob);
+                    this.images[i] = {
+                      src: imageUrl,
+                      isLoading: false,
+                    };
+                  }, environment.timeout);
                 },
                 error: (error) => {
                   console.error(error);

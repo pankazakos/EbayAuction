@@ -77,10 +77,14 @@
               >
             </mat-card-header>
             <div class="card-image">
+              <div class="image-spinner" *ngIf="images[i].isLoading">
+                <mat-spinner></mat-spinner>
+              </div>
               <img
+                *ngIf="!images[i].isLoading"
                 mat-card-image
                 class="item-image"
-                [src]="imageSrcs[i]"
+                [src]="images[i].src"
                 alt="item photo"
               />
             </div>
