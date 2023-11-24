@@ -177,18 +177,22 @@ export class SearchComponent {
   public onPageChange(event: PageEvent): void {
     this.isLoading = true;
 
-    if (this.paginatorTop && this.paginatorBottom) {
-      this.paginatorTop.pageIndex = event.pageIndex;
-      this.paginatorBottom.pageIndex = event.pageIndex;
+    if (event.pageSize != this.items.limit) {
+      this.items.limit = event.pageSize;
+
+      if (this.paginatorTop && this.paginatorBottom) {
+        this.paginatorTop.pageIndex = this.items.page - 1;
+        this.paginatorBottom.pageIndex = this.items.page - 1;
+      }
+      this.fetchItems();
+      return;
     }
 
     const selectedPage = event.pageIndex + 1;
 
-    if (event.pageSize != this.items.limit) {
-      this.items.limit = event.pageSize;
-      this.items.page = selectedPage;
-      this.fetchItems();
-      return;
+    if (this.paginatorTop && this.paginatorBottom) {
+      this.paginatorTop.pageIndex = event.pageIndex;
+      this.paginatorBottom.pageIndex = event.pageIndex;
     }
 
     this.items.page = selectedPage;
