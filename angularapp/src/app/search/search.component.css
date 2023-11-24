@@ -1,4 +1,5 @@
 #search-body {
+  width: 70%;
   display: flex;
   flex-direction: column;
   padding-top: 5rem;
@@ -16,6 +17,21 @@
 
 #items-section {
   width: 100%;
+}
+
+.items-top-toolbar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.items-top-toolbar-inner {
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .search-box {
@@ -42,23 +58,26 @@
 
 #item-boxes {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: row;
   justify-content: center;
+}
+
+#item-boxes-inner {
+  width: 95%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-start;
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
 
 .item-card {
   box-sizing: border-box;
+  width: 45%;
   padding: 3rem;
   background-color: rgb(255, 255, 255);
-}
-
-@media (min-width: 768px) {
-  .item-card {
-    flex-basis: calc(50% - 1rem);
-  }
 }
 
 .item-card:hover {
@@ -115,4 +134,18 @@ mat-card-header {
 
 .paginator {
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  #search-body {
+    width: 90%;
+  }
+
+  .search-box {
+    width: 80%;
+  }
+
+  .item-card {
+    width: 100%;
+  }
 }
