@@ -30,29 +30,27 @@
 
     <div id="items-section" fxLayout="column">
       <div class="items-top-toolbar">
-        <div class="items-top-toolbar-inner">
-          <div class="filter-button">
-            <button mat-raised-button (click)="showFiltersDialog()">
-              <div>filters</div>
-              <mat-icon
-                aria-hidden="false"
-                aria-label="Example home icon"
-                fontIcon="tune"
-              ></mat-icon>
-            </button>
-          </div>
-
-          <mat-paginator
-            #paginatorTop
-            class="paginator"
-            [length]="this.items.total"
-            [pageSize]="this.items.limit"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            (page)="onPageChange($event)"
-            aria-label="Select page"
-          >
-          </mat-paginator>
+        <div class="filter-button">
+          <button mat-raised-button (click)="showFiltersDialog()">
+            <div>filters</div>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="tune"
+            ></mat-icon>
+          </button>
         </div>
+
+        <mat-paginator
+          #paginatorTop
+          class="paginator"
+          [length]="this.items.total"
+          [pageSize]="this.items.limit"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          (page)="onPageChange($event)"
+          aria-label="Select page"
+        >
+        </mat-paginator>
       </div>
 
       <div id="main-spinner" *ngIf="isLoading">
@@ -60,68 +58,64 @@
       </div>
 
       <div *ngIf="!isLoading" id="item-boxes" fxFlex="100%">
-        <div id="item-boxes-inner">
-          <mat-card
-            class="item-card"
-            *ngFor="let item of items.castEntities; let i = index"
-          >
-            <a class="item-link" routerLink="item/{{ item.itemId }}">
-              <mat-card-header>
-                <mat-card-title>
-                  <div class="item-title">
-                    <h2>{{ item.name }}</h2>
-                  </div></mat-card-title
-                >
-              </mat-card-header>
-              <div class="card-image">
-                <div class="image-spinner" *ngIf="images[i].isLoading">
-                  <mat-spinner></mat-spinner>
-                </div>
-                <img
-                  *ngIf="!images[i].isLoading"
-                  mat-card-image
-                  class="item-image"
-                  [src]="images[i].src"
-                  alt="item photo"
-                />
+        <mat-card
+          class="item-card"
+          *ngFor="let item of items.castEntities; let i = index"
+        >
+          <a class="item-link" routerLink="item/{{ item.itemId }}">
+            <mat-card-header>
+              <mat-card-title>
+                <div class="item-title">
+                  <h2>{{ item.name }}</h2>
+                </div></mat-card-title
+              >
+            </mat-card-header>
+            <div class="card-image">
+              <div class="image-spinner" *ngIf="images[i].isLoading">
+                <mat-spinner></mat-spinner>
               </div>
-              <mat-card-content>
-                <p>
-                  <mat-list-item>
-                    <div class="field-wrapper">
-                      <div class="field-label">Current price:</div>
-                      <div class="field-value">{{ item.currently }}$</div>
-                    </div>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <div class="field-wrapper">
-                      <div class="field-label">Buy at:</div>
-                      <div class="field-value">
-                        {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
-                      </div>
-                    </div>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <div class="field-wrapper">
-                      <div class="field-label">Starting bid:</div>
-                      <div class="field-value">
-                        {{ item.firstBid }}
-                      </div>
-                    </div>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <div class="field-wrapper">
-                      <div class="field-label">Number of bids:</div>
-                      <div class="field-value">
-                        {{ item.numBids }}
-                      </div>
-                    </div>
-                  </mat-list-item>
-                </p>
-              </mat-card-content>
-            </a>
-          </mat-card>
-        </div>
+              <img
+                *ngIf="!images[i].isLoading"
+                mat-card-image
+                class="item-image"
+                [src]="images[i].src"
+                alt="item photo"
+              />
+            </div>
+            <mat-card-content>
+              <mat-list-item>
+                <div class="field-wrapper">
+                  <div class="field-label">Current price:</div>
+                  <div class="field-value">{{ item.currently }}$</div>
+                </div>
+              </mat-list-item>
+              <mat-list-item>
+                <div class="field-wrapper">
+                  <div class="field-label">Buy at:</div>
+                  <div class="field-value">
+                    {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
+                  </div>
+                </div>
+              </mat-list-item>
+              <mat-list-item>
+                <div class="field-wrapper">
+                  <div class="field-label">Starting bid:</div>
+                  <div class="field-value">
+                    {{ item.firstBid }}
+                  </div>
+                </div>
+              </mat-list-item>
+              <mat-list-item>
+                <div class="field-wrapper">
+                  <div class="field-label">Number of bids:</div>
+                  <div class="field-value">
+                    {{ item.numBids }}
+                  </div>
+                </div>
+              </mat-list-item>
+            </mat-card-content>
+          </a>
+        </mat-card>
       </div>
 
       <mat-paginator

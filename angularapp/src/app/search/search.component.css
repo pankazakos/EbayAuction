@@ -1,5 +1,5 @@
 #search-body {
-  width: 70%;
+  width: 75%;
   display: flex;
   flex-direction: column;
   padding-top: 5rem;
@@ -10,32 +10,29 @@
 }
 
 #search-box-section {
-  width: 70%;
+  width: 100%;
   display: flex;
   justify-content: center;
 }
 
 #items-section {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
 .items-top-toolbar {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-}
-
-.items-top-toolbar-inner {
-  width: 95%;
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
 }
 
 .search-box {
-  width: 50%;
+  width: 35%;
   box-sizing: border-box;
   border: 2px solid #bebebe;
 }
@@ -52,18 +49,8 @@
   display: none;
 }
 
-.filter-button {
-  margin-left: 1rem;
-}
-
 #item-boxes {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-#item-boxes-inner {
-  width: 95%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -75,7 +62,7 @@
 
 .item-card {
   box-sizing: border-box;
-  width: 45%;
+  width: 49%;
   padding: 3rem;
   background-color: rgb(255, 255, 255);
 }
@@ -134,6 +121,30 @@ mat-card-header {
 
 .paginator {
   width: 100%;
+}
+
+@media (max-width: 1200px) {
+  #search-body {
+    width: 80%;
+  }
+
+  .search-box {
+    width: 50%;
+  }
+}
+
+@media (max-width: 992px) {
+  #search-body {
+    width: 80%;
+  }
+
+  .search-box {
+    width: 65%;
+  }
+
+  .item-card {
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
