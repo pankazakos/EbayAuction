@@ -228,9 +228,18 @@ namespace webapi.Repository
         {
             var item = await GetById(id, cancel);
 
+            var itemWithCategories = _dbContext.Items
+                .Include(i => i.Categories)
+                .FirstOrDefault(i => i.ItemId == id);
+
+            if (itemWithCategories is null)
+            {
+                throw new InvalidOperationException($"Cannot find item {id}");
+            }
+
             if (item is null)
             {
-                throw new ArgumentException("Cannot find item with given id.");
+                throw new ArgumentException($"Cannot find item {id}");
             }
 
             await using (var transaction = await _dbContext.Database.BeginTransactionAsync(cancel))
@@ -244,11 +253,20 @@ namespace webapi.Repository
 
                     if (itemData.CategoryIds != null)
                     {
-                        var categories = await _categoryRepository.FilterWithIds(itemData.CategoryIds, cancel);
+                        var categoriesToRemove = itemWithCategories.Categories.ToList();
 
-                        item.Categories.Clear(); // delete previous categories
+                        foreach (var oldCategory in categoriesToRemove)
+                        {
+                            itemWithCategories.Categories.Remove(oldCategory);
+                        }
 
-                        item.Categories = categories.ToList();
+
+                        var newCategories = await _categoryRepository.FilterWithIds(itemData.CategoryIds, cancel);
+
+                        foreach (var newCategory in newCategories)
+                        {
+                            item.Categories.Add(newCategory);
+                        }
                     }
 
                     item.BuyPrice = itemData.BuyPrice;
