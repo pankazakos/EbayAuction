@@ -134,6 +134,37 @@ namespace webapi.Repository
             return items;
         }
 
+        private string GetImageFilenameFullPath(string guid)
+        {
+            var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
+
+            if (directoryPath is null)
+            {
+                throw new InvalidOperationException("Cannot find FileStorage:BasePath value in configuration");
+            }
+
+            var extensions = new[] { ".jpg", ".jpeg", ".png" };
+
+            string? fullPathToFile = null;
+
+            foreach (var ext in extensions)
+            {
+                var testPath = Path.Combine(directoryPath, guid + ext);
+                if (File.Exists(testPath))
+                {
+                    fullPathToFile = testPath;
+                    break;
+                }
+            }
+
+            if (fullPathToFile is null)
+            {
+                throw new InvalidOperationException("File does not exist");
+            }
+
+            return fullPathToFile;
+        }
+
         public async Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default)
         {
             var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
@@ -206,19 +237,32 @@ namespace webapi.Repository
             {
                 try
                 {
-                    item.Name = itemData.Name;
+                    if (itemData.Name != null)
+                    {
+                        item.Name = itemData.Name;
+                    }
 
-                    var categories = await _categoryRepository.FilterWithIds(itemData.CategoryIds, cancel);
+                    if (itemData.CategoryIds != null)
+                    {
+                        var categories = await _categoryRepository.FilterWithIds(itemData.CategoryIds, cancel);
 
-                    item.Categories = categories.ToList();
+                        item.Categories.Clear(); // delete previous categories
+
+                        item.Categories = categories.ToList();
+                    }
 
                     item.BuyPrice = itemData.BuyPrice;
 
-                    item.FirstBid = itemData.FirstBid;
+                    if (itemData.FirstBid.HasValue)
+                    {
+                        item.FirstBid = itemData.FirstBid.Value;
+                        item.Currently = itemData.FirstBid.Value;
+                    }
 
-                    item.Currently = itemData.FirstBid;
-
-                    item.Description = itemData.Description;
+                    if (itemData.Description != null)
+                    {
+                        item.Description = itemData.Description;
+                    }
 
                     var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
 
@@ -229,16 +273,25 @@ namespace webapi.Repository
 
                     Directory.CreateDirectory(directoryPath); // Create the directory if it doesn't exist
 
-                    var fullPathToFile = directoryPath + fileName;
+                    var fullPathToNewImage = directoryPath + fileName;
 
-                    if (postedFile != null && fileName != null)
+                    if (postedFile != null)
                     {
-                        await using (var stream = new FileStream(fullPathToFile, FileMode.Create))
+                        // Delete previous image if it exists
+                        if (item.ImageGuid != null)
+                        {
+
+                            var previousImageFullFilename = GetImageFilenameFullPath(item.ImageGuid);
+                            File.Delete(previousImageFullFilename);
+                        }
+
+                        // Save new image
+                        await using (var stream = new FileStream(fullPathToNewImage, FileMode.Create))
                         {
                             await postedFile.CopyToAsync(stream, cancel);
                         }
 
-                        item.ImageGuid = Path.GetFileNameWithoutExtension(fullPathToFile);
+                        item.ImageGuid = Path.GetFileNameWithoutExtension(fullPathToNewImage);
                     }
 
                     await _dbContext.SaveChangesAsync(cancel);

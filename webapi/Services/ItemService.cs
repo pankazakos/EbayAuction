@@ -155,16 +155,6 @@ namespace webapi.Services
 
         public async Task<Item> Edit(long id, EditItemRequest itemData, IFormFile? postedFile = null, CancellationToken cancel = default)
         {
-            try
-            {
-                itemData.Validate();
-            }
-            catch (ArgumentException ex)
-            {
-                _logger.LogWarning(ex.Message);
-                throw;
-            }
-
             if (postedFile is null)
             {
                 var editedItem = await _itemRepository.Edit(id, itemData, cancel: cancel);
