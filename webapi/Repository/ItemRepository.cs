@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
 using contracts.Requests.Item;
 using Microsoft.EntityFrameworkCore;
 using webapi.Database;
@@ -27,7 +26,7 @@ namespace webapi.Repository
             {
                 Name = item.Name,
                 Currently = item.FirstBid,
-                BuyPrice = null,
+                BuyPrice = item.BuyPrice,
                 FirstBid = item.FirstBid,
                 NumBids = 0,
                 Started = null,
@@ -193,6 +192,68 @@ namespace webapi.Repository
 
             return item;
         }
+
+        public async Task<Item> Edit(long id, EditItemRequest itemData, IFormFile? postedFile = null, string? fileName = null, CancellationToken cancel = default)
+        {
+            var item = await GetById(id, cancel);
+
+            if (item is null)
+            {
+                throw new ArgumentException("Cannot find item with given id.");
+            }
+
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync(cancel))
+            {
+                try
+                {
+                    item.Name = itemData.Name;
+
+                    var categories = await _categoryRepository.FilterWithIds(itemData.CategoryIds, cancel);
+
+                    item.Categories = categories.ToList();
+
+                    item.BuyPrice = itemData.BuyPrice;
+
+                    item.FirstBid = itemData.FirstBid;
+
+                    item.Currently = itemData.FirstBid;
+
+                    item.Description = itemData.Description;
+
+                    var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");
+
+                    if (directoryPath is null)
+                    {
+                        throw new InvalidOperationException("Cannot find FileStorage:BasePath value in configuration");
+                    }
+
+                    Directory.CreateDirectory(directoryPath); // Create the directory if it doesn't exist
+
+                    var fullPathToFile = directoryPath + fileName;
+
+                    if (postedFile != null && fileName != null)
+                    {
+                        await using (var stream = new FileStream(fullPathToFile, FileMode.Create))
+                        {
+                            await postedFile.CopyToAsync(stream, cancel);
+                        }
+
+                        item.ImageGuid = Path.GetFileNameWithoutExtension(fullPathToFile);
+                    }
+
+                    await _dbContext.SaveChangesAsync(cancel);
+
+                    await transaction.CommitAsync(cancel);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync(cancel);
+                    throw;
+                }
+            }
+            return item;
+        }
+
 
         public async Task Delete(Item item, CancellationToken cancel = default)
         {

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using contracts.Requests.Item;
+﻿using contracts.Requests.Item;
 using webapi.Models;
 using webapi.Repository.Interfaces;
 using webapi.Services.Interfaces;
@@ -153,6 +152,48 @@ namespace webapi.Services
                 throw;
             }
         }
+
+        public async Task<Item> Edit(long id, EditItemRequest itemData, IFormFile? postedFile = null, CancellationToken cancel = default)
+        {
+            try
+            {
+                itemData.Validate();
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex.Message);
+                throw;
+            }
+
+            if (postedFile is null)
+            {
+                var editedItem = await _itemRepository.Edit(id, itemData, cancel: cancel);
+
+                _logger.LogInformation("Item {itemId} edited", editedItem.ItemId);
+
+                return editedItem;
+            }
+
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+
+            var fileExtension = Path.GetExtension(postedFile.FileName);
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                const string message = "Invalid file type. Only .jpg, .jpeg, and .png files are allowed";
+                _logger.LogWarning(message);
+                throw new ArgumentException(message);
+            }
+
+            var fileName = Guid.NewGuid() + fileExtension;
+
+            var editedItemWithImage = await _itemRepository.Edit(id, itemData, postedFile, fileName, cancel);
+
+            _logger.LogInformation("Item {itemId} edited", editedItemWithImage.ItemId);
+
+            return editedItemWithImage;
+        }
+
 
         public async Task Delete(long id, CancellationToken cancel = default)
         {

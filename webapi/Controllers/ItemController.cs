@@ -6,8 +6,6 @@ using contracts.Responses.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
-using System.Net.Http;
 using webapi.Models;
 using webapi.Services.Interfaces;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
@@ -105,6 +103,43 @@ namespace webapi.Controllers
                 await _itemService.Activate(id, input, cancel);
 
                 return Ok($"Item {id} was successfully published");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Policy = Policies.ItemOwner)]
+        [HttpPut(ItemEndpoints.Edit)]
+        public async Task<IActionResult> Edit([FromRoute] long id, [FromForm] string itemJson, [FromForm] IFormFile? image, CancellationToken cancel = default)
+        {
+            EditItemRequest? itemData;
+            try
+            {
+                itemData = JsonConvert.DeserializeObject<EditItemRequest>(itemJson);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            if (itemData == null)
+            {
+                return BadRequest("Invalid item data");
+            }
+
+            try
+            {
+                if (image is null)
+                {
+                    await _itemService.Edit(id, itemData, cancel: cancel);
+                    return Ok($"Item was successfully edited");
+                }
+
+                await _itemService.Edit(id, itemData, image, cancel);
+                return Ok($"Item was successfully edited");
             }
             catch (ArgumentException ex)
             {

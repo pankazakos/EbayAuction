@@ -20,6 +20,8 @@
 
         public const string Activate = "Activate/{id:long}";
 
+        public const string Edit = "Edit/{id:long}";
+
         public const string Delete = "{id:long}";
     }
 }

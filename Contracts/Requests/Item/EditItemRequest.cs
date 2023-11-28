@@ -1,6 +1,6 @@
 ﻿namespace contracts.Requests.Item
 {
-    public class AddItemRequest : IAppRequest
+    public class EditItemRequest
     {
         public string Name { get; init; } = string.Empty;
 

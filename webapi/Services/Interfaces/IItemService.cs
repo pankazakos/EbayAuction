@@ -17,6 +17,8 @@ namespace webapi.Services.Interfaces
 
         public Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default);
 
+        public Task<Item> Edit(long id, EditItemRequest itemData, IFormFile? postedFile = null, CancellationToken cancel = default);
+
         public Task Delete(long id, CancellationToken cancel = default);
     }
 }
