@@ -63,57 +63,65 @@
           *ngFor="let item of items.castEntities; let i = index"
         >
           <a class="item-link" routerLink="item/{{ item.itemId }}">
-            <mat-card-header>
-              <mat-card-title>
-                <div class="item-title">
-                  <h2>{{ item.name }}</h2>
-                </div></mat-card-title
-              >
-            </mat-card-header>
-            <div class="card-image">
-              <div class="image-spinner" *ngIf="images[i].isLoading">
-                <mat-spinner></mat-spinner>
+            <div class="item-card-main-container">
+              <div class="item-card-image">
+                <div class="image-spinner" *ngIf="images[i].isLoading">
+                  <mat-spinner></mat-spinner>
+                </div>
+                <img
+                  *ngIf="!images[i].isLoading"
+                  mat-card-image
+                  class="item-image"
+                  [src]="images[i].src"
+                  alt="item photo"
+                />
               </div>
-              <img
-                *ngIf="!images[i].isLoading"
-                mat-card-image
-                class="item-image"
-                [src]="images[i].src"
-                alt="item photo"
-              />
+
+              <div class="item-card-header">
+                <mat-card-header>
+                  <mat-card-title>
+                    <div>
+                      <h2>{{ item.name }}</h2>
+                    </div></mat-card-title
+                  >
+                </mat-card-header>
+              </div>
+
+              <div class="item-content">
+                <mat-card-content>
+                  <mat-list-item>
+                    <div class="item-content-element">
+                      <div>Current price:</div>
+                      <div>{{ item.currently }}$</div>
+                    </div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <div class="item-content-element">
+                      <div>Buy at:</div>
+                      <div>
+                        {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
+                      </div>
+                    </div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <div class="item-content-element">
+                      <div>Starting bid:</div>
+                      <div>
+                        {{ item.firstBid }}
+                      </div>
+                    </div>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <div class="item-content-element">
+                      <div>Number of bids:</div>
+                      <div>
+                        {{ item.numBids }}
+                      </div>
+                    </div>
+                  </mat-list-item>
+                </mat-card-content>
+              </div>
             </div>
-            <mat-card-content>
-              <mat-list-item>
-                <div class="field-wrapper">
-                  <div class="field-label">Current price:</div>
-                  <div class="field-value">{{ item.currently }}$</div>
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <div class="field-wrapper">
-                  <div class="field-label">Buy at:</div>
-                  <div class="field-value">
-                    {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
-                  </div>
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <div class="field-wrapper">
-                  <div class="field-label">Starting bid:</div>
-                  <div class="field-value">
-                    {{ item.firstBid }}
-                  </div>
-                </div>
-              </mat-list-item>
-              <mat-list-item>
-                <div class="field-wrapper">
-                  <div class="field-label">Number of bids:</div>
-                  <div class="field-value">
-                    {{ item.numBids }}
-                  </div>
-                </div>
-              </mat-list-item>
-            </mat-card-content>
           </a>
         </mat-card>
       </div>
