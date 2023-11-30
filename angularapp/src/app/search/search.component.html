@@ -65,9 +65,7 @@
           <a class="item-link" routerLink="item/{{ item.itemId }}">
             <div class="item-card-main-container">
               <div class="item-card-image">
-                <div class="image-spinner" *ngIf="images[i].isLoading">
-                  <mat-spinner></mat-spinner>
-                </div>
+                <div class="skeleton-image" *ngIf="images[i].isLoading"></div>
                 <img
                   *ngIf="!images[i].isLoading"
                   mat-card-image
