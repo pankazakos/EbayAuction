@@ -12,6 +12,7 @@ import { ItemComponent } from './search/item/item.component';
 import { SearchModule } from './search/search.module';
 import { MyItemsModule } from './my-items/my-items.module';
 import { MyItemsComponent } from './my-items/my-items.component';
+import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
   {
@@ -29,10 +30,15 @@ const routes: Routes = [
     component: AdminComponent,
     canActivate: [AdminGuard],
   },
+  {
+    title: 'test',
+    path: 'test',
+    component: TestComponent,
+  },
 ];
 
 @NgModule({
-  declarations: [AppComponent, AdminComponent],
+  declarations: [AppComponent, AdminComponent, TestComponent],
   imports: [
     CommonImportsModule,
     SharedModule,
