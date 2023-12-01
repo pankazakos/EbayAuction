@@ -53,11 +53,57 @@
         </mat-paginator>
       </div>
 
-      <div id="main-spinner" *ngIf="isLoading">
-        <mat-spinner></mat-spinner>
+      <div *ngIf="isLoading" class="item-boxes">
+        <mat-card
+          class="item-card"
+          *ngFor="let i of getNumberArray(items.limit)"
+        >
+          <div class="item-card-main-container">
+            <div class="item-card-image">
+              <div class="skeleton-image"></div>
+            </div>
+
+            <div class="loading-item-card-header">
+              <div class="inner-loading-item-card-header skeleton-text"></div>
+            </div>
+
+            <div class="item-content">
+              <mat-card-content>
+                <mat-list-item>
+                  <div class="item-content-element">
+                    <div
+                      class="loading-current-price-label skeleton-text"
+                    ></div>
+                    <div
+                      class="loading-current-price-value skeleton-text"
+                    ></div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="item-content-element">
+                    <div class="loading-final-price-label skeleton-text"></div>
+                    <div class="loading-final-price-value skeleton-text"></div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="item-content-element">
+                    <div class="loading-starting-bid-label skeleton-text"></div>
+                    <div class="loading-starting-bid-value skeleton-text"></div>
+                  </div>
+                </mat-list-item>
+                <mat-list-item>
+                  <div class="item-content-element">
+                    <div class="loading-number-bids-label skeleton-text"></div>
+                    <div class="loading-number-bids-value skeleton-text"></div>
+                  </div>
+                </mat-list-item>
+              </mat-card-content>
+            </div>
+          </div>
+        </mat-card>
       </div>
 
-      <div *ngIf="!isLoading" id="item-boxes" fxFlex="100%">
+      <div *ngIf="!isLoading" class="item-boxes">
         <mat-card
           class="item-card"
           *ngFor="let item of items.castEntities; let i = index"
@@ -78,10 +124,8 @@
               <div class="item-card-header">
                 <mat-card-header>
                   <mat-card-title>
-                    <div>
-                      <h2>{{ item.name }}</h2>
-                    </div></mat-card-title
-                  >
+                    {{ item.name }}
+                  </mat-card-title>
                 </mat-card-header>
               </div>
 

@@ -201,4 +201,8 @@ export class SearchComponent {
       queryParamsHandling: 'merge',
     });
   }
+
+  public getNumberArray(limit: number): number[] {
+    return Array.from({ length: limit }, (_, i) => i);
+  }
 }
