@@ -1,5 +1,54 @@
 #filters-dialog-main-container {
-  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  padding-top: 5%;
+  width: 50vw;
+  height: 60vh;
+}
+
+#filters-container-content {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (max-width: 1200px) {
+  #filters-dialog-main-container {
+    width: 70vw;
+    height: 50vh;
+  }
+
+  #filters-container-content {
+    width: 70%;
+  }
+}
+
+@media (max-width: 992px) {
+  #filters-dialog-main-container {
+    width: 70vw;
+  }
+
+  #filters-container-content {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  #filters-dialog-main-container {
+    width: 80vw;
+    height: 70vh;
+  }
+
+  #filters-container-content {
+    width: 90%;
+  }
+}
+
+@media (max-width: 400px) {
+  #filters-dialog-main-container {
+    height: 90vh;
+  }
 }
 
 #price-range-slider .mat-mdc-slider {
@@ -8,20 +57,20 @@
 
 #price-range-inputs {
   width: 100%;
-}
-
-#inner-price-range-inputs {
-  width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
+#price-range-inputs mat-form-field {
+  width: 45%;
+}
+
 .price-range-from {
-  margin-right: 1rem;
+  width: 100%;
 }
 
 .price-range-to {
-  margin-left: 1rem;
+  width: 100%;
 }
 
 .category-chips {

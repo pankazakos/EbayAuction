@@ -159,8 +159,6 @@ export class SearchComponent {
 
   public showFiltersDialog() {
     this.dialog.open(FiltersDialogComponent, {
-      width: '50vw',
-      height: '60vh',
       autoFocus: false,
       restoreFocus: false,
     });
