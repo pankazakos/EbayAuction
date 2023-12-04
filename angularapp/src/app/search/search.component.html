@@ -11,20 +11,15 @@
             ></mat-icon>
           </button>
         </div>
-        <div class="search-input" fxFlex="90%">
-          <form (ngSubmit)="onSearchSubmit()">
-            <mat-form-field>
-              <mat-label>Search</mat-label>
-              <input
-                matInput
-                placeholder="search for item titles"
-                name="search-input"
-                [(ngModel)]="title"
-              />
-            </mat-form-field>
-            <button class="hidden-button" type="submit"></button>
-          </form>
-        </div>
+        <form (ngSubmit)="onSearchSubmit()">
+          <input
+            class="search-title-input"
+            placeholder="Search for item titles"
+            name="search-input"
+            [(ngModel)]="title"
+          />
+          <button class="hidden-button" type="submit"></button>
+        </form>
       </div>
     </div>
 
@@ -148,9 +143,7 @@
                   <mat-list-item>
                     <div class="item-content-element">
                       <div>Starting bid:</div>
-                      <div>
-                        {{ item.firstBid }}
-                      </div>
+                      <div>{{ item.firstBid }}$</div>
                     </div>
                   </mat-list-item>
                   <mat-list-item>
