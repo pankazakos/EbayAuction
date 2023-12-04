@@ -113,5 +113,17 @@ namespace webapi.Repository
 
             return user.Id;
         }
+
+        public async Task<string> IdToUsername(int id, CancellationToken cancel = default)
+        {
+            var user = await GetById(id, cancel);
+
+            if (user is null)
+            {
+                throw new InvalidOperationException($"User with id {id} not found");
+            }
+
+            return user.Username;
+        }
     }
 }

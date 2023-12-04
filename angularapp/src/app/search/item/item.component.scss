@@ -1,6 +1,15 @@
+#item-main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
+  height: 80vh;
+}
+
 #item-box {
   box-sizing: border-box;
-  flex-basis: 50%;
+  width: 50%;
+  height: 70%;
   padding: 3rem;
   background-color: rgb(229, 229, 233);
 }

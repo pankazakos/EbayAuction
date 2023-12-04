@@ -125,5 +125,11 @@ namespace webapi.Services
             _logger.LogInformation("User {username} logged in", user.Username);
         }
 
+        public async Task<string> IdToUsername(int id, CancellationToken cancel = default)
+        {
+            var username = await _userRepository.IdToUsername(id, cancel);
+
+            return username;
+        }
     }
 }

@@ -20,6 +20,15 @@
           />
           <button class="hidden-button" type="submit"></button>
         </form>
+        <div class="remove-title-button" fxFlex="10%">
+          <button *ngIf="title" mat-icon-button (click)="removeTitle()">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="remove title icon"
+              fontIcon="close"
+            ></mat-icon>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -30,8 +39,19 @@
             <div>filters</div>
             <mat-icon
               aria-hidden="false"
-              aria-label="Example home icon"
+              aria-label="filter button"
               fontIcon="tune"
+            ></mat-icon>
+          </button>
+        </div>
+
+        <div class="clear-filters-button">
+          <button mat-raised-button (click)="clearFilters()">
+            <div>clear</div>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="clear filters"
+              fontIcon="filter_list_off"
             ></mat-icon>
           </button>
         </div>
@@ -103,7 +123,7 @@
           class="item-card"
           *ngFor="let item of items.castEntities; let i = index"
         >
-          <a class="item-link" routerLink="item/{{ item.itemId }}">
+          <div class="item-link" (click)="showItemDialog(+item.itemId)">
             <div class="item-card-main-container">
               <div class="item-card-image">
                 <div class="skeleton-image" *ngIf="images[i].isLoading"></div>
@@ -157,7 +177,7 @@
                 </mat-card-content>
               </div>
             </div>
-          </a>
+          </div>
         </mat-card>
       </div>
 

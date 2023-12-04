@@ -10,6 +10,7 @@ export const UserEndpoints: Readonly<{
   delete: (id: number) => string;
   create: string;
   login: string;
+  IdToUsername: (id: number) => string;
 }> = {
   all: `${userBaseUrl}/all`,
   usernames: `${userBaseUrl}/usernames`,
@@ -18,4 +19,5 @@ export const UserEndpoints: Readonly<{
   delete: (id: number) => `${userBaseUrl}/${id}`,
   create: `${userBaseUrl}`,
   login: `${userBaseUrl}/login`,
+  IdToUsername: (id: number) => `${userBaseUrl}/username/${id}`,
 };

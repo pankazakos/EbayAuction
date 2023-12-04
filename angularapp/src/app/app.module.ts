@@ -8,7 +8,6 @@ import { SignInComponent } from './shared/sign-in/sign-in.component';
 import { SignUpComponent } from './shared/sign-up/sign-up.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminGuard } from './admin.guard';
-import { ItemComponent } from './search/item/item.component';
 import { SearchModule } from './search/search.module';
 import { MyItemsModule } from './my-items/my-items.module';
 import { MyItemsComponent } from './my-items/my-items.component';
@@ -23,7 +22,6 @@ const routes: Routes = [
   { title: 'my items', path: 'my-items', component: MyItemsComponent },
   { title: 'login', path: 'login', component: SignInComponent },
   { title: 'register', path: 'register', component: SignUpComponent },
-  { title: 'item info', path: 'item/:id', component: ItemComponent },
   {
     title: 'admin',
     path: 'admin',

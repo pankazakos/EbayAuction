@@ -1,72 +1,57 @@
-<div
-  id="search-container"
-  fxLayout="row"
-  fxLayoutAlign="space-between none"
-  fxFill
->
-  <div id="left-margin" fxFlex="20%"></div>
-  <div
-    id="search-body"
-    fxLayout="column"
-    fxLayoutAlign="space-evenly center"
-    fxFlex="60%"
-  >
-    <div id="search-input" fxflex="30%"></div>
-    <div id="item-box" fxFlex="70%" fxFill>
-      <div class="item-title">
-        <h2>{{ item.name }}</h2>
-      </div>
-      <mat-list>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">Currently:</div>
-            <div class="field-value">{{ item.currently }}$</div>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">BuyPrice:</div>
-            <div class="field-value">{{ item.buyPrice }}</div>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">FirstBid:</div>
-            <div class="field-value">{{ item.firstBid }}</div>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">Number of bids:</div>
-            <div class="field-value">{{ item.numBids }}</div>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">Published:</div>
-            <div class="field-value">{{ item.started }}</div>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">Ends:</div>
-            <div class="field-value">{{ item.ends }}</div>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">Description:</div>
-            <div class="field-value">{{ item.description }}</div>
-          </div>
-        </mat-list-item>
-        <mat-list-item>
-          <div class="field-wrapper">
-            <div class="field-label">Seller id:</div>
-            <div class="field-value">{{ item.sellerId }}</div>
-          </div>
-        </mat-list-item>
-      </mat-list>
+<div id="item-main-container">
+  <div id="item-box">
+    <div class="item-title">
+      <h2>{{ item.name }}</h2>
     </div>
+    <mat-list>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">Current price:</div>
+          <div class="field-value">{{ item.currently }}$</div>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">Buy at:</div>
+          <div class="field-value">{{ item.buyPrice }}</div>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">First Bid:</div>
+          <div class="field-value">{{ item.firstBid }}</div>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">Number of bids:</div>
+          <div class="field-value">{{ item.numBids }}</div>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">Published at:</div>
+          <div class="field-value">{{ item.started }}</div>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">Ending at:</div>
+          <div class="field-value">{{ item.ends }}</div>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">Description:</div>
+          <div class="field-value">{{ item.description }}</div>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div class="field-wrapper">
+          <div class="field-label">Seller:</div>
+          <div class="field-value">{{ username }}</div>
+        </div>
+      </mat-list-item>
+    </mat-list>
   </div>
-  <div id="right-margin" fxFlex="20%"></div>
 </div>

@@ -20,5 +20,7 @@ namespace webapi.Repository.Interfaces
         public Task UpdateLastLogin(User user, CancellationToken cancel = default);
 
         public Task<int> UsernameToId(string username, CancellationToken cancel = default);
+
+        public Task<string> IdToUsername(int id, CancellationToken cancel = default);
     }
 }

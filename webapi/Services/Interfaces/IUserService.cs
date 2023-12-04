@@ -18,5 +18,7 @@ namespace webapi.Services.Interfaces
         public Task Delete(int id, CancellationToken cancel = default);
 
         public Task UpdateLastLogin(string username, CancellationToken cancel = default);
+
+        public Task<string> IdToUsername(int id, CancellationToken cancel = default);
     }
 }

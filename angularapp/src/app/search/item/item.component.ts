@@ -1,32 +1,33 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observer } from 'rxjs';
+import { Component, Inject } from '@angular/core';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
+import { UserEndpoints } from 'src/app/shared/contracts/endpoints/UserEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
+import { IdToUsernameResponse } from 'src/app/shared/contracts/responses/user';
 import { DateTimeFormatService } from 'src/app/shared/date-time-format.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-item',
   templateUrl: './item.component.html',
-  styleUrls: ['./item.component.css'],
+  styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent {
-  item: BasicItemResponse;
+  itemId: number = -1;
+  item: BasicItemResponse = {} as BasicItemResponse;
+  username: IdToUsernameResponse = {} as IdToUsernameResponse;
 
   constructor(
     private http: HttpClient,
-    private route: ActivatedRoute,
-    private formatter: DateTimeFormatService
+    private formatter: DateTimeFormatService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.item = {} as BasicItemResponse;
+    this.itemId = data.itemId;
   }
 
   ngOnInit(): void {
-    const itemId = this.route.snapshot.params['id'];
-
-    this.http.get(ItemEndpoints.getById(itemId)).subscribe({
-      next: (response: BasicItemResponse) => {
+    this.http.get(ItemEndpoints.getById(this.itemId)).subscribe({
+      next: (response: BasicItemResponse | any) => {
         this.item = response;
         this.item.started = this.item.started
           ? this.formatter.formatDatetime(this.item.started.toString())
@@ -34,11 +35,23 @@ export class ItemComponent {
         this.item.ends = this.item.ends
           ? this.formatter.formatDatetime(this.item.ends.toString())
           : '';
+
         console.log(this.item);
+
+        this.http
+          .get(UserEndpoints.IdToUsername(this.item.sellerId))
+          .subscribe({
+            next: (response: IdToUsernameResponse | any) => {
+              this.username = response.username;
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
       },
       error: (error) => {
         console.error(error);
       },
-    } as Partial<Observer<any>>);
+    });
   }
 }

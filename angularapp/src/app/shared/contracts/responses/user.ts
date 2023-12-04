@@ -31,3 +31,7 @@ export interface RegisterUserResponse extends IUserResponse {
 export interface LoginUserResponse extends IUserResponse {
   accessToken: string;
 }
+
+export interface IdToUsernameResponse extends IUserResponse {
+  username: string;
+}

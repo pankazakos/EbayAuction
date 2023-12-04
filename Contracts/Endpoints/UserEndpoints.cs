@@ -17,5 +17,7 @@
         public const string Create = "";
 
         public const string Login = "Login";
+
+        public const string IdToUsername = "username/{id:int}";
     }
 }

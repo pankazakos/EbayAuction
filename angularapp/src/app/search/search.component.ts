@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ItemComponent } from './item/item.component';
 
 @Component({
   selector: 'app-search',
@@ -37,21 +38,26 @@ export class SearchComponent {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog,
+    private filtersDialog: MatDialog,
+    private itemDialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
 
   private setQueryParameter(
     paramName: string,
     queryParams: ParamMap,
-    setter: (value: string) => void
+    setter: (value: string) => void,
+    defaultValue: any
   ): void {
     if (queryParams.has(paramName)) {
       const value = queryParams.get(paramName);
       if (value != null) {
         setter(value);
+        return;
       }
     }
+
+    setter(defaultValue);
   }
 
   private openNoItemsFoundSnackBar(): void {
@@ -133,18 +139,38 @@ export class SearchComponent {
     this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
       this.isLoading = true;
 
-      this.setQueryParameter('page', queryParams, (value) => {
-        this.items.page = parseInt(value);
-      });
-      this.setQueryParameter('title', queryParams, (value) => {
-        this.title = value;
-      });
-      this.setQueryParameter('minPrice', queryParams, (value) => {
-        this.minPrice = Number(value);
-      });
-      this.setQueryParameter('maxPrice', queryParams, (value) => {
-        this.maxPrice = Number(value);
-      });
+      this.setQueryParameter(
+        'page',
+        queryParams,
+        (value) => {
+          this.items.page = parseInt(value);
+        },
+        1
+      );
+      this.setQueryParameter(
+        'title',
+        queryParams,
+        (value) => {
+          this.title = value;
+        },
+        ''
+      );
+      this.setQueryParameter(
+        'minPrice',
+        queryParams,
+        (value) => {
+          this.minPrice = Number(value);
+        },
+        0
+      );
+      this.setQueryParameter(
+        'maxPrice',
+        queryParams,
+        (value) => {
+          this.maxPrice = Number(value);
+        },
+        0
+      );
 
       if (queryParams.has('category')) {
         const categoryNames = queryParams.getAll('category');
@@ -157,17 +183,50 @@ export class SearchComponent {
     });
   }
 
-  public showFiltersDialog() {
-    this.dialog.open(FiltersDialogComponent, {
+  public showFiltersDialog(): void {
+    this.filtersDialog.open(FiltersDialogComponent, {
       autoFocus: false,
       restoreFocus: false,
+    });
+  }
+
+  public clearFilters(): void {
+    let queryParams = { ...this.route.snapshot.queryParams };
+
+    delete queryParams['minPrice'];
+    delete queryParams['maxPrice'];
+    delete queryParams['category'];
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+    });
+  }
+
+  public removeTitle(): void {
+    this.title = '';
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { title: '' },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  public showItemDialog(itemId: number): void {
+    this.itemDialog.open(ItemComponent, {
+      autoFocus: false,
+      restoreFocus: false,
+      data: {
+        itemId: itemId,
+      },
     });
   }
 
   public onSearchSubmit(): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { page: this.items.page, title: this.title },
+      queryParams: { page: 1, title: this.title },
       queryParamsHandling: 'merge',
     });
   }

@@ -116,5 +116,20 @@ namespace webapi.Controllers
                 AccessToken = jwt
             });
         }
+
+        [HttpGet(UserEndpoints.IdToUsername)]
+        public async Task<IActionResult> IdToUsername([FromRoute] int id, CancellationToken cancel = default)
+        {
+            try
+            {
+                var username = await _userService.IdToUsername(id, cancel);
+                return Ok(new IdToUsernameResponse{Username = username});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }
