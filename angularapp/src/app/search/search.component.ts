@@ -43,29 +43,58 @@ export class SearchComponent {
     private snackBar: MatSnackBar
   ) {}
 
-  private setQueryParameter(
-    paramName: string,
-    queryParams: ParamMap,
-    setter: (value: string) => void,
-    defaultValue: any
-  ): void {
-    if (queryParams.has(paramName)) {
-      const value = queryParams.get(paramName);
-      if (value != null) {
-        setter(value);
-        return;
-      }
-    }
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
+      this.isLoading = true;
 
-    setter(defaultValue);
+      // Reset to default values
+      this.items.page = 1;
+      this.title = '';
+      this.minPrice = 0;
+      this.maxPrice = 0;
+      this.categoryQuery = '';
+
+      // Set the new values if they exist
+      this.setQueryParameter('page', queryParams, (value) => {
+        this.items.page = Number(value);
+      });
+
+      if (this.paginatorTop && this.paginatorBottom) {
+        console.log('changed');
+
+        this.paginatorTop.pageIndex = this.items.page - 1;
+        this.paginatorBottom.pageIndex = this.items.page - 1;
+      }
+
+      this.setQueryParameter('title', queryParams, (value) => {
+        this.title = value;
+      });
+      this.setQueryParameter('minPrice', queryParams, (value) => {
+        this.minPrice = Number(value);
+      });
+      this.setQueryParameter('maxPrice', queryParams, (value) => {
+        this.maxPrice = Number(value);
+      });
+
+      if (queryParams.has('category')) {
+        const categoryNames = queryParams.getAll('category');
+        this.categoryQuery = categoryNames
+          .map((categoryName) => `categories=${categoryName}`)
+          .join('&');
+      }
+
+      this.fetchItems();
+    });
   }
 
-  private openNoItemsFoundSnackBar(): void {
-    this.snackBar.open('No Items found', 'close', {
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      duration: 1500,
-    });
+  private fetchItems(): void {
+    if (environment.production) {
+      this.makeApiSearchCall();
+    } else {
+      setTimeout(() => {
+        this.makeApiSearchCall();
+      }, environment.timeout);
+    }
   }
 
   private makeApiSearchCall(): void {
@@ -125,91 +154,10 @@ export class SearchComponent {
       });
   }
 
-  private fetchItems(): void {
-    if (environment.production) {
-      this.makeApiSearchCall();
-    } else {
-      setTimeout(() => {
-        this.makeApiSearchCall();
-      }, environment.timeout);
-    }
-  }
-
-  ngOnInit(): void {
-    this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
-      this.isLoading = true;
-
-      this.setQueryParameter(
-        'page',
-        queryParams,
-        (value) => {
-          this.items.page = parseInt(value);
-        },
-        1
-      );
-      this.setQueryParameter(
-        'title',
-        queryParams,
-        (value) => {
-          this.title = value;
-        },
-        ''
-      );
-      this.setQueryParameter(
-        'minPrice',
-        queryParams,
-        (value) => {
-          this.minPrice = Number(value);
-        },
-        0
-      );
-      this.setQueryParameter(
-        'maxPrice',
-        queryParams,
-        (value) => {
-          this.maxPrice = Number(value);
-        },
-        0
-      );
-
-      if (queryParams.has('category')) {
-        const categoryNames = queryParams.getAll('category');
-        this.categoryQuery = categoryNames
-          .map((categoryName) => `categories=${categoryName}`)
-          .join('&');
-      }
-
-      this.fetchItems();
-    });
-  }
-
   public showFiltersDialog(): void {
     this.filtersDialog.open(FiltersDialogComponent, {
       autoFocus: false,
       restoreFocus: false,
-    });
-  }
-
-  public clearFilters(): void {
-    let queryParams = { ...this.route.snapshot.queryParams };
-
-    delete queryParams['minPrice'];
-    delete queryParams['maxPrice'];
-    delete queryParams['category'];
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: queryParams,
-    });
-  }
-
-  public removeTitle(): void {
-    this.title = '';
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { title: '' },
-      queryParamsHandling: 'merge',
     });
   }
 
@@ -223,12 +171,19 @@ export class SearchComponent {
     });
   }
 
+  public clearFilters(): void {
+    this.removeUrlParameters(['minPrice', 'maxPrice', 'category']);
+  }
+
+  public removeTitle(): void {
+    this.removeUrlParameters(['title']);
+  }
+
   public onSearchSubmit(): void {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: 1, title: this.title },
-      queryParamsHandling: 'merge',
-    });
+    this.addUrlParameters([
+      { name: 'page', value: '1' },
+      { name: 'title', value: this.title },
+    ]);
   }
 
   public onPageChange(event: PageEvent): void {
@@ -247,21 +202,61 @@ export class SearchComponent {
 
     const selectedPage = event.pageIndex + 1;
 
-    if (this.paginatorTop && this.paginatorBottom) {
-      this.paginatorTop.pageIndex = event.pageIndex;
-      this.paginatorBottom.pageIndex = event.pageIndex;
-    }
-
     this.items.page = selectedPage;
 
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { page: selectedPage },
-      queryParamsHandling: 'merge',
-    });
+    this.addUrlParameters([{ name: 'page', value: selectedPage.toString() }]);
   }
 
   public getNumberArray(limit: number): number[] {
     return Array.from({ length: limit }, (_, i) => i);
+  }
+
+  private setQueryParameter(
+    paramName: string,
+    queryParams: ParamMap,
+    setter: (value: string) => void
+  ): void {
+    if (queryParams.has(paramName)) {
+      const value = queryParams.get(paramName);
+      if (value != null) {
+        setter(value);
+        return;
+      }
+    }
+  }
+
+  private openNoItemsFoundSnackBar(): void {
+    this.snackBar.open('No Items found', 'close', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 2500,
+    });
+  }
+
+  private addUrlParameters(params: { name: string; value: string }[]): void {
+    let queryParams: Record<string, string> = {};
+
+    params.forEach((param) => {
+      queryParams[param.name] = param.value;
+    });
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  private removeUrlParameters(paramNames: string[]): void {
+    let queryParams = { ...this.route.snapshot.queryParams };
+
+    paramNames.forEach((paramName) => {
+      delete queryParams[paramName];
+    });
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+    });
   }
 }
