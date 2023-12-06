@@ -34,26 +34,32 @@
 
     <div id="items-section" fxLayout="column">
       <div class="items-top-toolbar">
-        <div class="filter-button">
-          <button mat-raised-button (click)="showFiltersDialog()">
-            <div>filters</div>
-            <mat-icon
-              aria-hidden="false"
-              aria-label="filter button"
-              fontIcon="tune"
-            ></mat-icon>
-          </button>
-        </div>
+        <div class="filters-buttons">
+          <div class="open-filters-button">
+            <button mat-raised-button (click)="showFiltersDialog()">
+              <div>filters</div>
+              <mat-icon
+                aria-hidden="false"
+                aria-label="filter button"
+                fontIcon="filter_list"
+              ></mat-icon>
+            </button>
+          </div>
 
-        <div class="clear-filters-button">
-          <button mat-raised-button (click)="clearFilters()">
-            <div>clear</div>
-            <mat-icon
-              aria-hidden="false"
-              aria-label="clear filters"
-              fontIcon="filter_list_off"
-            ></mat-icon>
-          </button>
+          <div class="clear-filters-button">
+            <button
+              mat-icon-button
+              matTooltip="clear filters"
+              matTooltipPosition="above"
+              (click)="clearFilters()"
+            >
+              <mat-icon
+                aria-hidden="false"
+                aria-label="clear filters"
+                fontIcon="filter_list_off"
+              ></mat-icon>
+            </button>
+          </div>
         </div>
 
         <mat-paginator
@@ -181,16 +187,23 @@
         </mat-card>
       </div>
 
-      <mat-paginator
-        #paginatorBottom
-        class="paginator"
-        [length]="this.items.total"
-        [pageSize]="this.items.limit"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        (page)="onPageChange($event)"
-        aria-label="Select page"
+      <div
+        class="items-bottom-toolbar"
+        fxLayout="row"
+        fxLayoutAlign="end none"
+        fxFill
       >
-      </mat-paginator>
+        <mat-paginator
+          #paginatorBottom
+          class="paginator"
+          [length]="this.items.total"
+          [pageSize]="this.items.limit"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          (page)="onPageChange($event)"
+          aria-label="Select page"
+        >
+        </mat-paginator>
+      </div>
     </div>
   </div>
 </div>

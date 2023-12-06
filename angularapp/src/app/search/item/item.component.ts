@@ -16,6 +16,10 @@ export class ItemComponent {
   itemId: number = -1;
   item: BasicItemResponse = {} as BasicItemResponse;
   username: IdToUsernameResponse = {} as IdToUsernameResponse;
+  image: { src: string; isLoading: boolean } = {} as {
+    src: string;
+    isLoading: boolean;
+  };
 
   constructor(
     private http: HttpClient,
@@ -23,6 +27,7 @@ export class ItemComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.itemId = data.itemId;
+    this.image = data.image;
   }
 
   ngOnInit(): void {

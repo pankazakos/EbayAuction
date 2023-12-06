@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatAutocompleteModule,
     MatSnackBarModule,
+    MatTooltipModule,
   ],
   exports: [
     MatIconModule,
@@ -58,6 +60,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatAutocompleteModule,
     MatSnackBarModule,
+    MatTooltipModule,
   ],
 })
 export class MaterialUiModule {}

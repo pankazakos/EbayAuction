@@ -3,7 +3,7 @@ import { IEntityResponse } from './IEntityResponse';
 interface IItemResponse extends IEntityResponse {}
 
 export interface BasicItemResponse extends IItemResponse {
-  itemId: string;
+  itemId: number;
   name: string;
   currently: number;
   buyPrice: number;

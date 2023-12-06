@@ -27,6 +27,12 @@
   gap: 1rem;
 }
 
+.filters-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .items-top-toolbar {
   width: 100%;
   display: flex;
@@ -228,10 +234,6 @@ mat-card.item-card {
 
 .item-link {
   cursor: pointer;
-}
-
-.paginator {
-  width: 100%;
 }
 
 .loading-item-card-header {

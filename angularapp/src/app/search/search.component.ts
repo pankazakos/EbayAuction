@@ -29,7 +29,7 @@ export class SearchComponent {
   maxPrice: number = 0;
   categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
-  images: { src: string; isLoading: boolean }[] = [];
+  images: { src: string; isLoading: boolean; itemId: number }[] = [];
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -58,6 +58,10 @@ export class SearchComponent {
       this.setQueryParameter('page', queryParams, (value) => {
         this.items.page = Number(value);
       });
+
+      if (this.items.page == 1) {
+        this.removeUrlParameters(['page']);
+      }
 
       if (this.paginatorTop && this.paginatorBottom) {
         console.log('changed');
@@ -116,6 +120,7 @@ export class SearchComponent {
           this.images = new Array(this.items.limit).fill({
             src: '',
             isLoading: true,
+            itemId: -1,
           });
 
           if (this.items.castEntities.length === 0) {
@@ -137,6 +142,7 @@ export class SearchComponent {
                     this.images[i] = {
                       src: imageUrl,
                       isLoading: false,
+                      itemId: item.itemId,
                     };
                   }, environment.timeout);
                 },
@@ -162,11 +168,14 @@ export class SearchComponent {
   }
 
   public showItemDialog(itemId: number): void {
+    let itemImage = this.images.find((image) => image.itemId == itemId);
+
     this.itemDialog.open(ItemComponent, {
       autoFocus: false,
       restoreFocus: false,
       data: {
         itemId: itemId,
+        image: itemImage,
       },
     });
   }
