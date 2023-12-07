@@ -129,7 +129,7 @@
           class="item-card"
           *ngFor="let item of items.castEntities; let i = index"
         >
-          <div class="item-link" (click)="showItemDialog(+item.itemId)">
+          <div class="item-link" (click)="showItemDialog(i)">
             <div class="item-card-main-container">
               <div class="item-card-image">
                 <div class="skeleton-image" *ngIf="images[i].isLoading"></div>

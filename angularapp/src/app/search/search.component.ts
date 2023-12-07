@@ -167,15 +167,13 @@ export class SearchComponent {
     });
   }
 
-  public showItemDialog(itemId: number): void {
-    let itemImage = this.images.find((image) => image.itemId == itemId);
-
+  public showItemDialog(itemIdx: number): void {
     this.itemDialog.open(ItemComponent, {
       autoFocus: false,
       restoreFocus: false,
       data: {
-        itemId: itemId,
-        image: itemImage,
+        item: this.items.castEntities[itemIdx],
+        image: this.images[itemIdx],
       },
     });
   }
