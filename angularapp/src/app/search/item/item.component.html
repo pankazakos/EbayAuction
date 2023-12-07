@@ -61,20 +61,36 @@
           <div class="info-value">{{ sellerUsername }}</div>
         </div>
       </div>
-      <div class="item-description item-box-element">
-        {{ item.data.description }} Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Facere optio dolorum voluptatibus quos cumque natus
-        tempora, atque nemo laboriosam sint. Voluptatem qui ut, veniam magni
-        aliquam labore minima quis totam dolores aliquid nemo consequatur!
-        Ducimus est harum sequi illum! Dolore ipsa natus eaque maxime ducimus
-        officia corporis, corrupti fugiat ab!
+      <div class="item-box-element">
+        <div class="item-box-element-label">Description</div>
+        <div class="item-description">
+          {{ item.data.description }} Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Facere optio dolorum voluptatibus quos cumque natus
+          tempora, atque nemo laboriosam sint. Voluptatem qui ut, veniam magni
+          aliquam labore minima quis totam dolores aliquid nemo consequatur!
+          Ducimus est harum sequi illum! Dolore ipsa natus eaque maxime ducimus
+          officia corporis, corrupti fugiat ab!
+        </div>
+      </div>
+      <div class="item-box-element">
+        <div class="item-box-element-label">List of Bids</div>
+        <div class="list-of-bids"></div>
       </div>
     </div>
-    <div id="bid-section"></div>
   </div>
 </div>
 <div mat-dialog-actions>
-  <div id="bottom-toolbar">
-    <button mat-raised-button (click)="closeDialog()">close</button>
+  <button mat-raised-button (click)="closeDialog()">close</button>
+  <div class="bid-section">
+    <form (submit)="closeDialog()">
+      <div class="bid-form">
+        <input
+          type="number"
+          min="{{ item.data.currently }}"
+          placeholder="${{ item.data.currently }}"
+        />
+        <button mat-raised-button color="primary" type="submit">bid</button>
+      </div>
+    </form>
   </div>
 </div>

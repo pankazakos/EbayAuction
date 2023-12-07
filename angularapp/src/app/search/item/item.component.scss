@@ -6,12 +6,14 @@
 }
 
 [mat-dialog-actions] {
-  padding: 1rem;
+  justify-content: space-between;
+  padding: 1.25rem;
 }
 
 #dialog-content {
   padding: 0;
   color: black;
+  overflow: hidden; // enable it on smaller devices
 }
 
 #item-main-container {
@@ -74,24 +76,62 @@ $item-box-gap: 2rem;
   }
 }
 
-.description-and-bid-section {
-  width: calc(50% - $item-box-gap);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 .item-description {
-  height: 50%;
+  max-height: 200px;
   font-size: 1rem;
   text-align: justify;
+  overflow-y: auto;
+  padding-right: 1rem; // space for the scroll-bar
+}
+
+.item-box-element-label {
+  font-size: 1.25rem;
+  color: black;
+  padding-bottom: 0.25rem;
 }
 
 .bid-section {
-  height: 50%;
+  width: 35%;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
+  align-items: center;
+  box-sizing: border-box;
+
+  form {
+    width: 100%;
+    height: 100%;
+  }
+
+  .bid-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    input {
+      background: #eeee;
+      color: rgba(0, 0, 0, 0.8);
+      width: 60%;
+      height: 2rem;
+      font-size: 1rem;
+      padding-left: 0.25rem;
+      outline: none;
+      border: none;
+    }
+
+    button {
+      width: 20%;
+    }
+
+    input:focus-within {
+      background: #e0e0e0;
+      outline: 1px solid rgba(63, 81, 181, 0.5);
+    }
+
+    input::placeholder {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
 }
 
 .info-pair {
@@ -112,6 +152,10 @@ $item-box-gap: 2rem;
 }
 
 @media (max-width: 992px) {
+  #dialog-content {
+    overflow: auto;
+  }
+
   #item-main-container {
     min-height: 90vh;
   }
