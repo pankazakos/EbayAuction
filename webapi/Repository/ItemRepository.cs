@@ -86,6 +86,9 @@ namespace webapi.Repository
         {
             var baseQuery = _dbContext.Items.AsQueryable();
 
+            // Get only published
+            baseQuery = baseQuery.Where(item => item.Active == true);
+
             // Apply filters based on the query parameters
             if (!string.IsNullOrEmpty(query.Title))
             {
