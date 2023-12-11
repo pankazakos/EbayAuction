@@ -29,6 +29,8 @@ namespace webapi.Repository
 
             item.Currently = bid.Amount;
 
+            item.NumBids++;
+
             _dbContext.Bids.Add(bid);
 
             try
