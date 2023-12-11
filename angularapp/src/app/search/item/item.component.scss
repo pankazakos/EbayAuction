@@ -76,7 +76,17 @@ $item-box-gap: 2rem;
   }
 }
 
-.item-description {
+.item-box-element-description {
+  width: 100%;
+}
+
+.description-label {
+  font-size: 1.25rem;
+  color: black;
+  padding-bottom: 0.25rem;
+}
+
+.description {
   max-height: 200px;
   font-size: 1rem;
   text-align: justify;
@@ -84,10 +94,8 @@ $item-box-gap: 2rem;
   padding-right: 1rem; // space for the scroll-bar
 }
 
-.item-box-element-label {
-  font-size: 1.25rem;
-  color: black;
-  padding-bottom: 0.25rem;
+.item-box-element-description-expand {
+  display: none; // hide on large screens
 }
 
 .bid-section {
@@ -177,10 +185,27 @@ $item-box-gap: 2rem;
   #item-box {
     width: 80%;
   }
+
+  .item-box-element-description {
+    display: none; // hide and replace it with expansion panel
+  }
+
+  .item-box-element-description-expand {
+    display: block;
+    width: 100%;
+  }
+
+  .bid-section {
+    width: 50%;
+  }
 }
 
 @media (max-width: 576px) {
   #item-box {
     width: 90%;
+  }
+
+  .bid-section {
+    width: 65%;
   }
 }
