@@ -93,13 +93,16 @@
 <div mat-dialog-actions>
   <button mat-raised-button (click)="closeDialog()">close</button>
   <div class="bid-section">
-    <form (submit)="closeDialog()">
+    <form #bidForm="ngForm" (submit)="placeBid()">
       <div class="bid-form">
         <input
           type="number"
+          name="amount"
           min="{{ item.data.currently }}"
           placeholder="${{ item.data.currently }}"
+          ngModel
         />
+
         <button mat-raised-button color="primary" type="submit">bid</button>
       </div>
     </form>
