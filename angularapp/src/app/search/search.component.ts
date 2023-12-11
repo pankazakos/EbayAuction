@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemComponent } from './item/item.component';
+import { DateTimeFormatService } from '../shared/date-time-format.service';
 
 @Component({
   selector: 'app-search',
@@ -40,7 +41,8 @@ export class SearchComponent {
     private router: Router,
     private filtersDialog: MatDialog,
     private itemDialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private formatter: DateTimeFormatService
   ) {}
 
   ngOnInit(): void {
@@ -128,6 +130,8 @@ export class SearchComponent {
           }
 
           this.items.castEntities.map((item, i) => {
+            item.started = this.formatter.convertOnlyToDate(item.started);
+            item.ends = this.formatter.convertOnlyToDate(item.ends);
             this.http
               .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
                 responseType: 'blob',
@@ -172,7 +176,7 @@ export class SearchComponent {
       autoFocus: false,
       restoreFocus: false,
       data: {
-        item: this.items.castEntities[itemIdx],
+        item: { ...this.items.castEntities[itemIdx] },
         image: this.images[itemIdx],
       },
     });

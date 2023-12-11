@@ -155,29 +155,27 @@
                   <mat-list-item>
                     <div class="item-content-element">
                       <div>Current price:</div>
-                      <div>{{ item.currently }}$</div>
+                      <div>${{ item.currently }}</div>
                     </div>
                   </mat-list-item>
                   <mat-list-item>
                     <div class="item-content-element">
                       <div>Buy at:</div>
                       <div>
-                        {{ item.buyPrice ? item.buyPrice + "$" : "-" }}
+                        {{ item.buyPrice ? "$" + item.buyPrice : "-" }}
                       </div>
                     </div>
                   </mat-list-item>
                   <mat-list-item>
                     <div class="item-content-element">
-                      <div>Starting bid:</div>
-                      <div>{{ item.firstBid }}$</div>
+                      <div>Started:</div>
+                      <div>{{ item.started }}</div>
                     </div>
                   </mat-list-item>
                   <mat-list-item>
                     <div class="item-content-element">
-                      <div>Number of bids:</div>
-                      <div>
-                        {{ item.numBids }}
-                      </div>
+                      <div>Ends:</div>
+                      <div>{{ item.ends }}</div>
                     </div>
                   </mat-list-item>
                 </mat-card-content>
