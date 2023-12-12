@@ -87,6 +87,23 @@
   align-items: center;
 }
 
+#notification-section {
+  width: 100%;
+}
+
+.notification-icon {
+  margin-right: 0.25rem;
+}
+
+.notification-panel {
+  background-color: $tertiary-container;
+  color: $on-tertiary-container;
+}
+
+.notification-message {
+  line-height: 1.5rem;
+}
+
 #main-spinner {
   display: flex;
   justify-content: center;
