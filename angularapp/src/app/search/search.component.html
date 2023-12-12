@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div id="notification-section" *ngIf="!removedExpansionPanel">
+    <div id="notification-section" *ngIf="!removedExpansionPanel && !authData?.isLoggedIn">
       <mat-expansion-panel expanded class="notification-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>

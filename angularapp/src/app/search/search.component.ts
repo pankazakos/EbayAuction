@@ -11,6 +11,7 @@ import { FiltersDialogComponent } from './filters-dialog/filters-dialog.componen
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemComponent } from './item/item.component';
 import { DateTimeFormatService } from '../shared/date-time-format.service';
+import { AuthData, AuthService } from '../shared/auth-service.service';
 
 @Component({
   selector: 'app-search',
@@ -30,8 +31,11 @@ export class SearchComponent {
   maxPrice: number = 0;
   categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
+
   images: { src: string; isLoading: boolean; itemId: number }[] = [];
+
   removedExpansionPanel: boolean = false;
+  authData: AuthData | null = null;
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -43,10 +47,15 @@ export class SearchComponent {
     private filtersDialog: MatDialog,
     private itemDialog: MatDialog,
     private snackBar: MatSnackBar,
-    private formatter: DateTimeFormatService
+    private formatter: DateTimeFormatService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.authService.authData$.subscribe(
+      (authData) => (this.authData = authData)
+    );
+
     this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
       this.isLoading = true;
 
