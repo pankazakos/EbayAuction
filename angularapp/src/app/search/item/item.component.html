@@ -104,8 +104,8 @@
         <input
           type="number"
           name="amount"
-          min="{{ item.data.currently }}"
-          placeholder="${{ item.data.currently }}"
+          min="{{ item.data.currently + 1 }}"
+          placeholder="${{ item.data.currently + 1}}"
           [disabled]="isOwner()"
           ngModel
         />

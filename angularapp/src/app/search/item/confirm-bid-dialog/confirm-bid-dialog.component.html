@@ -1,8 +1,18 @@
 <div class="dialog-container">
   <div class="dialog-content">
-    <div class="question">
-      Are you sure you want to place a bid of ${{ data.bidAmount }} on
-      {{ data.itemName }}
+    <div class="confirmation">
+      <div>
+        <mat-icon
+          aria-label="warning icon"
+          fontIcon="warning"
+          class="warning-icon"
+        ></mat-icon>
+      </div>
+
+      <div class="question">
+        Are you sure you want to place a bid of ${{ data.bidAmount }} on
+        {{ data.itemName }}?
+      </div>
     </div>
     <div class="action-buttons">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>

@@ -1,10 +1,18 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Component, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserEndpoints } from 'src/app/shared/contracts/endpoints/UserEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
 import { IdToUsernameResponse } from 'src/app/shared/contracts/responses/user';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { DateTimeFormatService } from 'src/app/shared/date-time-format.service';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
@@ -12,6 +20,7 @@ import { ConfirmBidDialogComponent } from './confirm-bid-dialog/confirm-bid-dial
 import { AuthData, AuthService } from 'src/app/shared/auth-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
+import { Router } from '@angular/router';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -34,10 +43,13 @@ export class ItemComponent {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
+    private itemDialogRef: MatDialogRef<ItemComponent>,
     private confirmBidDialog: MatDialog,
     private formatter: DateTimeFormatService,
     private authService: AuthService,
     private invalidBid: MatSnackBar,
+    private successfulBid: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.item.data = data.item;
@@ -72,58 +84,85 @@ export class ItemComponent {
       });
   }
 
+  private openInvalidBidAlert(): void {
+    this.invalidBid.open('Invalid bid amount', 'Close', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 2500,
+      panelClass: ['error-snackbar'],
+      data: {
+        item: this.item.data,
+      },
+    });
+  }
+
   placeBid(): void {
     const bid = this.bidForm.value as AddBidRequest;
 
-    this.confirmBid();
-
-    this.http
-      .post<AddBidRequest>(
-        BidEndpoints.create,
-        {
-          itemId: this.item.data.itemId,
-          amount: bid.amount,
-        },
-        {
-          headers: this.headers,
-        }
-      )
-      .subscribe({
-        next: (response: BasicBidResponse | any) => {
-          this.bid = response;
-          this.item.data.currently = this.bid.amount;
-          this.item.data.numBids += 1;
-          this.bidForm.reset();
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-  }
-
-  confirmBid(): void {
-    const bid = this.bidForm.value as AddBidRequest;
-
     if (bid.amount == Number('') || bid.amount <= this.item.data.currently) {
-      this.invalidBid.open('Invalid bid amount', 'Close', {
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        duration: 2500,
-        panelClass: ['error-snackbar'],
-      });
-
+      this.openInvalidBidAlert();
       return;
     }
 
-    this.confirmBidDialog.open(ConfirmBidDialogComponent, {
-      height: '12rem',
-      width: '30vw',
-      autoFocus: false,
-      disableClose: true,
-      data: {
-        itemName: this.item.data.name,
-        bidAmount: this.bidForm.value.amount,
-      },
+    this.confirmBid(bid);
+  }
+
+  private confirmBid(bid: AddBidRequest): void {
+    const confirmDialogRef = this.confirmBidDialog.open(
+      ConfirmBidDialogComponent,
+      {
+        autoFocus: false,
+        disableClose: true,
+        data: {
+          itemName: this.item.data.name,
+          bidAmount: this.bidForm.value.amount,
+        },
+      }
+    );
+
+    confirmDialogRef.afterClosed().subscribe((result) => {
+      if (result === 'confirm') {
+        this.http
+          .post<AddBidRequest>(
+            BidEndpoints.create,
+            {
+              itemId: this.item.data.itemId,
+              amount: bid.amount,
+            },
+            {
+              headers: this.headers,
+            }
+          )
+          .subscribe({
+            next: (response: BasicBidResponse | any) => {
+              this.bid = response;
+              this.item.data.currently = this.bid.amount;
+              this.item.data.numBids += 1;
+
+              this.successfulBid.open('Bid successful!', 'Ok', {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                duration: 3000,
+                panelClass: ['basic-snackbar'],
+              });
+
+              this.bidForm.reset();
+            },
+            error: (error: HttpErrorResponse) => {
+              console.error(error);
+              if (error.status === 401) {
+                alert('Your session has expired. Please log in again.');
+                this.authService.logoutUser();
+                this.itemDialogRef.close();
+                this.router.navigate(['/login']);
+              } else if (error.status === 400) {
+                this.openInvalidBidAlert();
+              } else if (error.status === 500) {
+                alert('Internal server error. Please try again later.');
+              }
+            },
+          });
+      }
     });
   }
 
