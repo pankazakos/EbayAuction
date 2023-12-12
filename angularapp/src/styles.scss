@@ -116,3 +116,15 @@ body {
 mat-paginator {
   background-color: $background;
 }
+
+.mat-mdc-snack-bar-container {
+  &.basic-snackbar {
+    --mdc-snackbar-container-color: #dae4e5;
+    --mdc-snackbar-supporting-text-color: #3f4949;
+  }
+
+  &.error-snackbar {
+    --mdc-snackbar-container-color: #ffdad6;
+    --mdc-snackbar-supporting-text-color: #410002;
+  }
+}

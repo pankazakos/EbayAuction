@@ -241,6 +241,7 @@ export class SearchComponent {
       horizontalPosition: 'center',
       verticalPosition: 'top',
       duration: 2500,
+      panelClass: ['error-snackbar'],
     });
   }
 
