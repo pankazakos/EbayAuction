@@ -48,8 +48,8 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  background-color: $surface-variant;
-  color: $on-surface-variant;
+  background-color: $input-container;
+  color: $on-input-container;
   border-radius: 2rem;
 
   form {
@@ -73,7 +73,7 @@
 }
 
 .search-box:focus-within {
-  background: darken($color: $surface-variant, $amount: 5%);
+  background-color: darken($color: $input-container, $amount: 5%);
   outline: 1px solid $outline;
 }
 

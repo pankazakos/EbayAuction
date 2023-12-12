@@ -119,7 +119,7 @@ $item-box-gap: 2rem;
     align-items: center;
 
     input {
-      background: #eeee;
+      background-color: $input-container;
       color: rgba(0, 0, 0, 0.8);
       width: 60%;
       height: 2rem;
@@ -134,7 +134,7 @@ $item-box-gap: 2rem;
     }
 
     input:focus-within {
-      background: #e0e0e0;
+      background-color: darken($color: $input-container, $amount: 5%);
       outline: 1px solid $outline;
     }
 
