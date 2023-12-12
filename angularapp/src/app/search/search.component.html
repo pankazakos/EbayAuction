@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div id="notification-section">
+    <div id="notification-section" *ngIf="!removedExpansionPanel">
       <mat-expansion-panel expanded class="notification-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -43,16 +43,6 @@
               fontIcon="lightbulb"
             ></mat-icon>
             <span>Note</span>
-            <!-- <div>
-              <button mat-icon-button>
-                <mat-icon
-                  class="close-icon"
-                  aria-hidden="false"
-                  aria-label="expansion panel close icon"
-                  fontIcon="close"
-                ></mat-icon>
-              </button>
-            </div> -->
           </mat-panel-title>
         </mat-expansion-panel-header>
         <p class="notification-message">
@@ -61,6 +51,17 @@
           auctions. If you want to become an authorized user, you can sign up
           for free and also be able to add your own items for sale.
         </p>
+        <mat-action-row>
+          <button
+            mat-stroked-button
+            matTooltip="Remove this note"
+            matTooltipPosition="above"
+            (click)="removeNotification()"
+            color="primary"
+          >
+            Dismiss
+          </button>
+        </mat-action-row>
       </mat-expansion-panel>
     </div>
 

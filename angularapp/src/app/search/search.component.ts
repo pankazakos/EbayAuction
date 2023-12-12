@@ -31,6 +31,7 @@ export class SearchComponent {
   categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
   images: { src: string; isLoading: boolean; itemId: number }[] = [];
+  removedExpansionPanel: boolean = false;
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -223,6 +224,10 @@ export class SearchComponent {
 
   public getNumberArray(limit: number): number[] {
     return Array.from({ length: limit }, (_, i) => i);
+  }
+
+  public removeNotification(): void {
+    this.removedExpansionPanel = true;
   }
 
   private setQueryParameter(
