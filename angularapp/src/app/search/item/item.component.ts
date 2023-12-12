@@ -11,6 +11,7 @@ import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
 import { ConfirmBidDialogComponent } from './confirm-bid-dialog/confirm-bid-dialog.component';
 import { AuthData, AuthService } from 'src/app/shared/auth-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -76,25 +77,28 @@ export class ItemComponent {
 
     this.confirmBid();
 
-    // this.http
-    //   .post<AddBidRequest>(
-    //     BidEndpoints.create,
-    //     {
-    //       itemId: this.item.data.itemId,
-    //       amount: bid.amount,
-    //     },
-    //     {
-    //       headers: this.headers,
-    //     }
-    //   )
-    //   .subscribe({
-    //     next: (response: BasicBidResponse | any) => {
-    //       this.bid = response;
-    //     },
-    //     error: (error) => {
-    //       console.error(error);
-    //     },
-    //   });
+    this.http
+      .post<AddBidRequest>(
+        BidEndpoints.create,
+        {
+          itemId: this.item.data.itemId,
+          amount: bid.amount,
+        },
+        {
+          headers: this.headers,
+        }
+      )
+      .subscribe({
+        next: (response: BasicBidResponse | any) => {
+          this.bid = response;
+          this.item.data.currently = this.bid.amount;
+          this.item.data.numBids += 1;
+          this.bidForm.reset();
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
   }
 
   confirmBid(): void {
