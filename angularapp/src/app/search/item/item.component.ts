@@ -9,6 +9,7 @@ import { DateTimeFormatService } from 'src/app/shared/date-time-format.service';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
 import { ConfirmBidDialogComponent } from './confirm-bid-dialog/confirm-bid-dialog.component';
+import { AuthData, AuthService } from 'src/app/shared/auth-service.service';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -19,11 +20,13 @@ type loadingImage = { src: string; isLoading: boolean };
   styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent {
-  sellerUsername: IdToUsernameResponse = {} as IdToUsernameResponse;
+  seller: IdToUsernameResponse = {} as IdToUsernameResponse;
   item: loadingItem = {} as loadingItem;
   image: loadingImage = {} as loadingImage;
   headers: HttpHeaders;
   bid: BasicBidResponse = {} as BasicBidResponse;
+
+  authData: AuthData | null = null;
 
   @ViewChild('bidForm') bidForm!: NgForm;
 
@@ -31,6 +34,7 @@ export class ItemComponent {
     private http: HttpClient,
     private confirmBidDialog: MatDialog,
     private formatter: DateTimeFormatService,
+    private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.item.data = data.item;
@@ -42,6 +46,10 @@ export class ItemComponent {
   }
 
   ngOnInit(): void {
+    this.authService.authData$.subscribe(
+      (authData) => (this.authData = authData)
+    );
+
     this.item.data.started = this.item.data.started
       ? this.formatter.formatDatetime(this.item.data.started.toString())
       : '';
@@ -53,7 +61,7 @@ export class ItemComponent {
       .get(UserEndpoints.IdToUsername(this.item.data.sellerId))
       .subscribe({
         next: (response: IdToUsernameResponse | any) => {
-          this.sellerUsername = response.username;
+          this.seller = response;
         },
         error: (error) => {
           console.error(error);
@@ -98,5 +106,9 @@ export class ItemComponent {
         bidAmount: this.bidForm.value.amount,
       },
     });
+  }
+
+  isOwner(): boolean {
+    return this.authData?.username === this.seller.username;
   }
 }

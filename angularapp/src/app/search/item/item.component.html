@@ -58,7 +58,9 @@
         </div>
         <div class="info-pair">
           <div class="info-label">Seller:</div>
-          <div class="info-value">{{ sellerUsername }}</div>
+          <div class="info-value">
+            {{ isOwner() ? "you" : seller.username }}
+          </div>
         </div>
       </div>
       <div class="item-box-element-description">
@@ -92,18 +94,30 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button mat-dialog-close>close</button>
-  <div class="bid-section">
+  <div class="bid-section" *ngIf="authData?.isLoggedIn">
     <form #bidForm="ngForm" (submit)="placeBid()">
-      <div class="bid-form">
+      <div
+        class="bid-form"
+        [matTooltip]="isOwner() ? 'You cannot bid on your own items' : ''"
+        matTooltipPosition="above"
+      >
         <input
           type="number"
           name="amount"
           min="{{ item.data.currently }}"
           placeholder="${{ item.data.currently }}"
+          [disabled]="isOwner()"
           ngModel
         />
 
-        <button mat-raised-button color="accent" type="submit">bid</button>
+        <button
+          mat-raised-button
+          color="accent"
+          type="submit"
+          [disabled]="isOwner()"
+        >
+          bid
+        </button>
       </div>
     </form>
   </div>
