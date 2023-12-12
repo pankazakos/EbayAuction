@@ -119,12 +119,26 @@ mat-paginator {
 
 .mat-mdc-snack-bar-container {
   &.basic-snackbar {
-    --mdc-snackbar-container-color: #dae4e5;
-    --mdc-snackbar-supporting-text-color: #3f4949;
+    --mdc-snackbar-container-color: #cce8e9;
+    --mdc-snackbar-supporting-text-color: #041f21;
   }
 
   &.error-snackbar {
     --mdc-snackbar-container-color: #ffdad6;
     --mdc-snackbar-supporting-text-color: #410002;
+  }
+}
+
+@media (min-width: 600px) {
+  .mat-mdc-snack-bar-container {
+    &.basic-snackbar {
+      margin-top: 10%;
+      scale: 1.3;
+    }
+
+    &.error-snackbar {
+      margin-top: 10%;
+      scale: 1.3;
+    }
   }
 }
