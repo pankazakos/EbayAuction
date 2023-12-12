@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-confirm-bid-dialog',
@@ -7,5 +8,20 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./confirm-bid-dialog.component.scss'],
 })
 export class ConfirmBidDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(
+    private successfulBid: MatSnackBar,
+    private dialogRef: MatDialogRef<ConfirmBidDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
+
+  onConfirmBid(): void {
+    this.successfulBid.open('Bid successful!', 'Ok', {
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 3000,
+      panelClass: ['basic-snackbar'],
+    });
+
+    this.dialogRef.close();
+  }
 }
