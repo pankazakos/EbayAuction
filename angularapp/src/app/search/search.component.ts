@@ -118,43 +118,7 @@ export class SearchComponent {
         next: (response: PaginatedResponse<BasicItemResponse> | any) => {
           this.items = response;
           this.isLoading = false;
-          console.log(this.items);
-          this.images = new Array(this.items.limit).fill({
-            src: '',
-            isLoading: true,
-            itemId: -1,
-          });
-
-          if (this.items.castEntities.length === 0) {
-            this.openNoItemsFoundSnackBar();
-          }
-
-          this.items.castEntities.map((item, i) => {
-            item.started = this.formatter.convertOnlyToDate(item.started);
-            item.ends = this.formatter.convertOnlyToDate(item.ends);
-            this.http
-              .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
-                responseType: 'blob',
-              })
-              .subscribe({
-                next: (imageData: Blob) => {
-                  setTimeout(() => {
-                    const blob = new Blob([imageData], {
-                      type: 'image/jpeg',
-                    });
-                    const imageUrl = URL.createObjectURL(blob);
-                    this.images[i] = {
-                      src: imageUrl,
-                      isLoading: false,
-                      itemId: item.itemId,
-                    };
-                  }, environment.timeout);
-                },
-                error: (error) => {
-                  console.error(error);
-                },
-              });
-          });
+          this.fetchImages();
         },
         error: (error) => {
           console.error(error);
@@ -162,6 +126,45 @@ export class SearchComponent {
           alert('An error occured while searching for items');
         },
       });
+  }
+
+  private fetchImages(): void {
+    this.images = new Array(this.items.limit).fill({
+      src: '',
+      isLoading: true,
+      itemId: -1,
+    });
+
+    if (this.items.castEntities.length === 0) {
+      this.openNoItemsFoundSnackBar();
+    }
+
+    this.items.castEntities.map((item, i) => {
+      item.started = this.formatter.convertOnlyToDate(item.started);
+      item.ends = this.formatter.convertOnlyToDate(item.ends);
+      this.http
+        .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
+          responseType: 'blob',
+        })
+        .subscribe({
+          next: (imageData: Blob) => {
+            setTimeout(() => {
+              const blob = new Blob([imageData], {
+                type: 'image/jpeg',
+              });
+              const imageUrl = URL.createObjectURL(blob);
+              this.images[i] = {
+                src: imageUrl,
+                isLoading: false,
+                itemId: item.itemId,
+              };
+            }, environment.timeout);
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
+    });
   }
 
   public showFiltersDialog(): void {
