@@ -10,6 +10,7 @@
         (change)="onPriceRangeChange($event)"
       >
         <mat-chip-option
+          color="accent"
           *ngFor="let range of this.filterService.priceRanges"
           [value]="range.id"
           [selected]="this.filterService.selected == range.id"
@@ -18,6 +19,7 @@
       </mat-chip-listbox>
       <div id="price-range-slider">
         <mat-slider
+          color="accent"
           min="{{ this.filterService.sliderMinPrice }}"
           max="{{ this.filterService.sliderMaxPrice }}"
           [disabled]="this.filterService.disabledSlider"
@@ -98,7 +100,7 @@
   <button
     class="apply-filters-button"
     mat-raised-button
-    color="primary"
+    color="accent"
     (click)="applyFilters()"
   >
     Apply

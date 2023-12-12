@@ -1,3 +1,5 @@
+@import "../../styles.scss";
+
 #search-body {
   min-height: 100%;
   width: 65%;
@@ -46,8 +48,8 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  background-color: #f6f6f6;
-  color: rgba(0, 0, 0, 0.8);
+  background-color: $surface-variant;
+  color: $on-surface-variant;
   border-radius: 2rem;
 
   form {
@@ -71,8 +73,8 @@
 }
 
 .search-box:focus-within {
-  background: #eeeeee;
-  outline: 1px solid #006064;
+  background: darken($color: $surface-variant, $amount: 5%);
+  outline: 1px solid $outline;
 }
 
 .hidden-button {
