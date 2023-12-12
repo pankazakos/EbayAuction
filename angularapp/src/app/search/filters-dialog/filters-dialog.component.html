@@ -1,67 +1,77 @@
-<div id="filters-dialog-main-container">
-  <button mat-icon-button class="close-button" (click)="closeDialog()">
-    <mat-icon aria-label="close icon" fontIcon="close"></mat-icon>
-  </button>
-  <div id="filters-container-content">
-    <div id="select-price-range" fxFlex="50%" fxLayout="column">
-      <h2>Price range</h2>
-      <mat-chip-listbox
-        aria-label="price range selection"
-        (change)="onPriceRangeChange($event)"
-      >
-        <mat-chip-option
-          color="accent"
-          *ngFor="let range of this.filterService.priceRanges"
-          [value]="range.id"
-          [selected]="this.filterService.selected == range.id"
-          >{{ range.id }}</mat-chip-option
+<div mat-dialog-title>
+  <div class="dialog-title">Filters</div>
+  <div>
+    <button mat-icon-button class="top-close-button" mat-dialog-close>
+      <mat-icon aria-label="close icon" fontIcon="close"></mat-icon>
+    </button>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div id="filters-dialog-main-container">
+    <div id="filters-container-content">
+      <div id="select-price-range" fxFlex="50%" fxLayout="column">
+        <div class="filter-label">Price range</div>
+        <mat-chip-listbox
+          aria-label="price range selection"
+          (change)="onPriceRangeChange($event)"
         >
-      </mat-chip-listbox>
-      <div id="price-range-slider">
-        <mat-slider
-          color="accent"
-          min="{{ this.filterService.sliderMinPrice }}"
-          max="{{ this.filterService.sliderMaxPrice }}"
-          [disabled]="this.filterService.disabledSlider"
-        >
-          <input
-            [(ngModel)]="this.filterService.minPrice"
-            matSliderStartThumb
-          />
-          <input [(ngModel)]="this.filterService.maxPrice" matSliderEndThumb />
-        </mat-slider>
-      </div>
-      <div id="price-range-inputs" fxLayout="row">
-        <mat-form-field floatLabel="always">
-          <mat-label>From</mat-label>
-          <input
-            matInput
-            type="number"
-            class="price-range-from"
-            placeholder="0"
-            [(ngModel)]="this.filterService.minPrice"
-            min="0"
-            max="{{ this.filterService.maxPrice }}"
-          />
-          <span matTextPrefix>$&nbsp;</span>
-        </mat-form-field>
+          <mat-chip-option
+            color="accent"
+            *ngFor="let range of this.filterService.priceRanges"
+            [value]="range.id"
+            [selected]="this.filterService.selected == range.id"
+            >{{ range.id }}</mat-chip-option
+          >
+        </mat-chip-listbox>
+        <div id="price-range-slider">
+          <mat-slider
+            color="accent"
+            min="{{ this.filterService.sliderMinPrice }}"
+            max="{{ this.filterService.sliderMaxPrice }}"
+            [disabled]="this.filterService.disabledSlider"
+          >
+            <input
+              [(ngModel)]="this.filterService.minPrice"
+              matSliderStartThumb
+            />
+            <input
+              [(ngModel)]="this.filterService.maxPrice"
+              matSliderEndThumb
+            />
+          </mat-slider>
+        </div>
+        <div id="price-range-inputs" fxLayout="row">
+          <mat-form-field floatLabel="always">
+            <mat-label>From</mat-label>
+            <input
+              matInput
+              type="number"
+              class="price-range-from"
+              placeholder="0"
+              [(ngModel)]="this.filterService.minPrice"
+              min="0"
+              max="{{ this.filterService.maxPrice }}"
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
 
-        <mat-form-field floatLabel="always">
-          <mat-label>To</mat-label>
-          <input
-            matInput
-            type="number"
-            class="price-range-to"
-            placeholder="0"
-            [(ngModel)]="this.filterService.maxPrice"
-            min="0"
-            max="{{ this.filterService.maxPrice }}"
-          />
-          <span matTextPrefix>$&nbsp;</span>
-        </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label>To</mat-label>
+            <input
+              matInput
+              type="number"
+              class="price-range-to"
+              placeholder="0"
+              [(ngModel)]="this.filterService.maxPrice"
+              min="0"
+              max="{{ this.filterService.maxPrice }}"
+            />
+            <span matTextPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
       </div>
       <div id="select-categories" fxFlex="50%" fxLayout="column" fxFill>
-        <h2>Categories</h2>
+        <div class="filter-label">Categories</div>
         <mat-chip-listbox class="category-chips">
           <mat-chip
             *ngFor="let category of this.filterService.selectedCategoryNames"
@@ -97,12 +107,25 @@
       </div>
     </div>
   </div>
-  <button
-    class="apply-filters-button"
-    mat-raised-button
-    color="accent"
-    (click)="applyFilters()"
-  >
-    Apply
-  </button>
+</div>
+<div mat-dialog-actions>
+  <div>
+    <button
+      class="bottom-close-button"
+      mat-raised-button
+      (click)="closeDialog()"
+    >
+      Close
+    </button>
+  </div>
+  <div>
+    <button
+      class="apply-filters-button"
+      mat-raised-button
+      color="accent"
+      (click)="applyFilters()"
+    >
+      Apply
+    </button>
+  </div>
 </div>

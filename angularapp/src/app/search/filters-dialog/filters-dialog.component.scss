@@ -1,9 +1,28 @@
+[mat-dialog-title] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 9px;
+}
+
+[mat-dialog-content] {
+  padding: 0;
+  color: black;
+}
+
+[mat-dialog-actions] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+}
+
 #filters-dialog-main-container {
   display: flex;
   justify-content: center;
-  padding-top: 5%;
   width: 50vw;
   height: 60vh;
+  padding-top: 1rem;
 }
 
 #filters-container-content {
@@ -11,6 +30,38 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.filter-label {
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+#price-range-slider .mat-mdc-slider {
+  width: 80%;
+}
+
+#price-range-inputs {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#price-range-inputs mat-form-field {
+  width: 45%;
+}
+
+.price-range-from {
+  width: 100%;
+}
+
+.price-range-to {
+  width: 100%;
+}
+
+.category-chips {
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 1200px) {
@@ -49,42 +100,4 @@
   #filters-dialog-main-container {
     height: 90vh;
   }
-}
-
-#price-range-slider .mat-mdc-slider {
-  width: 80%;
-}
-
-#price-range-inputs {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-#price-range-inputs mat-form-field {
-  width: 45%;
-}
-
-.price-range-from {
-  width: 100%;
-}
-
-.price-range-to {
-  width: 100%;
-}
-
-.category-chips {
-  margin-bottom: 1rem;
-}
-
-.close-button {
-  position: absolute;
-  top: 3%;
-  right: 3%;
-}
-
-.apply-filters-button {
-  position: absolute;
-  bottom: 5%;
-  right: 5%;
 }
