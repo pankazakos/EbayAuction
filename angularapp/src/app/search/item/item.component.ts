@@ -4,11 +4,11 @@ import { NgForm } from '@angular/forms';
 import { UserEndpoints } from 'src/app/shared/contracts/endpoints/UserEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
 import { IdToUsernameResponse } from 'src/app/shared/contracts/responses/user';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { DateTimeFormatService } from 'src/app/shared/date-time-format.service';
-import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
+import { ConfirmBidDialogComponent } from './confirm-bid-dialog/confirm-bid-dialog.component';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -29,8 +29,8 @@ export class ItemComponent {
 
   constructor(
     private http: HttpClient,
+    private confirmBidDialog: MatDialog,
     private formatter: DateTimeFormatService,
-    private dialogRef: MatDialogRef<ItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.item.data = data.item;
@@ -61,31 +61,42 @@ export class ItemComponent {
       });
   }
 
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
-
-  placeBid() {
+  placeBid(): void {
     const bid = this.bidForm.value as AddBidRequest;
 
-    this.http
-      .post<AddBidRequest>(
-        BidEndpoints.create,
-        {
-          itemId: this.item.data.itemId,
-          amount: bid.amount,
-        },
-        {
-          headers: this.headers,
-        }
-      )
-      .subscribe({
-        next: (response: BasicBidResponse | any) => {
-          this.bid = response;
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
+    this.confirmBid();
+
+    // this.http
+    //   .post<AddBidRequest>(
+    //     BidEndpoints.create,
+    //     {
+    //       itemId: this.item.data.itemId,
+    //       amount: bid.amount,
+    //     },
+    //     {
+    //       headers: this.headers,
+    //     }
+    //   )
+    //   .subscribe({
+    //     next: (response: BasicBidResponse | any) => {
+    //       this.bid = response;
+    //     },
+    //     error: (error) => {
+    //       console.error(error);
+    //     },
+    //   });
+  }
+
+  confirmBid(): void {
+    this.confirmBidDialog.open(ConfirmBidDialogComponent, {
+      height: '12rem',
+      width: '30vw',
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        itemName: this.item.data.name,
+        bidAmount: this.bidForm.value.amount,
+      },
+    });
   }
 }

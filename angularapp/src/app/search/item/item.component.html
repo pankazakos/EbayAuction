@@ -3,7 +3,7 @@
     {{ item.data.name }}
   </div>
   <div>
-    <button mat-icon-button class="top-close-button" (click)="closeDialog()">
+    <button mat-icon-button class="top-close-button" mat-dialog-close>
       <mat-icon aria-label="close icon" fontIcon="close"></mat-icon>
     </button>
   </div>
@@ -91,7 +91,7 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="closeDialog()">close</button>
+  <button mat-raised-button mat-dialog-close>close</button>
   <div class="bid-section">
     <form #bidForm="ngForm" (submit)="placeBid()">
       <div class="bid-form">
@@ -103,7 +103,7 @@
           ngModel
         />
 
-        <button mat-raised-button color="primary" type="submit">bid</button>
+        <button mat-raised-button color="accent" type="submit">bid</button>
       </div>
     </form>
   </div>
