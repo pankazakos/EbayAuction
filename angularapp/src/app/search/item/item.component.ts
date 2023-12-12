@@ -10,6 +10,7 @@ import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
 import { ConfirmBidDialogComponent } from './confirm-bid-dialog/confirm-bid-dialog.component';
 import { AuthData, AuthService } from 'src/app/shared/auth-service.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -35,6 +36,7 @@ export class ItemComponent {
     private confirmBidDialog: MatDialog,
     private formatter: DateTimeFormatService,
     private authService: AuthService,
+    private invalidBid: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.item.data = data.item;
@@ -96,6 +98,19 @@ export class ItemComponent {
   }
 
   confirmBid(): void {
+    const bid = this.bidForm.value as AddBidRequest;
+
+    if (bid.amount == Number('') || bid.amount <= this.item.data.currently) {
+      this.invalidBid.open('Invalid bid amount', 'Close', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 2500,
+        panelClass: ['error-snackbar'],
+      });
+
+      return;
+    }
+
     this.confirmBidDialog.open(ConfirmBidDialogComponent, {
       height: '12rem',
       width: '30vw',
