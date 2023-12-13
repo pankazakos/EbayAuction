@@ -32,17 +32,32 @@
       </div>
     </div>
 
-    <div id="notification-section" *ngIf="!removedExpansionPanel && !authData?.isLoggedIn">
+    <div
+      id="notification-section"
+      *ngIf="!removedExpansionPanel && !authData?.isLoggedIn"
+    >
       <mat-expansion-panel expanded class="notification-panel">
         <mat-expansion-panel-header>
-          <mat-panel-title>
-            <mat-icon
-              class="notification-icon"
-              aria-hidden="false"
-              aria-label="lightbulb icon"
-              fontIcon="lightbulb"
-            ></mat-icon>
-            <span>Note</span>
+          <mat-panel-title class="panel-title">
+            <div class="note-label">
+              <mat-icon
+                class="notification-icon"
+                aria-hidden="false"
+                aria-label="info icon"
+                fontIcon="info"
+              ></mat-icon>
+              <span>Note</span>
+            </div>
+            <div>
+              <button mat-icon-button (click)="removeNotification()">
+                <mat-icon
+                  class="close-icon"
+                  aria-label="close icon"
+                  fontIcon="close"
+                >
+                </mat-icon>
+              </button>
+            </div>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <p class="notification-message">
@@ -51,17 +66,6 @@
           auctions. If you want to become an authorized user, you can sign up
           for free and also be able to add your own items for sale.
         </p>
-        <mat-action-row>
-          <button
-            mat-stroked-button
-            matTooltip="Remove this note"
-            matTooltipPosition="above"
-            (click)="removeNotification()"
-            color="primary"
-          >
-            Dismiss
-          </button>
-        </mat-action-row>
       </mat-expansion-panel>
     </div>
 

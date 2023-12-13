@@ -89,11 +89,17 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button mat-dialog-close>close</button>
-  <div class="bid-section" *ngIf="authData?.isLoggedIn">
+  <div class="bid-section">
     <form #bidForm="ngForm" (submit)="placeBid()">
       <div
         class="bid-form"
-        [matTooltip]="isOwner() ? 'You cannot bid on your own items' : ''"
+        [matTooltip]="
+          authData?.isLoggedIn == false
+            ? 'You must be logged in to bid'
+            : isOwner()
+            ? 'You cannot bid on your own items'
+            : ''
+        "
         matTooltipPosition="above"
       >
         <input
@@ -109,7 +115,7 @@
               ? item.data.currently + 1
               : item.data.currently
           }}"
-          [disabled]="isOwner()"
+          [disabled]="isOwner() || authData?.isLoggedIn == false"
           ngModel
         />
 
@@ -117,7 +123,7 @@
           mat-raised-button
           color="accent"
           type="submit"
-          [disabled]="isOwner()"
+          [disabled]="isOwner() || authData?.isLoggedIn == false"
         >
           bid
         </button>
