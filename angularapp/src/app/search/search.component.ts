@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { BasicItemResponse } from '../shared/contracts/responses/item';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -18,7 +18,7 @@ import { AuthData, AuthService } from '../shared/auth-service.service';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent {
+export class SearchComponent implements AfterViewInit {
   public items: PaginatedResponse<BasicItemResponse> = {
     castEntities: [],
     total: 0,
@@ -78,13 +78,6 @@ export class SearchComponent {
         this.removeUrlParameters(['page']);
       }
 
-      if (this.paginatorTop && this.paginatorBottom) {
-        console.log('changed');
-
-        this.paginatorTop.pageIndex = this.items.page - 1;
-        this.paginatorBottom.pageIndex = this.items.page - 1;
-      }
-
       this.setQueryParameter('title', queryParams, (value) => {
         this.title = value;
       });
@@ -103,6 +96,17 @@ export class SearchComponent {
       }
 
       this.fetchItems();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.paginatorTop && this.paginatorBottom) {
+        console.log('changed');
+
+        this.paginatorTop.pageIndex = this.items.page - 1;
+        this.paginatorBottom.pageIndex = this.items.page - 1;
+      }
     });
   }
 
