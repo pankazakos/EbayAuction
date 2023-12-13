@@ -118,7 +118,11 @@ export class ItemComponent {
   placeBid(): void {
     const bid = this.bidForm.value as AddBidRequest;
 
-    if (bid.amount == Number('') || bid.amount <= this.item.data.currently) {
+    if (
+      bid.amount == Number('') ||
+      bid.amount < this.item.data.currently ||
+      (bid.amount <= this.item.data.currently && this.item.data.numBids > 0)
+    ) {
       this.openInvalidBidAlert();
       return;
     }

@@ -54,10 +54,16 @@ namespace webapi.Services
                 throw new InvalidOperationException($"Users cannot make bids for their own items (username: {user.Username})");
             }
 
-            if (input.Amount <= item.Currently)
+            if (item.NumBids > 0 && input.Amount <= item.Currently)
             {
                 _logger.LogWarning("Bid cannot be less or equal to current bid. Must be greater than {Amount}", input.Amount);
                 throw new ArgumentException($"Bid cannot be less or equal to current bid. Must be greater than {input.Amount}");
+            }
+
+            if (item.NumBids == 0 && input.Amount < item.FirstBid)
+            {
+                _logger.LogWarning("Bid cannot be less than first bid. Must be equal or greater than {Amount}", item.FirstBid);
+                throw new ArgumentException($"Bid cannot be less than first bid. Must be equal or greater than {item.FirstBid}");
             }
 
             var bid = await _bidRepository.Create(input, user, item, cancel);
