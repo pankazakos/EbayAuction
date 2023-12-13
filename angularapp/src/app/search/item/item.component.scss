@@ -45,7 +45,7 @@ $item-box-gap: 2rem;
 .item-info {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .item-image {
@@ -147,6 +147,10 @@ $item-box-gap: 2rem;
 .info-pair {
   display: flex;
   justify-content: space-between;
+}
+
+.info-value {
+  text-align: right;
 }
 
 @media (max-width: 1600px) {

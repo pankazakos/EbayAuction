@@ -10,6 +10,8 @@
 
         public const string GetImage = "{guid}";
 
+        public const string Categories = "Categories/{id:long}";
+
         public const string Inactive = "Inactive";
 
         public const string Active = "Active";

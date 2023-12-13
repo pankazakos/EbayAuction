@@ -204,6 +204,24 @@ namespace webapi.Repository
             return content;
         }
 
+        public async Task<List<Category>> GetCategories(long id, CancellationToken cancel = default)
+        {
+            var item = await _dbContext.Items.SingleOrDefaultAsync(i => i.ItemId == id, cancel);
+
+            if (item is null)
+            {
+                throw new InvalidOperationException($"Cannot find item {id}");
+            }
+
+            var categories = await _dbContext.Items
+                .Include(i => i.Categories)
+                .Where(i => i.ItemId == id)
+                .SelectMany(i => i.Categories)
+                .ToListAsync(cancel);
+
+            return categories ?? throw new InvalidOperationException($"Cannot find categories of item {id}");
+        }
+
         public async Task<Item> Activate(long id, DateTime expiration, CancellationToken cancel = default)
         {
             var item = await GetById(id, cancel);

@@ -127,6 +127,21 @@ namespace webapi.Services
             return content;
         }
 
+        public async Task<IEnumerable<Category>> GetCategories(long id, CancellationToken cancel = default)
+        {
+            var categories = await _itemRepository.GetCategories(id, cancel);
+
+            if (categories.Any())
+            {
+                _logger.LogInformation("Categories {categoryIds} retrieved", string.Join(", ", categories.Select(c => c.Id)));
+                return categories;
+            }
+
+            _logger.LogWarning("No categories found for item {itemId}", id);
+
+            return Enumerable.Empty<Category>();
+        }
+
         public async Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default)
         {
             try

@@ -2,6 +2,7 @@
 using contracts.Endpoints;
 using contracts.Policies;
 using contracts.Requests.Item;
+using contracts.Responses.Category;
 using contracts.Responses.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -167,6 +168,7 @@ namespace webapi.Controllers
                 () => _itemService.Search(query, cancel), query.Page, query.Limit, _mapper);
         }
 
+
         [HttpGet(ItemEndpoints.GetImage)]
         public async Task<IActionResult> Image([FromRoute] string guid, CancellationToken cancel = default)
         {
@@ -192,6 +194,14 @@ namespace webapi.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+
+        [HttpGet(ItemEndpoints.Categories)]
+        public async Task<IActionResult> Categories([FromRoute] long id, CancellationToken cancel = default)
+        {
+            return await _controllerHelper.GetAllAndRespond<Category, BasicCategoryResponse>(
+                               () => _itemService.GetCategories(id, cancel), _mapper);
         }
 
 

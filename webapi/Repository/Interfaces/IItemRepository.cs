@@ -15,6 +15,8 @@ namespace webapi.Repository.Interfaces
 
         public Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default);
 
+        public Task<List<Category>> GetCategories(long id, CancellationToken cancel = default);
+
         public Task<Item> Activate(long id, DateTime expiration, CancellationToken cancel = default);
 
         public Task<Item> Edit(long id, EditItemRequest itemData, IFormFile? postedFile = null, string? fileName = null, CancellationToken cancel = default);

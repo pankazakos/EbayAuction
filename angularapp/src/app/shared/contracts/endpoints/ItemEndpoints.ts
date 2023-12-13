@@ -11,6 +11,7 @@ export const ItemEndpoints: Readonly<{
   bidden: string;
   getById: (id: number) => string;
   getImage: (guid: string) => string;
+  categories: (id: number) => string;
   activate: (id: number) => string;
   delete: (id: number) => string;
 }> = {
@@ -22,6 +23,7 @@ export const ItemEndpoints: Readonly<{
   bidden: `${itemBaseUrl}/bidden`,
   getById: (id: number) => `${itemBaseUrl}/${id}`,
   getImage: (guid: string) => `${itemBaseUrl}/${guid}`,
+  categories: (id: number) => `${itemBaseUrl}/categories/${id}`,
   activate: (id: number) => `${itemBaseUrl}/activate/${id}`,
   delete: (id: number) => `${itemBaseUrl}/${id}`,
 };

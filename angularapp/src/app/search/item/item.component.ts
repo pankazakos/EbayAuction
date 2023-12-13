@@ -21,6 +21,8 @@ import { AuthData, AuthService } from 'src/app/shared/auth-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
 import { Router } from '@angular/router';
+import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
+import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -36,6 +38,11 @@ export class ItemComponent {
   image: loadingImage = {} as loadingImage;
   headers: HttpHeaders;
   bid: BasicBidResponse = {} as BasicBidResponse;
+  categories: BasicCategoryResponse[] = [];
+  joinedCategories: string = '';
+
+  auctionStarted: string = '';
+  auctionEnds: string = '';
 
   authData: AuthData | null = null;
 
@@ -65,10 +72,10 @@ export class ItemComponent {
       (authData) => (this.authData = authData)
     );
 
-    this.item.data.started = this.item.data.started
+    this.auctionStarted = this.item.data.started
       ? this.formatter.formatDatetime(this.item.data.started.toString())
       : '';
-    this.item.data.ends = this.item.data.ends
+    this.auctionEnds = this.item.data.ends
       ? this.formatter.formatDatetime(this.item.data.ends.toString())
       : '';
 
@@ -82,6 +89,18 @@ export class ItemComponent {
           console.error(error);
         },
       });
+
+    this.http.get(ItemEndpoints.categories(this.item.data.itemId)).subscribe({
+      next: (response: BasicCategoryResponse[] | any) => {
+        this.categories = response;
+        this.joinedCategories = this.categories
+          .map((category) => category.name)
+          .join(', ');
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
   }
 
   private openInvalidBidAlert(): void {

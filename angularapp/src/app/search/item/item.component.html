@@ -49,12 +49,17 @@
         </div>
 
         <div class="info-pair">
+          <div class="info-label">Categories:</div>
+          <div class="info-value">{{ joinedCategories }}</div>
+        </div>
+
+        <div class="info-pair">
           <div class="info-label">Started at:</div>
-          <div class="info-value">{{ item.data.started }}</div>
+          <div class="info-value">{{ auctionStarted }}</div>
         </div>
         <div class="info-pair">
           <div class="info-label">Ending at:</div>
-          <div class="info-value">{{ item.data.ends }}</div>
+          <div class="info-value">{{ auctionEnds }}</div>
         </div>
         <div class="info-pair">
           <div class="info-label">Seller:</div>
@@ -105,7 +110,7 @@
           type="number"
           name="amount"
           min="{{ item.data.currently + 1 }}"
-          placeholder="${{ item.data.currently + 1}}"
+          placeholder="${{ item.data.currently + 1 }}"
           [disabled]="isOwner()"
           ngModel
         />

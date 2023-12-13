@@ -15,6 +15,8 @@ namespace webapi.Services.Interfaces
 
         public Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default);
 
+        public Task<IEnumerable<Category>> GetCategories(long id, CancellationToken cancel = default);
+
         public Task<Item> Activate(long id, PublishItemRequest input, CancellationToken cancel = default);
 
         public Task<Item> Edit(long id, EditItemRequest itemData, IFormFile? postedFile = null, CancellationToken cancel = default);
