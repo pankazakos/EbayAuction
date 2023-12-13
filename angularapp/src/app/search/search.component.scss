@@ -299,22 +299,22 @@ mat-card.item-card {
   width: 15%;
 }
 
-.loading-starting-bid-label {
-  width: 40%;
+.loading-started-label {
+  width: 25%;
   height: 0.5rem;
 }
 
-.loading-starting-bid-value {
-  width: 10%;
+.loading-started-value {
+  width: 30%;
 }
 
-.loading-number-bids-label {
-  width: 50%;
+.loading-ends-label {
+  width: 15%;
   height: 0.5rem;
 }
 
-.loading-number-bids-value {
-  width: 5%;
+.loading-ends-value {
+  width: 30%;
 }
 
 @media (max-width: 1700px) {
