@@ -12,7 +12,7 @@ using webapi.Database;
 namespace webapi.Migrations
 {
     [DbContext(typeof(AuctionContext))]
-    [Migration("20231123142126_InitialCreate")]
+    [Migration("20231212213129_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
