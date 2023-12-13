@@ -10,7 +10,7 @@ import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 @Component({
   selector: 'app-my-items',
   templateUrl: './my-items.component.html',
-  styleUrls: ['./my-items.component.css'],
+  styleUrls: ['./my-items.component.scss'],
 })
 export class MyItemsComponent {
   headers: HttpHeaders;

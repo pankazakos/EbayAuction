@@ -16,37 +16,12 @@
         <mat-tab label="Saved Items">
           <button
             class="add-item-button"
-            mat-raised-button
-            color="primary"
+            mat-fab
+            color="accent"
             (click)="addItem()"
           >
-            Add item
+            <mat-icon>add</mat-icon>
           </button>
-          <mat-list>
-            <mat-list-item *ngFor="let saved of inactiveItems">
-              <mat-list>
-                <mat-list-item>
-                  <div class="field-wrapper">
-                    <div class="field-label">BuyPrice:</div>
-                    <div class="field-value">{{ saved.buyPrice }}</div>
-                  </div>
-                </mat-list-item>
-                <mat-list-item>
-                  <div class="field-wrapper">
-                    <div class="field-label">FirstBid:</div>
-                    <div class="field-value">{{ saved.firstBid }}</div>
-                  </div>
-                </mat-list-item>
-                <mat-list-item>
-                  <div class="field-wrapper">
-                    <div class="field-label">Description:</div>
-                    <div class="field-value">{{ saved.description }}</div>
-                  </div>
-                </mat-list-item>
-              </mat-list>
-              <mat-divider></mat-divider>
-            </mat-list-item>
-          </mat-list>
         </mat-tab>
         <mat-tab label="Published"></mat-tab>
         <mat-tab label="Bids"></mat-tab>
