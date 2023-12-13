@@ -32,6 +32,9 @@ export class SearchComponent {
   categoryQuery: string = '';
   selectedCategoryNames: string[] = [];
 
+  auctionStarted: string = '';
+  auctionEnds: string = '';
+
   images: { src: string; isLoading: boolean; itemId: number }[] = [];
 
   removedExpansionPanel: boolean = false;
@@ -150,8 +153,8 @@ export class SearchComponent {
     }
 
     this.items.castEntities.map((item, i) => {
-      item.started = this.formatter.convertOnlyToDate(item.started);
-      item.ends = this.formatter.convertOnlyToDate(item.ends);
+      this.auctionStarted = this.formatter.convertOnlyToDate(item.started);
+      this.auctionEnds = this.formatter.convertOnlyToDate(item.ends);
       this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
