@@ -1,33 +1,53 @@
 <div
-  id="search-container"
+  id="my-items-container"
   fxLayout="row"
-  fxLayoutAlign="space-between none"
+  fxLayoutAlign="center flex-start"
   fxFill
 >
-  <div id="left-margin" fxFlex="20%"></div>
   <div
     id="my-items-body"
     fxLayout="column"
     fxLayoutAlign="space-evenly center"
     fxFlex="60%"
+    fxFill
   >
-    <div id="content" fxFlex="90%" fxFill>
+    <div id="my-items-tabs" fxFlex="85%" fxFill>
       <mat-tab-group (selectedTabChange)="onTabChanged($event)">
         <mat-tab label="Saved Items">
-          <button
-            class="add-item-button"
-            mat-fab
-            color="accent"
-            (click)="addItem()"
+          <div
+            id="saved-items-container"
+            fxLayout="column"
+            fxLayoutAlign="space-evenly start"
+            fxFill
           >
-            <mat-icon>add</mat-icon>
-          </button>
+            <div
+              id="saved-items-list"
+              fxLayout="row wrap"
+              fxLayoutAlign="start start"
+              fxFlex="50%"
+              fxFill
+            ></div>
+            <div
+              id="add-item-section"
+              fxLayout="row wrap"
+              fxLayoutAlign="end center"
+              fxFlex="20%"
+              fxFill
+            >
+              <button
+                class="add-item-button"
+                mat-fab
+                color="accent"
+                (click)="addItem()"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
         </mat-tab>
         <mat-tab label="Published"></mat-tab>
         <mat-tab label="Bids"></mat-tab>
       </mat-tab-group>
     </div>
   </div>
-
-  <div id="right-margin" fxFlex="20%"></div>
 </div>

@@ -1,0 +1,13 @@
+#my-items-tabs {
+  mat-tab-group {
+    height: 100%;
+  }
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper {
+  height: 100%;
+}
+
+.add-item-button {
+  margin-right: 1rem;
+}
