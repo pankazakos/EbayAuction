@@ -1,0 +1,106 @@
+<div mat-dialog-title>
+  <div class="dialog-title">Add item</div>
+  <div>
+    <button mat-icon-button class="top-close-button" mat-dialog-close>
+      <mat-icon aria-label="close icon" fontIcon="close"></mat-icon>
+    </button>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div id="add-item-main-container">
+    <div id="add-item-content">
+      <div id="add-item-form">
+        <mat-form-field floatLabel="always">
+          <mat-label>Title</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Title"
+            [(ngModel)]="this.myItemService.addItemForm.name"
+          />
+        </mat-form-field>
+        <mat-form-field floatLabel="always">
+          <mat-label>Minimum Bid</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            placeholder="$"
+            [(ngModel)]="this.myItemService.addItemForm.firstBid"
+          />
+        </mat-form-field>
+        <mat-form-field floatLabel="always">
+          <mat-label>Buy Price</mat-label>
+          <input
+            matInput
+            type="number"
+            [min]="
+              this.myItemService.addItemForm.firstBid
+                ? this.myItemService.addItemForm.firstBid
+                : 0
+            "
+            placeholder="$"
+            [(ngModel)]="this.myItemService.addItemForm.buyPrice"
+          />
+        </mat-form-field>
+        <mat-form-field floatLabel="always">
+          <mat-label>Select Categories</mat-label>
+          <mat-chip-listbox class="category-chips">
+            <mat-chip
+              *ngFor="let category of this.myItemService.selectedCategoryNames"
+              [removable]="true"
+              (removed)="removeCategory(category)"
+            >
+              {{ category }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-listbox>
+          <input
+            type="text"
+            placeholder="Type to search"
+            matInput
+            [formControl]="categoryFormControl"
+            [matAutocomplete]="auto"
+            (keydown.enter)="onAutocompleteEnterKeyPress()"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="onCategorySelected($event)"
+          >
+            <mat-option
+              *ngFor="let category of this.myItemService.filteredCategoryNames"
+              [value]="category"
+              >{{ category }}</mat-option
+            >
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field floatLabel="always">
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            type="text"
+            placeholder="Description"
+            [(ngModel)]="this.myItemService.addItemForm.description"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <div>
+      <button class="bottom-close-button" mat-raised-button mat-dialog-close>
+        Close
+      </button>
+    </div>
+    <div>
+      <button
+        class="bottom-add-button"
+        mat-raised-button
+        color="accent"
+        (click)="onCreateItem()"
+      >
+        Create
+      </button>
+    </div>
+  </div>
+</div>

@@ -25,7 +25,7 @@
               fxLayout="row wrap"
               fxLayoutAlign="start start"
             >
-              <mat-card>
+              <mat-card *ngIf="!inactiveItems.length">
                 <mat-card-header>
                   <mat-card-title>
                     <div class="note-label">
@@ -43,7 +43,7 @@
                   >Currently you don't have any temporary saved items. You can
                   create a new item by pressing the add button below and filling
                   the item information. After creating an item you have the
-                  option to edit it or publish it.</mat-card-content
+                  option to edit or publish it.</mat-card-content
                 >
               </mat-card>
             </div>

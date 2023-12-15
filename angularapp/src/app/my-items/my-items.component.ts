@@ -6,6 +6,8 @@ import {
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
+import { MatDialog } from '@angular/material/dialog';
+import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
 
 @Component({
   selector: 'app-my-items',
@@ -22,7 +24,7 @@ export class MyItemsComponent {
   updatedPublished: boolean = false;
   updatedBidden: boolean = false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private addItemDialog: MatDialog) {
     this.inactiveItems = [];
     this.publishedItems = [];
     this.itemsWithBids = [];
@@ -33,7 +35,7 @@ export class MyItemsComponent {
   }
 
   ngOnInit(): void {
-    this.setInactiveItems();
+    this.setInactiveItems(); // default tab is inactive
   }
 
   onTabChanged(event: MatTabChangeEvent): void {
@@ -100,5 +102,9 @@ export class MyItemsComponent {
 
   addItem(): void {
     console.log('add item');
+    this.addItemDialog.open(AddItemDialogComponent, {
+      autoFocus: false,
+      restoreFocus: false,
+    });
   }
 }

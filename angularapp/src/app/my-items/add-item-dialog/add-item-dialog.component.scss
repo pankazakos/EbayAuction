@@ -1,0 +1,63 @@
+[mat-dialog-title] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 9px;
+}
+
+[mat-dialog-content] {
+  padding: 0;
+  color: black;
+}
+
+[mat-dialog-actions] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+}
+
+#add-item-main-container {
+  display: flex;
+  justify-content: center;
+  width: 50vw;
+  height: 50vh;
+  padding-top: 1rem;
+  overflow-y: auto;
+}
+
+#add-item-content {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+
+#add-item-form {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    flex-wrap: nowrap;
+  }
+
+  mat-form-field {
+    width: 45%;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+
+    span {
+      padding: 0.5rem;
+      align-self: flex-end;
+    }
+  }
+}
