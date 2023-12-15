@@ -17,27 +17,47 @@
           <div
             id="saved-items-container"
             fxLayout="column"
-            fxLayoutAlign="space-evenly start"
+            fxLayoutAlign="start start"
             fxFill
           >
             <div
               id="saved-items-list"
               fxLayout="row wrap"
               fxLayoutAlign="start start"
-              fxFlex="50%"
-              fxFill
-            ></div>
+            >
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>
+                    <div class="note-label">
+                      <mat-icon
+                        class="notification-icon"
+                        aria-hidden="false"
+                        aria-label="info icon"
+                        fontIcon="info"
+                      ></mat-icon>
+                      <span>Note</span>
+                    </div></mat-card-title
+                  >
+                </mat-card-header>
+                <mat-card-content
+                  >Currently you don't have any temporary saved items. You can
+                  create a new item by pressing the add button below and filling
+                  the item information. After creating an item you have the
+                  option to edit it or publish it.</mat-card-content
+                >
+              </mat-card>
+            </div>
             <div
               id="add-item-section"
               fxLayout="row wrap"
               fxLayoutAlign="end center"
-              fxFlex="20%"
-              fxFill
             >
               <button
                 class="add-item-button"
                 mat-fab
                 color="accent"
+                matTooltip="Add Item"
+                matTooltipPosition="above"
                 (click)="addItem()"
               >
                 <mat-icon>add</mat-icon>

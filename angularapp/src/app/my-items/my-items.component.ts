@@ -76,10 +76,10 @@ export class MyItemsComponent {
   }
 
   addItem(): void {
-    this.http.post(
-      ItemEndpoints.create,
-      // { body: {} },
-      { headers: this.headers }
-    );
+    // this.http.post(
+    //   ItemEndpoints.create,
+    //   // { body: {} },
+    //   { headers: this.headers }
+    // );
   }
 }
