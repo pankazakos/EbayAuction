@@ -10,6 +10,8 @@
   <div id="add-item-main-container">
     <div id="add-item-content">
       <div id="add-item-form">
+        <!-- <div id="add-item-form-first-part"></div>
+        <div id="add-item-form-second-part"></div> -->
         <mat-form-field floatLabel="always">
           <mat-label>Title</mat-label>
           <input
@@ -43,6 +45,29 @@
             [(ngModel)]="this.myItemService.addItemForm.buyPrice"
           />
         </mat-form-field>
+        <mat-form-field floatLabel="always">
+          <mat-label>Image</mat-label>
+          <input
+            type="file"
+            style="display: none"
+            #fileInput
+            (change)="onFileSelected($event)"
+          />
+          <input
+            matInput
+            class="file-input"
+            placeholder="No file chosen"
+            [value]="fileName"
+            disabled
+          />
+          <button matSuffix mat-icon-button (click)="onRemoveFile()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <button matSuffix mat-icon-button (click)="fileInput.click()">
+            <mat-icon>attach_file</mat-icon>
+          </button>
+        </mat-form-field>
+
         <mat-form-field floatLabel="always">
           <mat-label>Select Categories</mat-label>
           <mat-chip-listbox class="category-chips">

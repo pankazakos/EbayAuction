@@ -16,6 +16,7 @@ export class AddItemDialogComponent {
   addItemForm: AddItemRequest = {} as AddItemRequest;
   categoryFormControl = new FormControl();
   categories: BasicCategoryResponse[] = [];
+  fileName: string = '';
 
   constructor(private http: HttpClient, public myItemService: MyItemService) {}
 
@@ -88,5 +89,17 @@ export class AddItemDialogComponent {
 
   onCreateItem(): void {
     console.log('create item');
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.fileName = file.name;
+      // file upload process
+    }
+  }
+
+  onRemoveFile(): void {
+    this.fileName = '';
   }
 }
