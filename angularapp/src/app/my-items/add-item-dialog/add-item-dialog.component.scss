@@ -34,17 +34,35 @@
   gap: 2rem;
 }
 
+$field-gap: 1.5rem;
+
 #add-item-form {
-  min-height: 100%;
-  width: 100%;
+  max-width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 1.5rem;
+  gap: 4rem;
+
+  #add-item-form-first-part {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: $field-gap;
+  }
+
+  #add-item-form-second-part {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: $field-gap;
+  }
 
   mat-form-field {
-    width: calc(45% - 1.5rem);
+    width: 100%;
 
     @media (max-width: 992px) {
       width: 100%;
@@ -57,11 +75,23 @@
   }
 }
 
-// [matSuffix] {
-//   background-color: red;
-//   font-size: 0.5rem;
-// }
+::ng-deep #image-input .mat-mdc-form-field-infix {
+  width: 40%;
 
-// .file-input {
-//   width: 20%;
-// }
+  @media (max-width: 576px) {
+    width: 20%;
+  }
+}
+
+@media (max-width: 1200px) {
+  #add-item-main-container {
+    width: 60vw;
+  }
+}
+
+@media (max-width: 992px) {
+  #add-item-form {
+    flex-direction: column;
+    gap: $field-gap;
+  }
+}

@@ -10,104 +10,116 @@
   <div id="add-item-main-container">
     <div id="add-item-content">
       <div id="add-item-form">
-        <!-- <div id="add-item-form-first-part"></div>
-        <div id="add-item-form-second-part"></div> -->
-        <mat-form-field floatLabel="always">
-          <mat-label>Title</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Title"
-            [(ngModel)]="this.myItemService.addItemForm.name"
-          />
-        </mat-form-field>
-        <mat-form-field floatLabel="always">
-          <mat-label>Minimum Bid</mat-label>
-          <input
-            matInput
-            type="number"
-            min="0"
-            placeholder="$"
-            [(ngModel)]="this.myItemService.addItemForm.firstBid"
-          />
-        </mat-form-field>
-        <mat-form-field floatLabel="always">
-          <mat-label>Buy Price</mat-label>
-          <input
-            matInput
-            type="number"
-            [min]="
-              this.myItemService.addItemForm.firstBid
-                ? this.myItemService.addItemForm.firstBid
-                : 0
-            "
-            placeholder="$"
-            [(ngModel)]="this.myItemService.addItemForm.buyPrice"
-          />
-        </mat-form-field>
-        <mat-form-field floatLabel="always">
-          <mat-label>Image</mat-label>
-          <input
-            type="file"
-            style="display: none"
-            #fileInput
-            (change)="onFileSelected($event)"
-          />
-          <input
-            matInput
-            class="file-input"
-            placeholder="No file chosen"
-            [value]="fileName"
-            disabled
-          />
-          <button matSuffix mat-icon-button (click)="onRemoveFile()">
-            <mat-icon>close</mat-icon>
-          </button>
-          <button matSuffix mat-icon-button (click)="fileInput.click()">
-            <mat-icon>attach_file</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <mat-form-field floatLabel="always">
-          <mat-label>Select Categories</mat-label>
-          <mat-chip-listbox class="category-chips">
-            <mat-chip
-              *ngFor="let category of this.myItemService.selectedCategoryNames"
-              [removable]="true"
-              (removed)="removeCategory(category)"
+        <div id="add-item-form-first-part">
+          <mat-form-field floatLabel="always">
+            <mat-label>Title</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Title"
+              [(ngModel)]="this.myItemService.addItemForm.name"
+            />
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label>Minimum Bid</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              placeholder="$"
+              [(ngModel)]="this.myItemService.addItemForm.firstBid"
+            />
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label>Buy Price</mat-label>
+            <input
+              matInput
+              type="number"
+              [min]="
+                this.myItemService.addItemForm.firstBid
+                  ? this.myItemService.addItemForm.firstBid
+                  : 0
+              "
+              placeholder="$"
+              [(ngModel)]="this.myItemService.addItemForm.buyPrice"
+            />
+          </mat-form-field>
+          <mat-form-field floatLabel="always" id="image-input">
+            <mat-label>Image</mat-label>
+            <input
+              type="file"
+              style="display: none"
+              #fileInput
+              (change)="onFileSelected($event)"
+            />
+            <input
+              matInput
+              class="file-input"
+              placeholder="No file chosen"
+              [matTooltip]="fileName"
+              [matTooltipDisabled]="fileName == ''"
+              [value]="fileName"
+              disabled
+            />
+            <button
+              matSuffix
+              mat-icon-button
+              (click)="onRemoveFile()"
+              [hidden]="fileName == ''"
             >
-              {{ category }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-          </mat-chip-listbox>
-          <input
-            type="text"
-            placeholder="Type to search"
-            matInput
-            [formControl]="categoryFormControl"
-            [matAutocomplete]="auto"
-            (keydown.enter)="onAutocompleteEnterKeyPress()"
-          />
-          <mat-autocomplete
-            #auto="matAutocomplete"
-            (optionSelected)="onCategorySelected($event)"
-          >
-            <mat-option
-              *ngFor="let category of this.myItemService.filteredCategoryNames"
-              [value]="category"
-              >{{ category }}</mat-option
+              <mat-icon>close</mat-icon>
+            </button>
+            <button matSuffix mat-icon-button (click)="fileInput.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+        <div id="add-item-form-second-part">
+          <mat-form-field floatLabel="always">
+            <mat-label>Select Categories</mat-label>
+            <mat-chip-listbox class="category-chips">
+              <mat-chip
+                *ngFor="
+                  let category of this.myItemService.selectedCategoryNames
+                "
+                [removable]="true"
+                (removed)="removeCategory(category)"
+              >
+                {{ category }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-listbox>
+            <input
+              type="text"
+              placeholder="Type to search"
+              matInput
+              [formControl]="categoryFormControl"
+              [matAutocomplete]="auto"
+              (keydown.enter)="onAutocompleteEnterKeyPress()"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="onCategorySelected($event)"
             >
-          </mat-autocomplete>
-        </mat-form-field>
-        <mat-form-field floatLabel="always">
-          <mat-label>Description</mat-label>
-          <textarea
-            matInput
-            type="text"
-            placeholder="Description"
-            [(ngModel)]="this.myItemService.addItemForm.description"
-          ></textarea>
-        </mat-form-field>
+              <mat-option
+                *ngFor="
+                  let category of this.myItemService.filteredCategoryNames
+                "
+                [value]="category"
+                >{{ category }}</mat-option
+              >
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              type="text"
+              placeholder="Description"
+              [(ngModel)]="this.myItemService.addItemForm.description"
+            ></textarea>
+          </mat-form-field>
+        </div>
       </div>
     </div>
   </div>
