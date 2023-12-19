@@ -31,6 +31,17 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  private readJwt(): string {
+    const token = localStorage.getItem(tokenKeyName);
+    if (token == null) {
+      return '';
+    }
+
+    const decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
+
+    return decodedJWT;
+  }
+
   getCurrentAuthData(): AuthData {
     return this.authDataSubject.getValue();
   }
@@ -49,6 +60,21 @@ export class AuthService {
     const username = decodedJWT.username;
     const isSuperUser = decodedJWT.IsSuperUser;
 
+    const expiryDate = decodedJWT.exp * 1000; // Convert to milliseconds
+
+    const now = new Date().getTime();
+    const timeout = expiryDate - now;
+
+    if (timeout < 0) {
+      alert('Your session has expired. Please login again');
+      this.logoutUser();
+      return;
+    }
+
+    setTimeout(() => {
+      this.logoutUser();
+    }, timeout);
+
     const newAuthData: AuthData = {
       username: username,
       role: isSuperUser ? UserRole.Admin : UserRole.User,
@@ -62,18 +88,6 @@ export class AuthService {
     );
   }
 
-  private readJwt(): string {
-    const token = localStorage.getItem(tokenKeyName);
-    if (token == null) {
-      console.log('No token found in local storage');
-      return '';
-    }
-
-    const decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
-
-    return decodedJWT;
-  }
-
   loginUser(username: string, password: string) {
     const credentials: UserCredentialsRequest = { username, password };
     this.http
@@ -81,17 +95,7 @@ export class AuthService {
       .subscribe({
         next: (response) => {
           localStorage.setItem(tokenKeyName, response.accessToken);
-
-          const decodedJWT: any = this.readJwt();
-          let role: UserRole = decodedJWT.IsSuperUser
-            ? UserRole.Admin
-            : UserRole.User;
-
-          this.authDataSubject.next({
-            username: username,
-            role: role,
-            isLoggedIn: true,
-          });
+          this.setAuthData();
           this.router.navigate(['/']);
         },
         error: (error) => {
