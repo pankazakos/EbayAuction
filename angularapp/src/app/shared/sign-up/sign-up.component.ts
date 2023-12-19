@@ -32,7 +32,7 @@ export class SignUpComponent {
         .post<RegisterUserResponse>(UserEndpoints.create, userInfo)
         .subscribe({
           next: (response) => {
-            this.authService.LoginUser(userInfo.username, userInfo.password);
+            this.authService.loginUser(userInfo.username, userInfo.password);
           },
           error: (error) => {
             if (error.status == 400) {

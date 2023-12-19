@@ -24,7 +24,7 @@ export class SignInComponent {
   onSubmit() {
     const credentials = this.loginForm.value as UserCredentialsRequest;
     if (this.loginForm.valid) {
-      this.authService.LoginUser(credentials.username, credentials.password);
+      this.authService.loginUser(credentials.username, credentials.password);
     }
   }
 }

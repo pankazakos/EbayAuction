@@ -40,7 +40,7 @@ export class AuthService {
     this.authDataSubject.next(newAuthData);
   }
 
-  LoginUser(username: string, password: string) {
+  loginUser(username: string, password: string) {
     const credentials: UserCredentialsRequest = { username, password };
     this.http
       .post<LoginUserResponse>(UserEndpoints.login, credentials)
