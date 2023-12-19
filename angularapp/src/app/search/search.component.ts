@@ -10,8 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemComponent } from './item/item.component';
-import { DateTimeFormatService } from '../shared/date-time-format.service';
-import { AuthData, AuthService } from '../shared/auth-service.service';
+import { DateTimeFormatService } from '../shared/services/date-time-format.service';
+import { AuthData, AuthService } from '../shared/services/auth-service.service';
 
 @Component({
   selector: 'app-search',

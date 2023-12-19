@@ -6,7 +6,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { baseUrl } from 'src/app/shared/types';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
-import { AuthService } from 'src/app/shared/auth-service.service';
+import { AuthService } from 'src/app/shared/services/auth-service.service';
 
 @Component({
   selector: 'app-add-item-dialog',

@@ -13,11 +13,14 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { DateTimeFormatService } from 'src/app/shared/date-time-format.service';
+import { DateTimeFormatService } from 'src/app/shared/services/date-time-format.service';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
 import { ConfirmBidDialogComponent } from './confirm-bid-dialog/confirm-bid-dialog.component';
-import { AuthData, AuthService } from 'src/app/shared/auth-service.service';
+import {
+  AuthData,
+  AuthService,
+} from 'src/app/shared/services/auth-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
 import { Router } from '@angular/router';

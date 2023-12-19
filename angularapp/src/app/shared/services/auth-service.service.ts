@@ -2,11 +2,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { UserCredentialsRequest } from './contracts/requests/user';
 import { BehaviorSubject } from 'rxjs';
-import { UserRole } from './types';
-import { LoginUserResponse } from './contracts/responses/user';
-import { UserEndpoints } from './contracts/endpoints/UserEndpoints';
+import { UserRole } from '../types';
+import { LoginUserResponse } from '../contracts/responses/user';
+import { UserEndpoints } from '../contracts/endpoints/UserEndpoints';
+import { UserCredentialsRequest } from '../contracts/requests/user';
 
 export interface AuthData {
   username: string;

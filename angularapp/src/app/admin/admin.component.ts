@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { DateTimeFormatService } from '../shared/date-time-format.service';
+import { DateTimeFormatService } from '../shared/services/date-time-format.service';
 import { BasicUserResponse } from '../shared/contracts/responses/user';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
 import { UserEndpoints } from '../shared/contracts/endpoints/UserEndpoints';
