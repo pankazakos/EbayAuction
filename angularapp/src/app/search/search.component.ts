@@ -101,12 +101,7 @@ export class SearchComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      if (this.paginatorTop && this.paginatorBottom) {
-        console.log('changed');
-
-        this.paginatorTop.pageIndex = this.items.page - 1;
-        this.paginatorBottom.pageIndex = this.items.page - 1;
-      }
+      this.syncPaginators();
     });
   }
 
@@ -222,11 +217,7 @@ export class SearchComponent implements AfterViewInit {
 
     if (event.pageSize != this.items.limit) {
       this.items.limit = event.pageSize;
-
-      if (this.paginatorTop && this.paginatorBottom) {
-        this.paginatorTop.pageIndex = this.items.page - 1;
-        this.paginatorBottom.pageIndex = this.items.page - 1;
-      }
+      this.syncPaginators();
       this.fetchItems();
       return;
     }
@@ -234,6 +225,8 @@ export class SearchComponent implements AfterViewInit {
     const selectedPage = event.pageIndex + 1;
 
     this.items.page = selectedPage;
+
+    this.syncPaginators();
 
     this.addUrlParameters([{ name: 'page', value: selectedPage.toString() }]);
   }
@@ -294,5 +287,12 @@ export class SearchComponent implements AfterViewInit {
       relativeTo: this.route,
       queryParams: queryParams,
     });
+  }
+
+  private syncPaginators(): void {
+    if (this.paginatorTop && this.paginatorBottom) {
+      this.paginatorTop.pageIndex = this.items.page - 1;
+      this.paginatorBottom.pageIndex = this.items.page - 1;
+    }
   }
 }
