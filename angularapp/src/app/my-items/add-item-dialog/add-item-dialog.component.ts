@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { AddItemRequest } from 'src/app/shared/contracts/requests/item';
 import { MyItemService } from '../my-item.service';
 import { FormControl } from '@angular/forms';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { baseUrl } from 'src/app/shared/types';
+import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -13,10 +13,14 @@ import { baseUrl } from 'src/app/shared/types';
   styleUrls: ['./add-item-dialog.component.scss'],
 })
 export class AddItemDialogComponent {
-  addItemForm: AddItemRequest = {} as AddItemRequest;
   categoryFormControl = new FormControl();
   categories: BasicCategoryResponse[] = [];
   fileName: string = '';
+  selectedFile: File | null = null;
+  headers: HttpHeaders = new HttpHeaders().set(
+    'Authorization',
+    `Bearer ${localStorage.getItem('accessToken')}`
+  );
 
   constructor(private http: HttpClient, public myItemService: MyItemService) {}
 
@@ -54,8 +58,6 @@ export class AddItemDialogComponent {
   }
 
   filterCategories(value: string) {
-    console.log('filtering method');
-
     const filterValue = value.toLowerCase();
     this.myItemService.filteredCategoryNames = this.categories
       .filter(
@@ -76,8 +78,6 @@ export class AddItemDialogComponent {
       (cat) => cat.name == category
     );
 
-    console.log('IndexToAddBack: ' + indexToAddback);
-
     this.myItemService.filteredCategoryNames.splice(
       indexToAddback,
       0,
@@ -88,14 +88,35 @@ export class AddItemDialogComponent {
   }
 
   onCreateItem(): void {
-    console.log('create item');
+    console.log(this.myItemService.addItemForm);
+
+    // const formData = new FormData();
+    // formData.append('itemJson', JSON.stringify(this.myItemService.addItemForm));
+    // if (this.selectedFile) {
+    //   formData.append('image', this.selectedFile);
+    // }
+
+    // this.http.post(`${ItemEndpoints.create}`, formData, {headers: this.headers}).subscribe({
+    //   next: (response: any) => {
+    //     console.log(response);
+    //   },
+    //   error: (error) => console.log(error),
+    // });
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
+  onFileSelected(event: Event) {
+    const element = event.target as HTMLInputElement;
+
+    if (!element.files || element.files.length <= 0) {
+      console.error('No files selected');
+      return;
+    }
+
+    const file = element.files[0];
+
     if (file) {
+      this.selectedFile = file;
       this.fileName = file.name;
-      // file upload process
     }
   }
 

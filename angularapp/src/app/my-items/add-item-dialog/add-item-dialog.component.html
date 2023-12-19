@@ -115,9 +115,12 @@
             <textarea
               matInput
               type="text"
+              #description
+              maxlength="300"
               placeholder="Description"
               [(ngModel)]="this.myItemService.addItemForm.description"
             ></textarea>
+            <mat-hint align="end">{{ description.value.length }}/300</mat-hint>
           </mat-form-field>
         </div>
       </div>
