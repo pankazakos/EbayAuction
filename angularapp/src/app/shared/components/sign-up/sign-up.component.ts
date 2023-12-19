@@ -2,10 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CardWrapperCssProps } from '../card/card.component';
-import { RegisterUserResponse } from '../contracts/responses/user';
-import { RegisterUserRequest } from '../contracts/requests/user';
-import { AuthService } from '../services/auth-service.service';
-import { UserEndpoints } from '../contracts/endpoints/UserEndpoints';
+import { RegisterUserResponse } from '../../contracts/responses/user';
+import { RegisterUserRequest } from '../../contracts/requests/user';
+import { AuthService } from '../../services/auth-service.service';
+import { UserEndpoints } from '../../contracts/endpoints/UserEndpoints';
 
 @Component({
   selector: 'app-sign-up',

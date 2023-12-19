@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from '../services/auth-service.service';
+import { AuthService } from '../../services/auth-service.service';
 import { Subscription } from 'rxjs';
-import { AuthData } from '../services/auth-service.service';
-import { UserRole } from '../types';
+import { AuthData } from '../../services/auth-service.service';
+import { UserRole } from '../../types';
 
 @Component({
   selector: 'app-navbar',
