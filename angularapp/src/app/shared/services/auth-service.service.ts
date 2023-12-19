@@ -14,6 +14,14 @@ export interface AuthData {
   isLoggedIn: boolean;
 }
 
+interface DecodedJwt {
+  username: string;
+  IsSuperUser: boolean;
+  exp: number;
+  iss: string;
+  aud: string;
+}
+
 const tokenKeyName = 'accessToken';
 
 @Injectable({
@@ -31,10 +39,10 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  private readJwt(): string {
+  private decodeJwt(): DecodedJwt | null {
     const token = localStorage.getItem(tokenKeyName);
     if (token == null) {
-      return '';
+      return null;
     }
 
     const decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
@@ -51,9 +59,9 @@ export class AuthService {
   }
 
   setAuthData(): void {
-    const decodedJWT: any = this.readJwt();
+    const decodedJWT: DecodedJwt | null = this.decodeJwt();
 
-    if (decodedJWT === '') {
+    if (decodedJWT == null) {
       return;
     }
 
