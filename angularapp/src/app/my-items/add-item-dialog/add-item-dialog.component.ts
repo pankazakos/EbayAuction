@@ -6,6 +6,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { baseUrl } from 'src/app/shared/types';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
+import { AuthService } from 'src/app/shared/auth-service.service';
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -17,12 +18,12 @@ export class AddItemDialogComponent {
   categories: BasicCategoryResponse[] = [];
   fileName: string = '';
   selectedFile: File | null = null;
-  headers: HttpHeaders = new HttpHeaders().set(
-    'Authorization',
-    `Bearer ${localStorage.getItem('accessToken')}`
-  );
 
-  constructor(private http: HttpClient, public myItemService: MyItemService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    public myItemService: MyItemService
+  ) {}
 
   ngOnInit(): void {
     this.http.get(`${baseUrl}/category/all`).subscribe({
@@ -89,6 +90,8 @@ export class AddItemDialogComponent {
 
   onCreateItem(): void {
     console.log(this.myItemService.addItemForm);
+
+    console.log(this.authService.getHeaders());
 
     // const formData = new FormData();
     // formData.append('itemJson', JSON.stringify(this.myItemService.addItemForm));

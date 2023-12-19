@@ -1,6 +1,6 @@
 // src/app/auth.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserCredentialsRequest } from './contracts/requests/user';
 import { BehaviorSubject } from 'rxjs';
@@ -14,11 +14,13 @@ export interface AuthData {
   isLoggedIn: boolean;
 }
 
+const tokenKeyName = 'accessToken';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {}
+  private headers: HttpHeaders = new HttpHeaders();
 
   private authDataSubject = new BehaviorSubject<AuthData>({
     username: '',
@@ -27,17 +29,49 @@ export class AuthService {
   });
   authData$ = this.authDataSubject.asObservable();
 
+  constructor(private http: HttpClient, private router: Router) {}
+
   getCurrentAuthData(): AuthData {
     return this.authDataSubject.getValue();
   }
 
-  setAuthData(username: string, isSuperUser: boolean): void {
+  getHeaders(): HttpHeaders {
+    return this.headers;
+  }
+
+  setAuthData(): void {
+    const decodedJWT: any = this.readJwt();
+
+    if (decodedJWT === '') {
+      return;
+    }
+
+    const username = decodedJWT.username;
+    const isSuperUser = decodedJWT.IsSuperUser;
+
     const newAuthData: AuthData = {
       username: username,
       role: isSuperUser ? UserRole.Admin : UserRole.User,
       isLoggedIn: true,
     };
     this.authDataSubject.next(newAuthData);
+
+    this.headers.set(
+      'Authorization',
+      `Bearer ${localStorage.getItem(tokenKeyName)}`
+    );
+  }
+
+  private readJwt(): string {
+    const token = localStorage.getItem(tokenKeyName);
+    if (token == null) {
+      console.log('No token found in local storage');
+      return '';
+    }
+
+    const decodedJWT = JSON.parse(window.atob(token.split('.')[1]));
+
+    return decodedJWT;
   }
 
   loginUser(username: string, password: string) {
@@ -46,9 +80,13 @@ export class AuthService {
       .post<LoginUserResponse>(UserEndpoints.login, credentials)
       .subscribe({
         next: (response) => {
-          let role: UserRole =
-            credentials.username == 'admin' ? UserRole.Admin : UserRole.User;
-          localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem(tokenKeyName, response.accessToken);
+
+          const decodedJWT: any = this.readJwt();
+          let role: UserRole = decodedJWT.IsSuperUser
+            ? UserRole.Admin
+            : UserRole.User;
+
           this.authDataSubject.next({
             username: username,
             role: role,
@@ -69,7 +107,7 @@ export class AuthService {
   }
 
   logoutUser() {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem(tokenKeyName);
     this.authDataSubject.next({
       username: '',
       role: UserRole.Anonymous,
