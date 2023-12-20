@@ -51,7 +51,7 @@ export class CategoryService {
       const firstMatchingOption = this._filtered[0];
       this._formControl.setValue(firstMatchingOption.name);
       this.onSelected({
-        option: { value: firstMatchingOption },
+        option: { value: firstMatchingOption.name },
       } as MatAutocompleteSelectedEvent);
     }
   }
