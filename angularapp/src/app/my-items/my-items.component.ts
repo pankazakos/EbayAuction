@@ -8,6 +8,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
+import { AuthService } from '../shared/services/auth-service.service';
 
 @Component({
   selector: 'app-my-items',
@@ -15,27 +16,22 @@ import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.compon
   styleUrls: ['./my-items.component.scss'],
 })
 export class MyItemsComponent {
-  headers: HttpHeaders;
-  inactiveItems: BasicItemResponse[];
-  publishedItems: PublishedItemResponse[];
-  itemsWithBids: BasicItemResponse[];
+  inactiveItems: BasicItemResponse[] = [];
+  publishedItems: PublishedItemResponse[] = [];
+  itemsWithBids: BasicItemResponse[] = [];
 
   updatedInactive: boolean = false;
   updatedPublished: boolean = false;
   updatedBidden: boolean = false;
 
-  constructor(private http: HttpClient, private addItemDialog: MatDialog) {
-    this.inactiveItems = [];
-    this.publishedItems = [];
-    this.itemsWithBids = [];
-    this.headers = new HttpHeaders().set(
-      'Authorization',
-      `Bearer ${localStorage.getItem('accessToken')}`
-    );
-  }
+  constructor(
+    private http: HttpClient,
+    private addItemDialog: MatDialog,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.setInactiveItems(); // default tab is inactive
+    this.setInactiveItems(); // default tab is for inactive items
   }
 
   onTabChanged(event: MatTabChangeEvent): void {
@@ -59,49 +55,54 @@ export class MyItemsComponent {
   setInactiveItems(): void {
     if (this.updatedInactive) return;
 
-    this.http.get(ItemEndpoints.inactive, { headers: this.headers }).subscribe({
-      next: (response: BasicItemResponse[] | any) => {
-        console.log(response);
+    this.http
+      .get(ItemEndpoints.inactive, { headers: this.authService.getHeaders() })
+      .subscribe({
+        next: (response: BasicItemResponse[] | any) => {
+          console.log(response);
 
-        this.inactiveItems = response;
-        this.updatedInactive = true;
-      },
-      error: (error: any) => {
-        console.log(error);
-      },
-    });
+          this.inactiveItems = response;
+          this.updatedInactive = true;
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+      });
   }
 
   setPublishedItems(): void {
     if (this.updatedPublished) return;
 
-    this.http.get(ItemEndpoints.active, { headers: this.headers }).subscribe({
-      next: (response: PublishedItemResponse[] | any) => {
-        console.log(response);
+    this.http
+      .get(ItemEndpoints.active, { headers: this.authService.getHeaders() })
+      .subscribe({
+        next: (response: PublishedItemResponse[] | any) => {
+          console.log(response);
 
-        this.publishedItems = response;
-        this.updatedPublished = true;
-      },
-      error: (error: any) => console.error(error),
-    });
+          this.publishedItems = response;
+          this.updatedPublished = true;
+        },
+        error: (error: any) => console.error(error),
+      });
   }
 
   setItemsWithBids(): void {
     if (this.updatedBidden) return;
 
-    this.http.get(ItemEndpoints.bidden, { headers: this.headers }).subscribe({
-      next: (response: BasicItemResponse[] | any) => {
-        console.log(response);
+    this.http
+      .get(ItemEndpoints.bidden, { headers: this.authService.getHeaders() })
+      .subscribe({
+        next: (response: BasicItemResponse[] | any) => {
+          console.log(response);
 
-        this.itemsWithBids = response;
-        this.updatedBidden = true;
-      },
-      error: (error: any) => console.error(error),
-    });
+          this.itemsWithBids = response;
+          this.updatedBidden = true;
+        },
+        error: (error: any) => console.error(error),
+      });
   }
 
   addItem(): void {
-    console.log('add item');
     this.addItemDialog.open(AddItemDialogComponent, {
       autoFocus: false,
       restoreFocus: false,

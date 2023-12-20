@@ -94,7 +94,7 @@ export class AuthService {
     };
     this.authDataSubject.next(newAuthData);
 
-    this.headers.set(
+    this.headers = this.headers.set(
       'Authorization',
       `Bearer ${localStorage.getItem(tokenKeyName)}`
     );
