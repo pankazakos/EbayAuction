@@ -9,22 +9,26 @@ import { BasicCategoryResponse } from '../contracts/responses/category';
 export class CategoryService {
   formControl = new FormControl();
   categories: BasicCategoryResponse[] = [];
-  selectedNames: string[] = [];
-  filteredNames: string[] = [];
+  selectedCategories: BasicCategoryResponse[] = [];
+  filteredCategories: BasicCategoryResponse[] = [];
 
   constructor() {}
 
   onSelected(event: MatAutocompleteSelectedEvent): void {
-    const selectedCategory = event.option.value;
-    this.selectedNames.push(selectedCategory);
+    const selectedCategoryName = event.option.value;
+    const selectedCategory = this.categories.find(
+      (category) => category.name === selectedCategoryName
+    );
+
+    if (selectedCategory) this.selectedCategories.push(selectedCategory);
 
     this.formControl.setValue('');
   }
 
   onAutocompleteEnterKeyPress(): void {
-    if (this.filteredNames.length > 0) {
-      const firstMatchingOption = this.filteredNames[0];
-      this.formControl.setValue(firstMatchingOption);
+    if (this.filteredCategories.length > 0) {
+      const firstMatchingOption = this.filteredCategories[0];
+      this.formControl.setValue(firstMatchingOption.name);
       this.onSelected({
         option: { value: firstMatchingOption },
       } as MatAutocompleteSelectedEvent);
@@ -33,28 +37,36 @@ export class CategoryService {
 
   filter(value: string) {
     const filterValue = value.toLowerCase();
-    this.filteredNames = this.categories
-      .filter((category) => !this.selectedNames.includes(category.name))
-      .map((category) => category.name)
-      .filter((category) => category.toLowerCase().includes(filterValue));
+
+    // Filter based on the input value
+    this.filteredCategories = this.categories.filter((category) =>
+      category.name.toLowerCase().includes(filterValue)
+    );
+
+    // Also filter out the selected categories
+    this.filteredCategories = this.filteredCategories.filter(
+      (category) =>
+        !this.selectedCategories.find((selected) => selected.id === category.id)
+    );
   }
 
-  remove(category: string): void {
-    const index = this.selectedNames.indexOf(category);
+  remove(category: BasicCategoryResponse): void {
+    const index = this.selectedCategories.findIndex(
+      (selected) => selected.id === category.id
+    );
     if (index >= 0) {
-      this.selectedNames.splice(index, 1);
+      this.selectedCategories.splice(index, 1);
     }
 
     const indexToAddback = this.categories.findIndex(
-      (cat) => cat.name == category
+      (cat) => cat.id === category.id
     );
-
-    this.filteredNames.splice(indexToAddback, 0, category);
+    if (indexToAddback >= 0) {
+      this.filteredCategories.push(category);
+    }
   }
 
   getCategoryIds(): number[] {
-    return this.categories
-      .filter((category) => this.selectedNames.includes(category.name))
-      .map((category) => category.id);
+    return this.selectedCategories.map((category) => category.id);
   }
 }

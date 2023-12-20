@@ -27,8 +27,8 @@ export class AddItemDialogComponent {
     this.http.get(`${baseUrl}/category/all`).subscribe({
       next: (response: BasicCategoryResponse[] | any) => {
         this.categoryService.categories = response;
-        this.categoryService.filteredNames =
-          this.categoryService.categories.map((category) => category.name);
+        this.categoryService.filteredCategories =
+          this.categoryService.categories;
       },
       error: (error) => console.log(error),
     });
@@ -38,57 +38,8 @@ export class AddItemDialogComponent {
     });
   }
 
-  // onCategorySelected(event: MatAutocompleteSelectedEvent): void {
-  //   const selectedCategory = event.option.value;
-  //   this.categoryService.selectedNames.push(selectedCategory);
-
-  //   this.categoryService.setValue(''); // remove from form and display in chip
-  // }
-
-  // onAutocompleteEnterKeyPress(): void {
-  //   if (this.myItemService.filteredCategoryNames.length > 0) {
-  //     const firstMatchingOption = this.myItemService.filteredCategoryNames[0];
-  //     this.categoryFormControl.setValue(firstMatchingOption);
-  //     this.onCategorySelected({
-  //       option: { value: firstMatchingOption },
-  //     } as MatAutocompleteSelectedEvent);
-  //   }
-  // }
-
-  // filterCategories(value: string) {
-  //   const filterValue = value.toLowerCase();
-  //   this.myItemService.filteredCategoryNames = this.categories
-  //     .filter(
-  //       (category) =>
-  //         !this.myItemService.selectedCategoryNames.includes(category.name)
-  //     )
-  //     .map((category) => category.name)
-  //     .filter((category) => category.toLowerCase().includes(filterValue));
-  // }
-
-  // removeCategory(category: string): void {
-  //   const index = this.myItemService.selectedCategoryNames.indexOf(category);
-  //   if (index >= 0) {
-  //     this.myItemService.selectedCategoryNames.splice(index, 1);
-  //   }
-
-  //   const indexToAddback = this.categories.findIndex(
-  //     (cat) => cat.name == category
-  //   );
-
-  //   this.myItemService.filteredCategoryNames.splice(
-  //     indexToAddback,
-  //     0,
-  //     category
-  //   );
-
-  //   console.log('filtered: ' + this.myItemService.filteredCategoryNames);
-  // }
-
   onCreateItem(): void {
     console.log(this.myItemService.addItemForm);
-
-    console.log(this.categoryService.selectedNames);
 
     console.log(this.categoryService.getCategoryIds());
 

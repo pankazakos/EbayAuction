@@ -79,11 +79,11 @@
             <mat-label>Select Categories</mat-label>
             <mat-chip-listbox class="category-chips">
               <mat-chip
-                *ngFor="let category of categoryService.selectedNames"
+                *ngFor="let category of categoryService.selectedCategories"
                 [removable]="true"
                 (removed)="categoryService.remove(category)"
               >
-                {{ category }}
+                {{ category.name }}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
             </mat-chip-listbox>
@@ -100,9 +100,9 @@
               (optionSelected)="categoryService.onSelected($event)"
             >
               <mat-option
-                *ngFor="let category of categoryService.filteredNames"
-                [value]="category"
-                >{{ category }}</mat-option
+                *ngFor="let category of categoryService.filteredCategories"
+                [value]="category.name"
+                >{{ category.name }}</mat-option
               >
             </mat-autocomplete>
           </mat-form-field>
