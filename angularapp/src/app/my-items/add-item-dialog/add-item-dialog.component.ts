@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MyItemService } from '../my-item.service';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { HttpClient } from '@angular/common/http';
 import { baseUrl } from 'src/app/shared/types';
 import { AuthService } from 'src/app/shared/services/auth-service.service';
@@ -26,9 +25,7 @@ export class AddItemDialogComponent {
   ngOnInit(): void {
     this.http.get(`${baseUrl}/category/all`).subscribe({
       next: (response: BasicCategoryResponse[] | any) => {
-        this.categoryService.categories = response;
-        this.categoryService.filteredCategories =
-          this.categoryService.categories;
+        this.categoryService.setCategories(response);
       },
       error: (error) => console.log(error),
     });

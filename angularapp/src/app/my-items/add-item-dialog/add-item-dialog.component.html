@@ -79,7 +79,7 @@
             <mat-label>Select Categories</mat-label>
             <mat-chip-listbox class="category-chips">
               <mat-chip
-                *ngFor="let category of categoryService.selectedCategories"
+                *ngFor="let category of categoryService.selected"
                 [removable]="true"
                 (removed)="categoryService.remove(category)"
               >
@@ -100,7 +100,7 @@
               (optionSelected)="categoryService.onSelected($event)"
             >
               <mat-option
-                *ngFor="let category of categoryService.filteredCategories"
+                *ngFor="let category of categoryService.filtered"
                 [value]="category.name"
                 >{{ category.name }}</mat-option
               >

@@ -7,28 +7,49 @@ import { BasicCategoryResponse } from '../contracts/responses/category';
   providedIn: 'root',
 })
 export class CategoryService {
-  formControl = new FormControl();
-  categories: BasicCategoryResponse[] = [];
-  selectedCategories: BasicCategoryResponse[] = [];
-  filteredCategories: BasicCategoryResponse[] = [];
+  private _formControl = new FormControl();
+  private _categories: BasicCategoryResponse[] = [];
+  private _selected: BasicCategoryResponse[] = [];
+  private _filtered: BasicCategoryResponse[] = [];
 
   constructor() {}
 
+  get formControl(): FormControl {
+    return this._formControl;
+  }
+
+  get categories(): BasicCategoryResponse[] {
+    return this._categories;
+  }
+
+  get selected(): BasicCategoryResponse[] {
+    return this._selected;
+  }
+
+  get filtered(): BasicCategoryResponse[] {
+    return this._filtered;
+  }
+
+  setCategories(categories: BasicCategoryResponse[]): void {
+    this._categories = categories;
+    this._filtered = categories;
+  }
+
   onSelected(event: MatAutocompleteSelectedEvent): void {
     const selectedCategoryName = event.option.value;
-    const selectedCategory = this.categories.find(
+    const selectedCategory = this._categories.find(
       (category) => category.name === selectedCategoryName
     );
 
-    if (selectedCategory) this.selectedCategories.push(selectedCategory);
+    if (selectedCategory) this._selected.push(selectedCategory);
 
-    this.formControl.setValue('');
+    this._formControl.setValue('');
   }
 
   onAutocompleteEnterKeyPress(): void {
-    if (this.filteredCategories.length > 0) {
-      const firstMatchingOption = this.filteredCategories[0];
-      this.formControl.setValue(firstMatchingOption.name);
+    if (this._filtered.length > 0) {
+      const firstMatchingOption = this._filtered[0];
+      this._formControl.setValue(firstMatchingOption.name);
       this.onSelected({
         option: { value: firstMatchingOption },
       } as MatAutocompleteSelectedEvent);
@@ -39,34 +60,34 @@ export class CategoryService {
     const filterValue = value.toLowerCase();
 
     // Filter based on the input value
-    this.filteredCategories = this.categories.filter((category) =>
+    this._filtered = this._categories.filter((category) =>
       category.name.toLowerCase().includes(filterValue)
     );
 
     // Also filter out the selected categories
-    this.filteredCategories = this.filteredCategories.filter(
+    this._filtered = this._filtered.filter(
       (category) =>
-        !this.selectedCategories.find((selected) => selected.id === category.id)
+        !this._selected.find((selected) => selected.id === category.id)
     );
   }
 
   remove(category: BasicCategoryResponse): void {
-    const index = this.selectedCategories.findIndex(
+    const index = this._selected.findIndex(
       (selected) => selected.id === category.id
     );
     if (index >= 0) {
-      this.selectedCategories.splice(index, 1);
+      this._selected.splice(index, 1);
     }
 
-    const indexToAddback = this.categories.findIndex(
+    const indexToAddback = this._categories.findIndex(
       (cat) => cat.id === category.id
     );
     if (indexToAddback >= 0) {
-      this.filteredCategories.push(category);
+      this._filtered.push(category);
     }
   }
 
   getCategoryIds(): number[] {
-    return this.selectedCategories.map((category) => category.id);
+    return this._selected.map((category) => category.id);
   }
 }
