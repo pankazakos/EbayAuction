@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { MyItemService } from '../my-item.service';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { baseUrl } from 'src/app/shared/types';
 import { AuthService } from 'src/app/shared/services/auth-service.service';
 import { CategoryService } from 'src/app/shared/services/category.service';
+import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -36,24 +37,26 @@ export class AddItemDialogComponent {
   }
 
   onCreateItem(): void {
-    console.log(this.myItemService.addItemForm);
+    this.myItemService.addItemForm.categoryIds =
+      this.categoryService.getCategoryIds();
 
-    console.log(this.categoryService.getCategoryIds());
+    const formData = new FormData();
 
-    console.log(this.authService.getHeaders());
+    formData.append('itemJson', JSON.stringify(this.myItemService.addItemForm));
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
 
-    // const formData = new FormData();
-    // formData.append('itemJson', JSON.stringify(this.myItemService.addItemForm));
-    // if (this.selectedFile) {
-    //   formData.append('image', this.selectedFile);
-    // }
-
-    // this.http.post(`${ItemEndpoints.create}`, formData, {headers: this.headers}).subscribe({
-    //   next: (response: any) => {
-    //     console.log(response);
-    //   },
-    //   error: (error) => console.log(error),
-    // });
+    this.http
+      .post(`${ItemEndpoints.create}`, formData, {
+        headers: this.authService.getHeaders(),
+      })
+      .subscribe({
+        next: (response: any) => {
+          console.log(response);
+        },
+        error: (error) => console.log(error),
+      });
   }
 
   onFileSelected(event: Event) {
