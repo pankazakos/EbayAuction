@@ -17,7 +17,7 @@
               matInput
               type="text"
               placeholder="Title"
-              [(ngModel)]="this.myItemService.addItemForm.name"
+              [(ngModel)]="myItemService.addItemForm.name"
             />
           </mat-form-field>
           <mat-form-field floatLabel="always">
@@ -27,7 +27,7 @@
               type="number"
               min="0"
               placeholder="$"
-              [(ngModel)]="this.myItemService.addItemForm.firstBid"
+              [(ngModel)]="myItemService.addItemForm.firstBid"
             />
           </mat-form-field>
           <mat-form-field floatLabel="always">
@@ -36,12 +36,12 @@
               matInput
               type="number"
               [min]="
-                this.myItemService.addItemForm.firstBid
-                  ? this.myItemService.addItemForm.firstBid
+                myItemService.addItemForm.firstBid
+                  ? myItemService.addItemForm.firstBid
                   : 0
               "
               placeholder="$"
-              [(ngModel)]="this.myItemService.addItemForm.buyPrice"
+              [(ngModel)]="myItemService.addItemForm.buyPrice"
             />
           </mat-form-field>
           <mat-form-field floatLabel="always" id="image-input">
@@ -79,11 +79,9 @@
             <mat-label>Select Categories</mat-label>
             <mat-chip-listbox class="category-chips">
               <mat-chip
-                *ngFor="
-                  let category of this.myItemService.selectedCategoryNames
-                "
+                *ngFor="let category of categoryService.selectedNames"
                 [removable]="true"
-                (removed)="removeCategory(category)"
+                (removed)="categoryService.remove(category)"
               >
                 {{ category }}
                 <mat-icon matChipRemove>cancel</mat-icon>
@@ -93,18 +91,16 @@
               type="text"
               placeholder="Type to search"
               matInput
-              [formControl]="categoryFormControl"
+              [formControl]="categoryService.formControl"
               [matAutocomplete]="auto"
-              (keydown.enter)="onAutocompleteEnterKeyPress()"
+              (keydown.enter)="categoryService.onAutocompleteEnterKeyPress()"
             />
             <mat-autocomplete
               #auto="matAutocomplete"
-              (optionSelected)="onCategorySelected($event)"
+              (optionSelected)="categoryService.onSelected($event)"
             >
               <mat-option
-                *ngFor="
-                  let category of this.myItemService.filteredCategoryNames
-                "
+                *ngFor="let category of categoryService.filteredNames"
                 [value]="category"
                 >{{ category }}</mat-option
               >
@@ -118,7 +114,7 @@
               #description
               maxlength="300"
               placeholder="Description"
-              [(ngModel)]="this.myItemService.addItemForm.description"
+              [(ngModel)]="myItemService.addItemForm.description"
             ></textarea>
             <mat-hint align="end">{{ description.value.length }}/300</mat-hint>
           </mat-form-field>

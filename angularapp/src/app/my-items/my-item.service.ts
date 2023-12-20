@@ -6,8 +6,6 @@ import { AddItemRequest } from '../shared/contracts/requests/item';
 })
 export class MyItemService {
   addItemForm: AddItemRequest = {} as AddItemRequest;
-  selectedCategoryNames: string[] = [];
-  filteredCategoryNames: string[] = [];
 
   constructor() {}
 }
