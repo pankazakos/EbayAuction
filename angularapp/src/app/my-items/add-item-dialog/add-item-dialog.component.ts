@@ -13,9 +13,6 @@ import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints'
   styleUrls: ['./add-item-dialog.component.scss'],
 })
 export class AddItemDialogComponent {
-  fileName: string = '';
-  selectedFile: File | null = null;
-
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -43,8 +40,9 @@ export class AddItemDialogComponent {
     const formData = new FormData();
 
     formData.append('itemJson', JSON.stringify(this.myItemService.addItemForm));
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
+
+    if (this.myItemService.addItemImageFile) {
+      formData.append('image', this.myItemService.addItemImageFile);
     }
 
     this.http
@@ -70,12 +68,13 @@ export class AddItemDialogComponent {
     const file = element.files[0];
 
     if (file) {
-      this.selectedFile = file;
-      this.fileName = file.name;
+      this.myItemService.addItemImageFilename = file.name;
+      this.myItemService.addItemImageFile = file;
     }
   }
 
   onRemoveFile(): void {
-    this.fileName = '';
+    this.myItemService.addItemImageFilename = '';
+    this.myItemService.addItemImageFile = null;
   }
 }

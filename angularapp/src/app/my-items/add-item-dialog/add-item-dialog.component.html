@@ -56,16 +56,16 @@
               matInput
               class="file-input"
               placeholder="No file chosen"
-              [matTooltip]="fileName"
-              [matTooltipDisabled]="fileName == ''"
-              [value]="fileName"
+              [matTooltip]="myItemService.addItemImageFilename"
+              [matTooltipDisabled]="myItemService.addItemImageFilename == ''"
+              [value]="myItemService.addItemImageFilename"
               disabled
             />
             <button
               matSuffix
               mat-icon-button
               (click)="onRemoveFile()"
-              [hidden]="fileName == ''"
+              [hidden]="myItemService.addItemImageFilename == ''"
             >
               <mat-icon>close</mat-icon>
             </button>
