@@ -74,11 +74,11 @@
         <div class="filter-label">Categories</div>
         <mat-chip-listbox class="category-chips">
           <mat-chip
-            *ngFor="let category of this.filterService.selectedCategoryNames"
+            *ngFor="let category of categoryService.selected"
             [removable]="true"
-            (removed)="removeCategory(category)"
+            (removed)="categoryService.remove(category)"
           >
-            {{ category }}
+            {{ category.name }}
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
         </mat-chip-listbox>
@@ -89,18 +89,18 @@
             type="text"
             placeholder="Type to search"
             matInput
-            [formControl]="categoryFormControl"
+            [formControl]="categoryService.formControl"
             [matAutocomplete]="auto"
-            (keydown.enter)="onAutocompleteEnterKeyPress()"
+            (keydown.enter)="categoryService.onAutocompleteEnterKeyPress()"
           />
           <mat-autocomplete
             #auto="matAutocomplete"
-            (optionSelected)="onCategorySelected($event)"
+            (optionSelected)="categoryService.onSelected($event)"
           >
             <mat-option
-              *ngFor="let category of this.filterService.filteredCategoryNames"
-              [value]="category"
-              >{{ category }}</mat-option
+              *ngFor="let category of categoryService.filtered"
+              [value]="category.name"
+              >{{ category.name }}</mat-option
             >
           </mat-autocomplete>
         </mat-form-field>
