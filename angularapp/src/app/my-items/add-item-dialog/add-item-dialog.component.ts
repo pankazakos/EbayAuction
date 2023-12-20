@@ -6,6 +6,8 @@ import { baseUrl } from 'src/app/shared/types';
 import { AuthService } from 'src/app/shared/services/auth-service.service';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
+import { MatDialogRef } from '@angular/material/dialog';
+import { AlertService } from 'src/app/shared/services/alert.service';
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -17,7 +19,9 @@ export class AddItemDialogComponent {
     private http: HttpClient,
     private authService: AuthService,
     public myItemService: MyItemService,
-    public categoryService: CategoryService
+    public categoryService: CategoryService,
+    private alertService: AlertService,
+    private selfDialogRef: MatDialogRef<AddItemDialogComponent>
   ) {}
 
   ngOnInit(): void {
@@ -52,8 +56,17 @@ export class AddItemDialogComponent {
       .subscribe({
         next: (response: any) => {
           console.log(response);
+          this.alertService.success('Item created successfully', 'Ok');
+          this.selfDialogRef.close('success');
         },
-        error: (error) => console.log(error),
+        error: (error) => {
+          console.log(error);
+          if (error.status == 400) {
+            this.alertService.error('Invalid data to create item', 'Close');
+          } else if (error.status == 500) {
+            this.alertService.internalError();
+          }
+        },
       });
   }
 

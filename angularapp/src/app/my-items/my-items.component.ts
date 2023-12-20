@@ -9,6 +9,7 @@ import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
 import { AuthService } from '../shared/services/auth-service.service';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-my-items',
@@ -103,9 +104,16 @@ export class MyItemsComponent {
   }
 
   addItem(): void {
-    this.addItemDialog.open(AddItemDialogComponent, {
+    const addItemDialogRef = this.addItemDialog.open(AddItemDialogComponent, {
       autoFocus: false,
       restoreFocus: false,
+    });
+
+    addItemDialogRef.afterClosed().subscribe((result) => {
+      if (result == 'success') {
+        this.updatedInactive = false;
+        this.setInactiveItems();
+      }
     });
   }
 }

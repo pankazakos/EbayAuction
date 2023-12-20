@@ -8,11 +8,7 @@ import { NgForm } from '@angular/forms';
 import { UserEndpoints } from 'src/app/shared/contracts/endpoints/UserEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
 import { IdToUsernameResponse } from 'src/app/shared/contracts/responses/user';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { DateTimeFormatService } from 'src/app/shared/services/date-time-format.service';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
@@ -21,11 +17,10 @@ import {
   AuthData,
   AuthService,
 } from 'src/app/shared/services/auth-service.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
-import { Router } from '@angular/router';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
+import { AlertService } from 'src/app/shared/services/alert.service';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -53,13 +48,10 @@ export class ItemComponent {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private itemDialogRef: MatDialogRef<ItemComponent>,
     private confirmBidDialog: MatDialog,
     private formatter: DateTimeFormatService,
     private authService: AuthService,
-    private invalidBid: MatSnackBar,
-    private successfulBid: MatSnackBar,
+    private alertService: AlertService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.item.data = data.item;
@@ -107,15 +99,7 @@ export class ItemComponent {
   }
 
   private openInvalidBidAlert(): void {
-    this.invalidBid.open('Invalid bid amount', 'Close', {
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      duration: 2500,
-      panelClass: ['error-snackbar'],
-      data: {
-        item: this.item.data,
-      },
-    });
+    this.alertService.error('Invalid bid', 'Close');
   }
 
   placeBid(): void {
@@ -164,27 +148,15 @@ export class ItemComponent {
               this.bid = response;
               this.item.data.currently = this.bid.amount;
               this.item.data.numBids += 1;
-
-              this.successfulBid.open('Bid successful!', 'Ok', {
-                horizontalPosition: 'center',
-                verticalPosition: 'top',
-                duration: 3000,
-                panelClass: ['basic-snackbar'],
-              });
-
+              this.alertService.success('Bid successful!', 'Ok');
               this.bidForm.reset();
             },
             error: (error: HttpErrorResponse) => {
               console.error(error);
-              if (error.status === 401) {
-                alert('Your session has expired. Please log in again.');
-                this.authService.logoutUser();
-                this.itemDialogRef.close();
-                this.router.navigate(['/login']);
-              } else if (error.status === 400) {
+              if (error.status === 400) {
                 this.openInvalidBidAlert();
               } else if (error.status === 500) {
-                alert('Internal server error. Please try again later.');
+                this.alertService.internalError();
               }
             },
           });

@@ -120,7 +120,7 @@ mat-paginator {
 }
 
 .mat-mdc-snack-bar-container {
-  &.basic-snackbar {
+  &.success-snackbar {
     --mdc-snackbar-container-color: #cce8e9;
     --mdc-snackbar-supporting-text-color: #041f21;
   }
@@ -133,14 +133,14 @@ mat-paginator {
 
 @media (min-width: 600px) {
   .mat-mdc-snack-bar-container {
-    &.basic-snackbar {
+    &.success-snackbar {
       margin-top: 10%;
-      scale: 1.3;
+      scale: 1.25;
     }
 
     &.error-snackbar {
       margin-top: 10%;
-      scale: 1.3;
+      scale: 1.25;
     }
   }
 }
