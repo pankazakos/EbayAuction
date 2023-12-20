@@ -50,6 +50,11 @@ export class AuthService {
     return decodedJWT;
   }
 
+  private handleSessionTimeout(): void {
+    alert('Your session has expired. Please login again');
+    this.logoutUser();
+  }
+
   getCurrentAuthData(): AuthData {
     return this.authDataSubject.getValue();
   }
@@ -74,13 +79,12 @@ export class AuthService {
     const timeout = expiryDate - now;
 
     if (timeout < 0) {
-      alert('Your session has expired. Please login again');
-      this.logoutUser();
+      this.handleSessionTimeout();
       return;
     }
 
     setTimeout(() => {
-      this.logoutUser();
+      this.handleSessionTimeout();
     }, timeout);
 
     const newAuthData: AuthData = {
