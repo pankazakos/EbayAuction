@@ -59,6 +59,14 @@ $field-gap: 1.5rem;
     justify-content: flex-start;
     align-items: flex-start;
     gap: $field-gap;
+
+    .add-item-form-description {
+      textarea {
+        height: 12rem;
+        min-height: 8rem;
+        max-height: 15rem;
+      }
+    }
   }
 
   mat-form-field {

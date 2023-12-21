@@ -79,7 +79,7 @@
         </div>
         <div id="add-item-form-second-part">
           <mat-form-field floatLabel="always">
-            <mat-label>Select Categories*</mat-label>
+            <mat-label>Select Categories</mat-label>
             <mat-chip-listbox class="category-chips">
               <mat-chip
                 *ngFor="let category of categoryService.selected"
@@ -97,6 +97,7 @@
               [formControl]="categoryService.formControl"
               [matAutocomplete]="auto"
               (keydown.enter)="categoryService.onAutocompleteEnterKeyPress()"
+              [required]="categoryService.selected.length == 0"
             />
             <mat-autocomplete
               #auto="matAutocomplete"
