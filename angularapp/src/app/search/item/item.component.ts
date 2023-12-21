@@ -34,6 +34,7 @@ export class ItemComponent {
   seller: IdToUsernameResponse = {} as IdToUsernameResponse;
   item: loadingItem = {} as loadingItem;
   image: loadingImage = {} as loadingImage;
+  isItemInactive: boolean = false;
   headers: HttpHeaders;
   bid: BasicBidResponse = {} as BasicBidResponse;
   categories: BasicCategoryResponse[] = [];
@@ -52,10 +53,11 @@ export class ItemComponent {
     private formatter: DateTimeFormatService,
     private authService: AuthService,
     private alertService: AlertService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public dialogInputData: any
   ) {
-    this.item.data = data.item;
-    this.image = data.image;
+    this.item.data = dialogInputData.item;
+    this.image = dialogInputData.image;
+    this.isItemInactive = dialogInputData.isItemInactive;
     this.headers = new HttpHeaders().set(
       'Authorization',
       `Bearer ${localStorage.getItem('accessToken')}`

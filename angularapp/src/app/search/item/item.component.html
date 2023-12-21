@@ -89,7 +89,7 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button mat-dialog-close>close</button>
-  <div class="bid-section">
+  <div *ngIf="!isItemInactive" class="bid-section">
     <form #bidForm="ngForm" (submit)="placeBid()">
       <div
         class="bid-form"

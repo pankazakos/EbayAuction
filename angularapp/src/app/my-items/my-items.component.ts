@@ -127,6 +127,7 @@ export class MyItemsComponent {
       data: {
         item: { ...this.inactiveItems.data[itemIdx] },
         image: this.inactiveItems.images[itemIdx],
+        isItemInactive: true,
       },
     });
   }
