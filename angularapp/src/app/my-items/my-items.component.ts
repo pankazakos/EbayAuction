@@ -3,13 +3,14 @@ import {
   BasicItemResponse,
   PublishedItemResponse,
 } from '../shared/contracts/responses/item';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
 import { AuthService } from '../shared/services/auth-service.service';
-import { AlertService } from '../shared/services/alert.service';
+import { ItemComponent } from '../search/item/item.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-my-items',
@@ -20,6 +21,7 @@ export class MyItemsComponent {
   inactiveItems: BasicItemResponse[] = [];
   publishedItems: PublishedItemResponse[] = [];
   itemsWithBids: BasicItemResponse[] = [];
+  images: { src: string; isLoading: boolean; itemId: number }[] = [];
 
   updatedInactive: boolean = false;
   updatedPublished: boolean = false;
@@ -28,7 +30,8 @@ export class MyItemsComponent {
   constructor(
     private http: HttpClient,
     private addItemDialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private itemDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +67,7 @@ export class MyItemsComponent {
 
           this.inactiveItems = response;
           this.updatedInactive = true;
+          this.fetchImages();
         },
         error: (error: any) => {
           console.log(error);
@@ -101,6 +105,44 @@ export class MyItemsComponent {
         },
         error: (error: any) => console.error(error),
       });
+  }
+
+  showItemDialog(itemIdx: number): void {
+    this.itemDialog.open(ItemComponent, {
+      autoFocus: false,
+      restoreFocus: false,
+      data: {
+        item: { ...this.inactiveItems[itemIdx] },
+        image: this.images[itemIdx],
+      },
+    });
+  }
+
+  private fetchImages(): void {
+    this.inactiveItems.map((item) => {
+      this.http
+        .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
+          responseType: 'blob',
+        })
+        .subscribe({
+          next: (imageData: Blob) => {
+            setTimeout(() => {
+              const blob = new Blob([imageData], {
+                type: 'image/jpeg',
+              });
+              const imageUrl = URL.createObjectURL(blob);
+              this.images.push({
+                src: imageUrl,
+                isLoading: false,
+                itemId: item.itemId,
+              });
+            }, environment.timeout);
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
+    });
   }
 
   addItem(): void {

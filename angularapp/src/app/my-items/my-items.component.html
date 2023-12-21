@@ -25,6 +25,57 @@
               fxLayout="row wrap"
               fxLayoutAlign="start start"
             >
+              <div *ngIf="updatedInactive" class="item-boxes">
+                <mat-card
+                  class="item-card"
+                  *ngFor="let item of inactiveItems; let i = index"
+                >
+                  <div class="item-link" (click)="showItemDialog(i)">
+                    <div class="item-card-main-container">
+                      <div class="item-card-image">
+                        <div
+                          class="skeleton-image"
+                          *ngIf="images[i].isLoading"
+                        ></div>
+                        <img
+                          *ngIf="!images[i].isLoading"
+                          mat-card-image
+                          class="item-image"
+                          [src]="images[i].src"
+                          alt="item photo"
+                        />
+                      </div>
+
+                      <div class="item-card-header">
+                        <mat-card-header>
+                          <mat-card-title>
+                            {{ item.name }}
+                          </mat-card-title>
+                        </mat-card-header>
+                      </div>
+
+                      <div class="item-content">
+                        <mat-card-content>
+                          <mat-list-item>
+                            <div class="item-content-element">
+                              <div>Current price:</div>
+                              <div>${{ item.currently }}</div>
+                            </div>
+                          </mat-list-item>
+                          <mat-list-item>
+                            <div class="item-content-element">
+                              <div>Buy at:</div>
+                              <div>
+                                {{ item.buyPrice ? "$" + item.buyPrice : "-" }}
+                              </div>
+                            </div>
+                          </mat-list-item>
+                        </mat-card-content>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card>
+              </div>
               <mat-card *ngIf="!inactiveItems.length">
                 <mat-card-header>
                   <mat-card-title>
