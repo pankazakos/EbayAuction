@@ -18,6 +18,7 @@
               type="text"
               placeholder="Title"
               [(ngModel)]="myItemService.addItemForm.name"
+              required
             />
           </mat-form-field>
           <mat-form-field floatLabel="always">
@@ -28,6 +29,7 @@
               min="0"
               placeholder="$"
               [(ngModel)]="myItemService.addItemForm.firstBid"
+              required
             />
           </mat-form-field>
           <mat-form-field floatLabel="always">
@@ -42,6 +44,7 @@
               "
               placeholder="$"
               [(ngModel)]="myItemService.addItemForm.buyPrice"
+              required
             />
           </mat-form-field>
           <mat-form-field floatLabel="always" id="image-input">
@@ -76,7 +79,7 @@
         </div>
         <div id="add-item-form-second-part">
           <mat-form-field floatLabel="always">
-            <mat-label>Select Categories</mat-label>
+            <mat-label>Select Categories*</mat-label>
             <mat-chip-listbox class="category-chips">
               <mat-chip
                 *ngFor="let category of categoryService.selected"
@@ -106,7 +109,7 @@
               >
             </mat-autocomplete>
           </mat-form-field>
-          <mat-form-field floatLabel="always">
+          <mat-form-field floatLabel="always" class="add-item-form-description">
             <mat-label>Description</mat-label>
             <textarea
               matInput
@@ -115,6 +118,7 @@
               maxlength="300"
               placeholder="Description"
               [(ngModel)]="myItemService.addItemForm.description"
+              required
             ></textarea>
             <mat-hint align="end">{{ description.value.length }}/300</mat-hint>
           </mat-form-field>
