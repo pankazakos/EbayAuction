@@ -154,14 +154,6 @@ mat-card.item-card {
   cursor: pointer;
 }
 
-.item-content > mat-card-content {
-  padding: 0;
-}
-
-.item-content mat-list-item {
-  padding: 0;
-}
-
 .item-content-element {
   width: 90%;
   display: flex;
@@ -170,6 +162,18 @@ mat-card.item-card {
 
 .item-link {
   cursor: pointer;
+}
+
+.item-card-actions {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+
+  mat-icon {
+    margin: 0;
+  }
 }
 
 @media (max-width: 1700px) {

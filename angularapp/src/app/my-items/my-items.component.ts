@@ -172,4 +172,16 @@ export class MyItemsComponent {
       }
     });
   }
+
+  deleteItem(): void {
+    console.log('delete item');
+  }
+
+  editItem(): void {
+    console.log('edit item');
+  }
+
+  publishItem(): void {
+    console.log('publish item');
+  }
 }

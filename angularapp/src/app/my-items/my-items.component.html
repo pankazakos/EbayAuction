@@ -55,6 +55,21 @@
                       </div>
 
                       <div class="item-content"></div>
+                      <div class="item-card-actions">
+                        <button mat-raised-button (click)="editItem()">
+                          <mat-icon aria-label="edit icon" fontIcon="edit" />
+                        </button>
+                        <button
+                          mat-raised-button
+                          color="accent"
+                          (click)="publishItem()"
+                        >
+                          <mat-icon
+                            aria-label="publish icon"
+                            fontIcon="publish"
+                          />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </mat-card>
