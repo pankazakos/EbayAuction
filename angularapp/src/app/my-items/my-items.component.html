@@ -25,23 +25,23 @@
               fxLayout="row wrap"
               fxLayoutAlign="start start"
             >
-              <div *ngIf="updatedInactive" class="item-boxes">
+              <div *ngIf="!inactiveItems.loading" class="item-boxes">
                 <mat-card
                   class="item-card"
-                  *ngFor="let item of inactiveItems; let i = index"
+                  *ngFor="let item of inactiveItems.data; let i = index"
                 >
                   <div class="item-link" (click)="showItemDialog(i)">
                     <div class="item-card-main-container">
                       <div class="item-card-image">
                         <div
                           class="skeleton-image"
-                          *ngIf="images[i].isLoading"
+                          *ngIf="inactiveItems.images[i].isLoading"
                         ></div>
                         <img
-                          *ngIf="!images[i].isLoading"
+                          *ngIf="!inactiveItems.images[i].isLoading"
                           mat-card-image
                           class="item-image"
-                          [src]="images[i].src"
+                          [src]="inactiveItems.images[i].src"
                           alt="item photo"
                         />
                       </div>
@@ -76,7 +76,7 @@
                   </div>
                 </mat-card>
               </div>
-              <mat-card *ngIf="!inactiveItems.length">
+              <mat-card *ngIf="inactiveItems.empty" class="note-card">
                 <mat-card-header>
                   <mat-card-title>
                     <div class="note-label">

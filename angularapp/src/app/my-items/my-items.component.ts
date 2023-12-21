@@ -18,14 +18,25 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./my-items.component.scss'],
 })
 export class MyItemsComponent {
-  inactiveItems: BasicItemResponse[] = [];
-  publishedItems: PublishedItemResponse[] = [];
-  itemsWithBids: BasicItemResponse[] = [];
-  images: { src: string; isLoading: boolean; itemId: number }[] = [];
-
-  updatedInactive: boolean = false;
-  updatedPublished: boolean = false;
-  updatedBidden: boolean = false;
+  inactiveItems: {
+    data: BasicItemResponse[];
+    loading: boolean;
+    images: { src: string; isLoading: boolean; itemId: number }[];
+    empty: boolean;
+  } = {
+    data: [],
+    loading: true,
+    images: [],
+    empty: false,
+  };
+  publishedItems: { data: PublishedItemResponse[]; loading: boolean } = {
+    data: [],
+    loading: true,
+  };
+  itemsWithBids: { data: BasicItemResponse[]; loading: boolean } = {
+    data: [],
+    loading: true,
+  };
 
   constructor(
     private http: HttpClient,
@@ -57,7 +68,7 @@ export class MyItemsComponent {
   }
 
   setInactiveItems(): void {
-    if (this.updatedInactive) return;
+    if (!this.inactiveItems.loading) return;
 
     this.http
       .get(ItemEndpoints.inactive, { headers: this.authService.getHeaders() })
@@ -65,9 +76,11 @@ export class MyItemsComponent {
         next: (response: BasicItemResponse[] | any) => {
           console.log(response);
 
-          this.inactiveItems = response;
-          this.updatedInactive = true;
-          this.fetchImages();
+          this.inactiveItems.data = response;
+          this.inactiveItems.loading = false;
+          if (this.inactiveItems.data.length == 0)
+            this.inactiveItems.empty = true;
+          else this.fetchImages();
         },
         error: (error: any) => {
           console.log(error);
@@ -76,7 +89,7 @@ export class MyItemsComponent {
   }
 
   setPublishedItems(): void {
-    if (this.updatedPublished) return;
+    if (!this.publishedItems.loading) return;
 
     this.http
       .get(ItemEndpoints.active, { headers: this.authService.getHeaders() })
@@ -84,15 +97,15 @@ export class MyItemsComponent {
         next: (response: PublishedItemResponse[] | any) => {
           console.log(response);
 
-          this.publishedItems = response;
-          this.updatedPublished = true;
+          this.publishedItems.data = response;
+          this.publishedItems.loading = false;
         },
         error: (error: any) => console.error(error),
       });
   }
 
   setItemsWithBids(): void {
-    if (this.updatedBidden) return;
+    if (!this.publishedItems.loading) return;
 
     this.http
       .get(ItemEndpoints.bidden, { headers: this.authService.getHeaders() })
@@ -100,8 +113,8 @@ export class MyItemsComponent {
         next: (response: BasicItemResponse[] | any) => {
           console.log(response);
 
-          this.itemsWithBids = response;
-          this.updatedBidden = true;
+          this.itemsWithBids.data = response;
+          this.itemsWithBids.loading = false;
         },
         error: (error: any) => console.error(error),
       });
@@ -112,14 +125,14 @@ export class MyItemsComponent {
       autoFocus: false,
       restoreFocus: false,
       data: {
-        item: { ...this.inactiveItems[itemIdx] },
-        image: this.images[itemIdx],
+        item: { ...this.inactiveItems.data[itemIdx] },
+        image: this.inactiveItems.images[itemIdx],
       },
     });
   }
 
   private fetchImages(): void {
-    this.inactiveItems.map((item) => {
+    this.inactiveItems.data.map((item) => {
       this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
@@ -131,7 +144,7 @@ export class MyItemsComponent {
                 type: 'image/jpeg',
               });
               const imageUrl = URL.createObjectURL(blob);
-              this.images.push({
+              this.inactiveItems.images.push({
                 src: imageUrl,
                 isLoading: false,
                 itemId: item.itemId,
@@ -153,7 +166,7 @@ export class MyItemsComponent {
 
     addItemDialogRef.afterClosed().subscribe((result) => {
       if (result == 'success') {
-        this.updatedInactive = false;
+        this.inactiveItems.loading = true;
         this.setInactiveItems();
       }
     });
