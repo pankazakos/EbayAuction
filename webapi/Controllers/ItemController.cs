@@ -11,6 +11,7 @@ using webapi.Models;
 using webapi.Services.Interfaces;
 using webapi.Utilities.AuthorizationUtils.PolicyUtils;
 using webapi.Utilities.ControllerUtils;
+using webapi.Utilities.MappingUtils;
 
 namespace webapi.Controllers
 {
@@ -135,12 +136,12 @@ namespace webapi.Controllers
             {
                 if (image is null)
                 {
-                    await _itemService.Edit(id, itemData, cancel: cancel);
-                    return Ok($"Item was successfully edited");
+                    var item = await _itemService.Edit(id, itemData, cancel: cancel);
+                    return Ok(item.MapToResponse<BasicItemResponse>(_mapper));
                 }
 
-                await _itemService.Edit(id, itemData, image, cancel);
-                return Ok($"Item was successfully edited");
+                var itemWithImage = await _itemService.Edit(id, itemData, image, cancel);
+                return Ok(itemWithImage.MapToResponse<BasicItemResponse>(_mapper));
             }
             catch (ArgumentException ex)
             {
