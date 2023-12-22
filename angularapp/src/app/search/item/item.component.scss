@@ -82,6 +82,10 @@ $item-box-gap: 2rem;
   width: 100%;
 }
 
+.item-box-element-description-short {
+  width: calc(50% - 2rem);
+}
+
 .description-label {
   font-size: 1.25rem;
   color: black;
