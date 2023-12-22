@@ -25,7 +25,10 @@
               fxLayout="row wrap"
               fxLayoutAlign="start start"
             >
-              <div *ngIf="!inactiveItems.loading" class="item-boxes">
+              <div
+                *ngIf="!inactiveItems.loading && !inactiveItems.empty"
+                class="item-boxes"
+              >
                 <mat-card
                   class="item-card"
                   *ngFor="let item of inactiveItems.data; let i = index"
@@ -158,7 +161,7 @@
           </div>
         </mat-tab>
         <mat-tab label="Published"></mat-tab>
-        <mat-tab label="Bids"></mat-tab>
+        <mat-tab label="My Bids"></mat-tab>
       </mat-tab-group>
     </div>
   </div>

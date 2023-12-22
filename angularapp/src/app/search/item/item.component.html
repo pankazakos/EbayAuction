@@ -29,14 +29,18 @@
         <div class="info-pair">
           <div class="info-label">Current price:</div>
           <div class="info-value">
-            {{ isItemInactive ? "-" : "$" + item.data.currently + 1 }}
+            {{ isItemInactive ? "-" : "$" + (item.data.currently + 1) }}
           </div>
         </div>
 
         <div class="info-pair">
           <div class="info-label">Last Bid:</div>
           <div class="info-value">
-            {{ isItemInactive ? "-" : "$" + item.data.currently }}
+            {{
+              isItemInactive || item.data.numBids == 0
+                ? "-"
+                : "$" + item.data.currently
+            }}
           </div>
         </div>
 
