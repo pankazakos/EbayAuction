@@ -1,6 +1,16 @@
-.custom-toolbar {
+#toolbar {
   width: 100%;
   box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#toolbar-right-section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
 }
 
 .custom-link {
@@ -8,21 +18,17 @@
   color: floralwhite;
 }
 
-.fill-remaining-space {
-  flex: 1 1 auto;
-}
-
 .link {
   text-decoration: none;
 }
 
-.account-button {
+.large-icon-button {
   padding: 0;
 }
 
-.account-icon {
+.large-icon {
   color: floralwhite;
-  font-size: 2rem;
+  font-size: 1.75rem;
   height: 100%;
   width: 100%;
   display: flex;
