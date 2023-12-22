@@ -8,7 +8,7 @@
     id="my-items-body"
     fxLayout="column"
     fxLayoutAlign="space-evenly center"
-    fxFlex="60%"
+    fxFlex="75%"
     fxFill
   >
     <div id="my-items-tabs" fxFlex="85%" fxFill>
@@ -54,15 +54,58 @@
                         </mat-card-header>
                       </div>
 
-                      <div class="item-content"></div>
+                      <div class="item-content">
+                        <mat-card-content>
+                          <mat-list-item>
+                            <div class="item-content-element">
+                              <div>Minimum Bid:</div>
+                              <div>${{ item.firstBid }}</div>
+                            </div>
+                          </mat-list-item>
+                          <mat-list-item>
+                            <div class="item-content-element">
+                              <div>Buy at:</div>
+                              <div>
+                                {{ item.buyPrice ? "$" + item.buyPrice : "-" }}
+                              </div>
+                            </div>
+                          </mat-list-item>
+                          <!-- <mat-list-item>
+                            <div class="item-content-element">
+                              <div>Categories:</div>
+                              <div>{{  }}</div>
+                            </div>
+                          </mat-list-item> -->
+                        </mat-card-content>
+                      </div>
+
                       <div class="item-card-actions">
-                        <button mat-raised-button (click)="editItem()">
+                        <button
+                          mat-raised-button
+                          matTooltip="delete"
+                          color="warn"
+                          class="delete-button"
+                          (click)="deleteItem(i); $event.stopPropagation()"
+                        >
+                          <mat-icon
+                            aria-label="delete icon"
+                            fontIcon="delete"
+                          />
+                        </button>
+                        <button
+                          mat-raised-button
+                          matTooltip="edit"
+                          class="edit-button"
+                          (click)="editItem(); $event.stopPropagation()"
+                        >
                           <mat-icon aria-label="edit icon" fontIcon="edit" />
                         </button>
                         <button
                           mat-raised-button
+                          matTooltip="publish"
                           color="accent"
-                          (click)="publishItem()"
+                          class="publish-button"
+                          (click)="publishItem(); $event.stopPropagation()"
                         >
                           <mat-icon
                             aria-label="publish icon"

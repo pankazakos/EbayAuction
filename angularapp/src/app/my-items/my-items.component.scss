@@ -142,6 +142,14 @@ mat-card.item-card {
   padding: 0;
 }
 
+.item-content > mat-card-content {
+  padding: 0;
+}
+
+.item-content mat-list-item {
+  padding: 0;
+}
+
 .item-content {
   width: 80%;
   display: flex;
@@ -171,8 +179,19 @@ mat-card.item-card {
   align-items: center;
   padding: 0.5rem 1rem 0.5rem 1rem;
 
+  .delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .edit-button {
+    background-color: rgb(210, 190, 10);
+  }
+
   mat-icon {
     margin: 0;
+    color: black;
   }
 }
 

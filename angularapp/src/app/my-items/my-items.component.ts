@@ -11,6 +11,8 @@ import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.compon
 import { AuthService } from '../shared/services/auth-service.service';
 import { ItemComponent } from '../search/item/item.component';
 import { environment } from 'src/environments/environment';
+import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-delete-dialog.component';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-my-items',
@@ -42,7 +44,9 @@ export class MyItemsComponent {
     private http: HttpClient,
     private addItemDialog: MatDialog,
     private authService: AuthService,
-    private itemDialog: MatDialog
+    private itemDialog: MatDialog,
+    private confirmDeleteDialog: MatDialog,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -78,6 +82,7 @@ export class MyItemsComponent {
 
           this.inactiveItems.data = response;
           this.inactiveItems.loading = false;
+          this.inactiveItems.empty = false;
           if (this.inactiveItems.data.length == 0)
             this.inactiveItems.empty = true;
           else this.fetchImages();
@@ -133,7 +138,13 @@ export class MyItemsComponent {
   }
 
   private fetchImages(): void {
-    this.inactiveItems.data.map((item) => {
+    this.inactiveItems.images = new Array(this.inactiveItems.data.length).fill({
+      src: '',
+      isLoading: true,
+      itemId: -1,
+    });
+
+    this.inactiveItems.data.map((item, i) => {
       this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
@@ -145,11 +156,11 @@ export class MyItemsComponent {
                 type: 'image/jpeg',
               });
               const imageUrl = URL.createObjectURL(blob);
-              this.inactiveItems.images.push({
+              this.inactiveItems.images[i] = {
                 src: imageUrl,
                 isLoading: false,
                 itemId: item.itemId,
-              });
+              };
             }, environment.timeout);
           },
           error: (error) => {
@@ -173,8 +184,40 @@ export class MyItemsComponent {
     });
   }
 
-  deleteItem(): void {
+  deleteItem(index: number): void {
     console.log('delete item');
+    const confirmDeleteDialogRef = this.confirmDeleteDialog.open(
+      ConfirmDeleteDialogComponent,
+      {
+        autoFocus: false,
+        disableClose: true,
+        data: {
+          itemName: this.inactiveItems.data[index].name,
+        },
+      }
+    );
+
+    confirmDeleteDialogRef.afterClosed().subscribe((result) => {
+      if (result === 'confirm') {
+        this.confirmDelete(this.inactiveItems.data[index].itemId);
+      }
+    });
+  }
+
+  confirmDelete(itemId: number): void {
+    this.http
+      .delete(ItemEndpoints.delete(itemId), {
+        headers: this.authService.getHeaders(),
+      })
+      .subscribe({
+        next: (response: any) => {
+          console.log(response);
+          this.alertService.success('Item successfully deleted', 'Ok');
+          this.inactiveItems.loading = true;
+          this.setInactiveItems();
+        },
+        error: (error: any) => console.error(error),
+      });
   }
 
   editItem(): void {

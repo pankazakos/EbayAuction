@@ -1,0 +1,23 @@
+<div class="dialog-container">
+  <div class="dialog-content">
+    <div class="confirmation">
+      <div>
+        <mat-icon
+          aria-label="warning icon"
+          fontIcon="warning"
+          class="warning-icon"
+        ></mat-icon>
+      </div>
+
+      <div class="question">
+        Are you sure you want to delete your saved item {{ data.itemName }}?
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+      <button mat-stroked-button color="accent" (click)="onConfirmBid()">
+        Confirm
+      </button>
+    </div>
+  </div>
+</div>
