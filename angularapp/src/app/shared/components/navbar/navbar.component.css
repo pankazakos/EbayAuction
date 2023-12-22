@@ -15,3 +15,17 @@
 .link {
   text-decoration: none;
 }
+
+.account-button {
+  padding: 0;
+}
+
+.account-icon {
+  color: floralwhite;
+  font-size: 2rem;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

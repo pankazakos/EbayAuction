@@ -1,15 +1,25 @@
 <mat-toolbar color="primary" class="custom-toolbar">
   <a href="/" class="custom-link">EbayAuction</a>
   <span class="fill-remaining-space"></span>
-  <div *ngIf="authData?.isLoggedIn">
-    <button mat-button [matMenuTriggerFor]="menu">
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div>{{ authData?.username }}</div>
-        <div fxLayout="column" fxLayoutAlign="end none">
-          <mat-icon>keyboard_arrow_down</mat-icon>
-        </div>
-      </div>
-    </button>
+  <div>
+    <a *ngIf="!authData?.isLoggedIn" routerLink="login">
+      <button mat-icon-button class="account-button">
+        <mat-icon
+          aria-label="account icon"
+          fontIcon="account_circle"
+          class="account-icon"
+        />
+      </button>
+    </a>
+    <div *ngIf="authData?.isLoggedIn">
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="account-button">
+        <mat-icon
+          aria-label="account icon"
+          fontIcon="account_circle"
+          class="account-icon"
+        />
+      </button>
+    </div>
     <mat-menu #menu="matMenu">
       <a class="link" routerLink="my-items">
         <button mat-menu-item>my items</button>
@@ -19,10 +29,5 @@
       </a>
       <button mat-menu-item (click)="callLogoutUser()">logout</button>
     </mat-menu>
-  </div>
-  <div *ngIf="!authData?.isLoggedIn">
-    <a routerLink="login">
-      <button mat-raised-button>Login</button>
-    </a>
   </div>
 </mat-toolbar>
