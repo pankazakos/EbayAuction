@@ -6,6 +6,13 @@
   align-items: center;
 }
 
+#toolbar-left-section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 #toolbar-right-section {
   display: flex;
   justify-content: flex-start;

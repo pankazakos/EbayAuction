@@ -1,8 +1,6 @@
 <mat-toolbar id="toolbar" color="primary">
   <div id="toolbar-left-section">
     <a href="/" class="custom-link">EbayAuction</a>
-  </div>
-  <div id="toolbar-right-section">
     <a routerLink="/">
       <button mat-icon-button class="large-icon-button">
         <mat-icon
@@ -11,6 +9,8 @@
           class="large-icon"
         /></button
     ></a>
+  </div>
+  <div id="toolbar-right-section">
     <a *ngIf="!authData?.isLoggedIn" routerLink="login">
       <button mat-icon-button class="large-icon-button">
         <mat-icon
