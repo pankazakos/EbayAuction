@@ -25,10 +25,24 @@
         />
       </div>
 
-      <div *ngIf="!isItemInactive" class="item-info item-box-element">
-        <div *ngIf="!isItemInactive" class="info-pair">
+      <div class="item-info item-box-element">
+        <div class="info-pair">
           <div class="info-label">Current price:</div>
-          <div class="info-value">${{ item.data.currently }}</div>
+          <div class="info-value">
+            {{ isItemInactive ? "-" : "$" + item.data.currently + 1 }}
+          </div>
+        </div>
+
+        <div class="info-pair">
+          <div class="info-label">Last Bid:</div>
+          <div class="info-value">
+            {{ isItemInactive ? "-" : "$" + item.data.currently }}
+          </div>
+        </div>
+
+        <div class="info-pair">
+          <div class="info-label">Minimum Bid:</div>
+          <div class="info-value">${{ item.data.firstBid }}</div>
         </div>
 
         <div class="info-pair">
@@ -39,11 +53,6 @@
         </div>
 
         <div class="info-pair">
-          <div class="info-label">Minimum Bid:</div>
-          <div class="info-value">${{ item.data.firstBid }}</div>
-        </div>
-
-        <div *ngIf="!isItemInactive" class="info-pair">
           <div class="info-label">Number of bids:</div>
           <div class="info-value">{{ item.data.numBids }}</div>
         </div>
@@ -65,20 +74,14 @@
             {{ isItemInactive ? "Not published yet" : auctionEnds }}
           </div>
         </div>
-        <div *ngIf="!isItemInactive" class="info-pair">
+        <div class="info-pair">
           <div class="info-label">Seller:</div>
           <div class="info-value">
             {{ isOwner() ? "you" : seller.username }}
           </div>
         </div>
       </div>
-      <div
-        [class]="
-          isItemInactive
-            ? 'item-box-element-description-short'
-            : 'item-box-element-description'
-        "
-      >
+      <div class="item-box-element-description">
         <div class="description-label">Description</div>
         <div class="description">
           {{ item.data.description }}
