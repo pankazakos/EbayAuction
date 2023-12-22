@@ -7,9 +7,13 @@ import { HttpClient } from '@angular/common/http';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
-import { CategoryEndpoints } from 'src/app/shared/contracts/endpoints/CategoryEnpoints';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { baseUrl } from 'src/app/shared/types';
+
+export interface EditItemDialogOutputData {
+  status: 'edited' | 'cancelled';
+  item?: BasicItemResponse;
+}
 
 @Component({
   selector: 'app-edit-item-dialog',
@@ -26,9 +30,9 @@ export class EditItemDialogComponent implements AfterViewInit {
     public categoryService: CategoryService,
     private selfDialogRef: MatDialogRef<EditItemDialogComponent>,
     private alertService: AlertService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public dialogInputData: any
   ) {
-    this.item = data.item;
+    this.item = dialogInputData.item;
     this.myItemService.editItemForm.name = this.item.name;
     this.myItemService.editItemForm.firstBid = this.item.firstBid;
     this.myItemService.editItemForm.buyPrice = this.item.buyPrice;
@@ -84,9 +88,12 @@ export class EditItemDialogComponent implements AfterViewInit {
         headers: this.authService.getHeaders(),
       })
       .subscribe({
-        next: (response: any) => {
+        next: (response: BasicItemResponse | any) => {
           console.log(response);
-          this.selfDialogRef.close('success');
+          this.selfDialogRef.close({
+            status: 'edited',
+            item: response,
+          } as EditItemDialogOutputData);
         },
         error: (error) => {
           console.error(error);

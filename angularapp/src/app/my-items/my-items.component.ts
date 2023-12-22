@@ -13,7 +13,10 @@ import { ItemComponent } from '../search/item/item.component';
 import { environment } from 'src/environments/environment';
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-delete-dialog.component';
 import { AlertService } from '../shared/services/alert.service';
-import { EditItemDialogComponent } from './edit-item-dialog/edit-item-dialog.component';
+import {
+  EditItemDialogComponent,
+  EditItemDialogOutputData,
+} from './edit-item-dialog/edit-item-dialog.component';
 
 @Component({
   selector: 'app-my-items',
@@ -222,8 +225,7 @@ export class MyItemsComponent {
       });
   }
 
-  editItem(item: BasicItemResponse): void {
-    console.log('edit item');
+  editItem(item: BasicItemResponse, idx: number): void {
     const editItemDialogRef = this.editItemDialog.open(
       EditItemDialogComponent,
       {
@@ -235,11 +237,16 @@ export class MyItemsComponent {
       }
     );
 
-    editItemDialogRef.afterClosed().subscribe((result) => {
-      if (result == 'success') {
-        this.alertService.success('Item successfully saved', 'Ok');
-      }
-    });
+    editItemDialogRef
+      .afterClosed()
+      .subscribe((result: EditItemDialogOutputData) => {
+        if (result.status == 'edited') {
+          if (result.item) {
+            this.inactiveItems.data[idx] = result.item;
+          }
+          this.alertService.success('Item successfully saved', 'Ok');
+        }
+      });
   }
 
   publishItem(): void {
