@@ -13,6 +13,7 @@ import { ItemComponent } from '../search/item/item.component';
 import { environment } from 'src/environments/environment';
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-delete-dialog.component';
 import { AlertService } from '../shared/services/alert.service';
+import { EditItemDialogComponent } from './edit-item-dialog/edit-item-dialog.component';
 
 @Component({
   selector: 'app-my-items',
@@ -43,6 +44,7 @@ export class MyItemsComponent {
   constructor(
     private http: HttpClient,
     private addItemDialog: MatDialog,
+    private editItemDialog: MatDialog,
     private authService: AuthService,
     private itemDialog: MatDialog,
     private confirmDeleteDialog: MatDialog,
@@ -220,8 +222,24 @@ export class MyItemsComponent {
       });
   }
 
-  editItem(): void {
+  editItem(item: BasicItemResponse): void {
     console.log('edit item');
+    const editItemDialogRef = this.editItemDialog.open(
+      EditItemDialogComponent,
+      {
+        autoFocus: false,
+        restoreFocus: false,
+        data: {
+          item: item,
+        },
+      }
+    );
+
+    editItemDialogRef.afterClosed().subscribe((result) => {
+      if (result == 'success') {
+        this.alertService.success('Item successfully saved', 'Ok');
+      }
+    });
   }
 
   publishItem(): void {

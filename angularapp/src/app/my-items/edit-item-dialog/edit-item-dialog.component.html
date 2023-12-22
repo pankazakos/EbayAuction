@@ -1,0 +1,147 @@
+<div mat-dialog-title>
+  <div class="dialog-title">Edit item</div>
+  <div>
+    <button mat-icon-button class="top-close-button" mat-dialog-close>
+      <mat-icon aria-label="close icon" fontIcon="close"></mat-icon>
+    </button>
+  </div>
+</div>
+<div mat-dialog-content>
+  <div id="add-item-main-container">
+    <div id="add-item-content">
+      <div id="add-item-form">
+        <div id="add-item-form-first-part">
+          <mat-form-field floatLabel="always">
+            <mat-label>Title</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Title"
+              [(ngModel)]="myItemService.editItemForm.name"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label>Minimum Bid</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              placeholder="$"
+              [(ngModel)]="myItemService.editItemForm.firstBid"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field floatLabel="always">
+            <mat-label>Buy Price</mat-label>
+            <input
+              matInput
+              type="number"
+              [min]="
+                myItemService.editItemForm.firstBid
+                  ? myItemService.editItemForm.firstBid
+                  : 0
+              "
+              placeholder="$"
+              [(ngModel)]="myItemService.editItemForm.buyPrice"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field floatLabel="always" id="image-input">
+            <mat-label>Image</mat-label>
+            <input
+              type="file"
+              style="display: none"
+              #fileInput
+              (change)="onFileSelected($event)"
+            />
+            <input
+              matInput
+              class="file-input"
+              placeholder="No file chosen"
+              [matTooltip]="myItemService.editItemImageFilename"
+              [matTooltipDisabled]="myItemService.editItemImageFilename == ''"
+              [value]="myItemService.editItemImageFilename"
+              disabled
+            />
+            <button
+              matSuffix
+              mat-icon-button
+              (click)="onRemoveFile()"
+              [hidden]="myItemService.editItemImageFilename == ''"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <button matSuffix mat-icon-button (click)="fileInput.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+        <div id="add-item-form-second-part">
+          <mat-form-field floatLabel="always">
+            <mat-label>Select Categories</mat-label>
+            <mat-chip-listbox class="category-chips">
+              <mat-chip
+                *ngFor="let category of categoryService.selected"
+                [removable]="true"
+                (removed)="categoryService.remove(category)"
+              >
+                {{ category.name }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-listbox>
+            <input
+              type="text"
+              placeholder="Type to search"
+              matInput
+              [formControl]="categoryService.formControl"
+              [matAutocomplete]="auto"
+              (keydown.enter)="categoryService.onAutocompleteEnterKeyPress()"
+              [required]="categoryService.selected.length == 0"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              (optionSelected)="categoryService.onSelected($event)"
+            >
+              <mat-option
+                *ngFor="let category of categoryService.filtered"
+                [value]="category.name"
+                >{{ category.name }}</mat-option
+              >
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field floatLabel="always" class="add-item-form-description">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              type="text"
+              #description
+              maxlength="500"
+              placeholder="Description"
+              [(ngModel)]="myItemService.editItemForm.description"
+              required
+            ></textarea>
+            <mat-hint align="end">{{ description.value.length }}/500</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <div>
+      <button class="bottom-close-button" mat-raised-button mat-dialog-close>
+        Close
+      </button>
+    </div>
+    <div>
+      <button
+        class="bottom-add-button"
+        mat-raised-button
+        color="accent"
+        (click)="onSaveItem()"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>

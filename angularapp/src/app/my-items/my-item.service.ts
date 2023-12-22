@@ -8,6 +8,9 @@ export class MyItemService {
   addItemForm: AddItemRequest = {} as AddItemRequest;
   addItemImageFilename: string = '';
   addItemImageFile: File | null = null;
+  editItemForm: AddItemRequest = {} as AddItemRequest;
+  editItemImageFilename: string = '';
+  editItemImageFile: File | null = null;
 
   constructor() {}
 }

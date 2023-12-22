@@ -35,6 +35,10 @@ export class CategoryService {
     this._filtered = categories;
   }
 
+  setSelectedCategories(selected: BasicCategoryResponse[]): void {
+    this._selected = selected;
+  }
+
   onSelected(event: MatAutocompleteSelectedEvent): void {
     const selectedCategoryName = event.option.value;
     const selectedCategory = this._categories.find(

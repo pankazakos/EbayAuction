@@ -1,0 +1,105 @@
+[mat-dialog-title] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 9px;
+}
+
+[mat-dialog-content] {
+  padding: 0;
+  color: black;
+}
+
+[mat-dialog-actions] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+}
+
+#add-item-main-container {
+  display: flex;
+  justify-content: center;
+  width: 50vw;
+  height: 50vh;
+  padding-top: 1rem;
+  overflow-y: auto;
+}
+
+#add-item-content {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+
+$field-gap: 1.5rem;
+
+#add-item-form {
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4rem;
+
+  #add-item-form-first-part {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: $field-gap;
+  }
+
+  #add-item-form-second-part {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: $field-gap;
+
+    .add-item-form-description {
+      textarea {
+        height: 14rem;
+        min-height: 10rem;
+        max-height: 18rem;
+      }
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+
+    @media (max-width: 992px) {
+      width: 100%;
+    }
+
+    span {
+      padding: 0.5rem;
+      align-self: flex-end;
+    }
+  }
+}
+
+::ng-deep #image-input .mat-mdc-form-field-infix {
+  width: 40%;
+
+  @media (max-width: 576px) {
+    width: 20%;
+  }
+}
+
+@media (max-width: 1200px) {
+  #add-item-main-container {
+    width: 60vw;
+  }
+}
+
+@media (max-width: 992px) {
+  #add-item-form {
+    flex-direction: column;
+    gap: $field-gap;
+  }
+}
