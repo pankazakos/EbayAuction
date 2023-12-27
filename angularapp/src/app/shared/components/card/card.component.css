@@ -4,15 +4,45 @@
 }
 
 .custom-card {
-  width: 100%;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  border-radius: 2%;
+  border-radius: 1rem;
 }
 
 .custom-content {
-  width: 50%;
+  width: 85%;
 }
 
 .custom-actions {
-  width: 50%;
+  width: 85%;
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (min-width: 600px) {
+  .custom-content {
+    width: 75%;
+  }
+
+  .custom-actions {
+    width: 75%;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .custom-content {
+    width: 65%;
+  }
+
+  .custom-actions {
+    width: 65%;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .custom-content {
+    width: 55%;
+  }
+  .custom-actions {
+    width: 55%;
+  }
 }
