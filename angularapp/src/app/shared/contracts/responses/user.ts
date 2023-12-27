@@ -9,7 +9,7 @@ export interface BasicUserResponse extends IUserResponse {
   firtsName: string;
   lastName: string;
   lastLogin: string;
-  dateJoined: Date;
+  dateJoined: string;
   country: string;
   location: string;
   isSuperuser: boolean;
@@ -22,7 +22,7 @@ export interface RegisterUserResponse extends IUserResponse {
   email: string;
   firstName: string;
   lastName: string;
-  dateJoined: Date;
+  dateJoined: string;
   country: string;
   location: string;
   isSuperuser: boolean;
