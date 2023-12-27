@@ -14,6 +14,8 @@ import { CategoryService } from 'src/app/shared/services/category.service';
   styleUrls: ['./filters-dialog.component.scss'],
 })
 export class FiltersDialogComponent {
+  priceRangePrevOption: number | null = null;
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -37,8 +39,21 @@ export class FiltersDialogComponent {
   }
 
   onPriceRangeChange(event: MatChipListboxChange) {
+    console.log('price range change');
+
     const selectedOption = event.value;
+
     this.filterService.priceRanges.forEach((range) => {
+      if (selectedOption === undefined) {
+        this.filterService.sliderMinPrice = 0;
+        this.filterService.sliderMaxPrice = 0;
+        this.filterService.minPrice = null;
+        this.filterService.maxPrice = null;
+        this.filterService.selected = null;
+        this.filterService.disabledSlider = true;
+        return;
+      }
+
       if (selectedOption == range.id) {
         if (range.id == 'custom') {
           this.filterService.sliderMinPrice = 0;
@@ -49,6 +64,7 @@ export class FiltersDialogComponent {
           this.filterService.disabledSlider = true;
           return;
         }
+
         this.filterService.sliderMinPrice = range.values.from;
         this.filterService.sliderMaxPrice = range.values.to;
         this.filterService.minPrice = range.values.from;

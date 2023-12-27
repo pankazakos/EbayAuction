@@ -11,9 +11,9 @@ export class FilterService {
       to: number;
     };
   }[];
-  minPrice: number;
-  maxPrice: number;
-  selected: string;
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  selected: string | null = null;
   sliderMinPrice: number;
   sliderMaxPrice: number;
   disabledSlider: boolean;
@@ -27,11 +27,8 @@ export class FilterService {
       { id: '$5000 and up', values: { from: 5000, to: 100000 } },
       { id: 'custom', values: { from: 0, to: 100000 } },
     ];
-    this.minPrice = this.priceRanges[0].values.from;
-    this.maxPrice = this.priceRanges[0].values.to;
-    this.selected = this.priceRanges[0].id;
     this.sliderMinPrice = this.priceRanges[0].values.from;
     this.sliderMaxPrice = this.priceRanges[0].values.to;
-    this.disabledSlider = false;
+    this.disabledSlider = true;
   }
 }
