@@ -191,7 +191,7 @@ export class SearchComponent implements AfterViewInit {
       autoFocus: false,
       restoreFocus: false,
       data: {
-        item: { ...this.items.castEntities[itemIdx] },
+        item: this.items.castEntities[itemIdx],
         image: this.images[itemIdx],
       },
     });
