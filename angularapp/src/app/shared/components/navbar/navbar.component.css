@@ -17,16 +17,21 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.75rem;
+  gap: 2.5rem;
 }
 
-.custom-link {
-  text-decoration: none;
-  color: floralwhite;
+.logo {
+  font-size: 1.4rem;
 }
 
 .link {
   text-decoration: none;
+  color: floralwhite;
+}
+
+.home {
+  font-weight: 300;
+  font-size: 1.25rem;
 }
 
 .large-icon-button {

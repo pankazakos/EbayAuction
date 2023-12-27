@@ -1,16 +1,9 @@
 <mat-toolbar id="toolbar" color="primary">
   <div id="toolbar-left-section">
-    <a href="/" class="custom-link">EbayAuction</a>
-    <a routerLink="/">
-      <button mat-icon-button class="large-icon-button">
-        <mat-icon
-          aria-label="home icon"
-          fontIcon="home"
-          class="large-icon"
-        /></button
-    ></a>
+    <a href="/" class="link logo">EbayAuction</a>
   </div>
   <div id="toolbar-right-section">
+    <a routerLink="/" class="link home">Home</a>
     <a *ngIf="!authData?.isLoggedIn" routerLink="login">
       <button mat-icon-button class="large-icon-button">
         <mat-icon
@@ -20,7 +13,7 @@
         />
       </button>
     </a>
-    <div *ngIf="authData?.isLoggedIn">
+    <div *ngIf="authData?.isLoggedIn" class="account-circle">
       <button
         mat-icon-button
         [matMenuTriggerFor]="menu"
