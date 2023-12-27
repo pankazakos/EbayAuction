@@ -12,7 +12,6 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { DateTimeFormatService } from 'src/app/shared/services/date-time-format.service';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
-import { ConfirmBidDialogComponent } from './confirm-bid-dialog/confirm-bid-dialog.component';
 import {
   AuthData,
   AuthService,
@@ -22,6 +21,7 @@ import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/catego
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { BidStepService } from 'src/app/shared/services/bid-step.service';
+import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -51,7 +51,7 @@ export class ItemComponent {
 
   constructor(
     private http: HttpClient,
-    private confirmBidDialog: MatDialog,
+    private confirmDialog: MatDialog,
     private formatter: DateTimeFormatService,
     private authService: AuthService,
     private alertService: AlertService,
@@ -125,17 +125,13 @@ export class ItemComponent {
   }
 
   private confirmBid(bid: AddBidRequest): void {
-    const confirmDialogRef = this.confirmBidDialog.open(
-      ConfirmBidDialogComponent,
-      {
-        autoFocus: false,
-        disableClose: true,
-        data: {
-          itemName: this.item.data.name,
-          bidAmount: this.bidForm.value.amount,
-        },
-      }
-    );
+    const confirmDialogRef = this.confirmDialog.open(ConfirmComponent, {
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        question: `Are you sure you want to place a bid of ${this.bidForm.value.amount} on ${this.item.data.name}?`,
+      },
+    });
 
     confirmDialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirm') {

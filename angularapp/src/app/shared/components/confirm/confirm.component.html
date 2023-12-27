@@ -9,13 +9,11 @@
         ></mat-icon>
       </div>
 
-      <div class="question">
-        Are you sure you want to delete your saved item {{ data.itemName }}?
-      </div>
+      <div class="question">{{ question }}</div>
     </div>
     <div class="action-buttons">
       <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
-      <button mat-stroked-button color="accent" (click)="onConfirmBid()">
+      <button mat-stroked-button color="accent" (click)="onConfirm()">
         Confirm
       </button>
     </div>

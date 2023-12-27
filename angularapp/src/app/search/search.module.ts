@@ -4,10 +4,9 @@ import { ItemComponent } from './item/item.component';
 import { RouterModule } from '@angular/router';
 import { CommonImportsModule } from '../common-imports/common-imports.module';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
-import { ConfirmBidDialogComponent } from './item/confirm-bid-dialog/confirm-bid-dialog.component';
 
 @NgModule({
-  declarations: [SearchComponent, ItemComponent, FiltersDialogComponent, ConfirmBidDialogComponent],
+  declarations: [SearchComponent, ItemComponent, FiltersDialogComponent],
   imports: [CommonImportsModule, RouterModule],
   exports: [SearchComponent],
 })

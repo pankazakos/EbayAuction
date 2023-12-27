@@ -11,12 +11,12 @@ import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.compon
 import { AuthService } from '../shared/services/auth-service.service';
 import { ItemComponent } from '../search/item/item.component';
 import { environment } from 'src/environments/environment';
-import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog/confirm-delete-dialog.component';
 import { AlertService } from '../shared/services/alert.service';
 import {
   EditItemDialogComponent,
   EditItemDialogOutputData,
 } from './edit-item-dialog/edit-item-dialog.component';
+import { ConfirmComponent } from '../shared/components/confirm/confirm.component';
 
 @Component({
   selector: 'app-my-items',
@@ -50,7 +50,7 @@ export class MyItemsComponent {
     private editItemDialog: MatDialog,
     private authService: AuthService,
     private itemDialog: MatDialog,
-    private confirmDeleteDialog: MatDialog,
+    private confirmDialog: MatDialog,
     private alertService: AlertService
   ) {}
 
@@ -189,27 +189,23 @@ export class MyItemsComponent {
     });
   }
 
-  deleteItem(index: number): void {
-    console.log('delete item');
-    const confirmDeleteDialogRef = this.confirmDeleteDialog.open(
-      ConfirmDeleteDialogComponent,
-      {
-        autoFocus: false,
-        disableClose: true,
-        data: {
-          itemName: this.inactiveItems.data[index].name,
-        },
-      }
-    );
+  confirmDelete(index: number): void {
+    const confirmDeleteDialogRef = this.confirmDialog.open(ConfirmComponent, {
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        question: `Are you sure you want to delete your saved item ${this.inactiveItems.data[index].name}?`,
+      },
+    });
 
     confirmDeleteDialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirm') {
-        this.confirmDelete(this.inactiveItems.data[index].itemId);
+        this.deleteItem(this.inactiveItems.data[index].itemId);
       }
     });
   }
 
-  confirmDelete(itemId: number): void {
+  deleteItem(itemId: number): void {
     this.http
       .delete(ItemEndpoints.delete(itemId), {
         headers: this.authService.getHeaders(),
