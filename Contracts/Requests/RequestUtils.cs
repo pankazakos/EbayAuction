@@ -18,7 +18,7 @@
             }
         }
 
-        public static void EnsurePositiveNumber(string fieldName, float value)
+        public static void EnsurePositiveNumber(string fieldName, decimal value)
         {
             if (value <= 0)
             {

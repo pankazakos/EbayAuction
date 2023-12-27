@@ -30,7 +30,7 @@ namespace Api.IntegrationTests.BidController
             var bid = new AddBidRequest
             {
                 ItemId = 1,
-                Amount = 100.4f
+                Amount = 100.4m
             };
 
             var data = Utils.ConvertRequestData(bid, Utils.ContentType.Json);

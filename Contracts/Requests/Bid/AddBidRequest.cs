@@ -4,7 +4,7 @@
     {
         public long ItemId { get; init; }
 
-        public float Amount { get; init; }
+        public decimal Amount { get; init; }
 
         public void Validate()
         {

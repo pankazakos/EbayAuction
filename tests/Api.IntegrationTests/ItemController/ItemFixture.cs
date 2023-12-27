@@ -122,7 +122,7 @@ namespace Api.IntegrationTests.ItemController
             var bid = new AddBidRequest
             {
                 ItemId = 2,
-                Amount = 30.5f
+                Amount = 30.5m
             };
 
             var item2 = await _itemRepository.GetById(2) ?? throw new InvalidOperationException("Cannot find item 2");

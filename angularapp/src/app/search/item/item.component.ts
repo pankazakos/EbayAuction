@@ -21,6 +21,7 @@ import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 import { AlertService } from 'src/app/shared/services/alert.service';
+import { BidStepService } from 'src/app/shared/services/bid-step.service';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -44,6 +45,7 @@ export class ItemComponent {
   auctionEnds: string = '';
 
   authData: AuthData | null = null;
+  bidStep: number = 0;
 
   @ViewChild('bidForm') bidForm!: NgForm;
 
@@ -53,6 +55,7 @@ export class ItemComponent {
     private formatter: DateTimeFormatService,
     private authService: AuthService,
     private alertService: AlertService,
+    private bidStepService: BidStepService,
     @Inject(MAT_DIALOG_DATA) public dialogInputData: any
   ) {
     this.item.data = dialogInputData.item;
@@ -86,6 +89,8 @@ export class ItemComponent {
           console.error(error);
         },
       });
+
+    this.bidStep = this.bidStepService.getBidStep(this.item.data.currently);
 
     this.http.get(ItemEndpoints.categories(this.item.data.itemId)).subscribe({
       next: (response: BasicCategoryResponse[] | any) => {

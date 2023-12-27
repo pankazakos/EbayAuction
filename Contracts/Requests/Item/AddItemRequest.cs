@@ -6,9 +6,9 @@
 
         public List<int> CategoryIds { get; init; } = new();
 
-        public float? BuyPrice { get; init; }
+        public decimal? BuyPrice { get; init; }
 
-        public float FirstBid { get; init; }
+        public decimal FirstBid { get; init; }
 
         public string Description { get; init; } = string.Empty;
 

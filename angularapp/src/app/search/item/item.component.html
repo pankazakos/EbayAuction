@@ -29,7 +29,13 @@
         <div class="info-pair">
           <div class="info-label">Current price:</div>
           <div class="info-value">
-            {{ isItemInactive ? "-" : "$" + (item.data.currently + 1) }}
+            {{
+              isItemInactive
+                ? "-"
+                : item.data.numBids > 0
+                ? "$" + (item.data.currently + bidStep)
+                : "$" + item.data.firstBid
+            }}
           </div>
         </div>
 
@@ -124,14 +130,15 @@
           name="amount"
           min="{{
             item.data.numBids > 0
-              ? item.data.currently + 1
+              ? item.data.currently + bidStep
               : item.data.currently
           }}"
           placeholder="${{
             item.data.numBids > 0
-              ? item.data.currently + 1
+              ? item.data.currently + bidStep
               : item.data.currently
           }}"
+          step="{{ bidStep }}"
           [disabled]="isOwner() || authData?.isLoggedIn == false"
           ngModel
         />

@@ -9,11 +9,11 @@ namespace webapi.Models
 
         public string Name { get; set; } = string.Empty;
 
-        public float Currently { get; set; }
+        public decimal Currently { get; set; }
 
-        public float? BuyPrice { get; set; }
+        public decimal? BuyPrice { get; set; }
 
-        public float FirstBid { get; set; }
+        public decimal FirstBid { get; set; }
 
         public int NumBids { get; set; }
 
