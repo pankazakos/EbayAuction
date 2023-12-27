@@ -17,7 +17,7 @@ export interface AuthData {
 
 interface DecodedJwt {
   username: string;
-  IsSuperUser: boolean;
+  IsSuperuser: string;
   exp: number;
   iss: string;
   aud: string;
@@ -79,7 +79,7 @@ export class AuthService {
     }
 
     const username = decodedJWT.username;
-    const isSuperUser = decodedJWT.IsSuperUser;
+    const isSuperuser = decodedJWT.IsSuperuser;
 
     const expiryDate = decodedJWT.exp * 1000; // Convert to milliseconds
 
@@ -97,7 +97,7 @@ export class AuthService {
 
     const newAuthData: AuthData = {
       username: username,
-      role: isSuperUser ? UserRole.Admin : UserRole.User,
+      role: isSuperuser === 'True' ? UserRole.Admin : UserRole.User,
       isLoggedIn: true,
     };
     this.authDataSubject.next(newAuthData);
