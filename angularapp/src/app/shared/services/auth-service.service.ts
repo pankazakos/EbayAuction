@@ -7,6 +7,7 @@ import { UserRole } from '../types';
 import { LoginUserResponse } from '../contracts/responses/user';
 import { UserEndpoints } from '../contracts/endpoints/UserEndpoints';
 import { UserCredentialsRequest } from '../contracts/requests/user';
+import { AlertService } from './alert.service';
 
 export interface AuthData {
   username: string;
@@ -37,7 +38,11 @@ export class AuthService {
   });
   authData$ = this.authDataSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private alertService: AlertService
+  ) {}
 
   private decodeJwt(): DecodedJwt | null {
     const token = localStorage.getItem(tokenKeyName);
@@ -51,7 +56,10 @@ export class AuthService {
   }
 
   private handleSessionTimeout(): void {
-    alert('Your session has expired. Please login again');
+    this.alertService.error(
+      'Your session has expired. Please login again',
+      'Close'
+    );
     this.logoutUser();
   }
 
@@ -112,11 +120,11 @@ export class AuthService {
         },
         error: (error) => {
           if (error.status === 404) {
-            alert('invalid username');
+            this.alertService.error('Invalid username', 'Close');
           } else if (error.status === 400) {
-            alert('incorrect password');
+            this.alertService.error('Incorrect password', 'Close');
           } else {
-            alert('unexpected error. Please try again later');
+            this.alertService.internalError();
           }
         },
       });
