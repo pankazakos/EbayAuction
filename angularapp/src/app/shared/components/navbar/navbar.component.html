@@ -27,7 +27,7 @@
       </button>
     </div>
     <mat-menu #menu="matMenu">
-      <a class="link" routerLink="my-items">
+      <a *ngIf="authData?.role != adminRole" class="link" routerLink="my-items">
         <button mat-menu-item>my items</button>
       </a>
       <a *ngIf="authData?.role == adminRole" class="link" routerLink="admin">
