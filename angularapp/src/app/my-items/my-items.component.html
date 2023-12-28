@@ -33,7 +33,7 @@
                   class="item-card"
                   *ngFor="let item of inactiveItems.data; let i = index"
                 >
-                  <div class="item-link" (click)="showItemDialog(i)">
+                  <div class="item-link" (click)="showItemDialog(i, false)">
                     <div class="item-card-main-container">
                       <div class="item-card-image">
                         <div
@@ -102,7 +102,9 @@
                           matTooltip="publish"
                           color="accent"
                           class="publish-button"
-                          (click)="publishItem(); $event.stopPropagation()"
+                          (click)="
+                            showItemDialog(i, true); $event.stopPropagation()
+                          "
                         >
                           <mat-icon
                             aria-label="publish icon"

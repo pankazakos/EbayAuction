@@ -17,6 +17,7 @@ import {
   EditItemDialogOutputData,
 } from './edit-item-dialog/edit-item-dialog.component';
 import { ConfirmComponent } from '../shared/components/confirm/confirm.component';
+import { MyItemService } from './my-item.service';
 
 @Component({
   selector: 'app-my-items',
@@ -46,6 +47,7 @@ export class MyItemsComponent {
 
   constructor(
     private http: HttpClient,
+    private myItemService: MyItemService,
     private addItemDialog: MatDialog,
     private editItemDialog: MatDialog,
     private authService: AuthService,
@@ -130,15 +132,22 @@ export class MyItemsComponent {
       });
   }
 
-  showItemDialog(itemIdx: number): void {
-    this.itemDialog.open(ItemComponent, {
+  showItemDialog(itemIdx: number, openCalendar: boolean): void {
+    const itemDialogRef = this.itemDialog.open(ItemComponent, {
       autoFocus: false,
       restoreFocus: false,
       data: {
-        item: { ...this.inactiveItems.data[itemIdx] },
+        item: this.inactiveItems.data[itemIdx],
         image: this.inactiveItems.images[itemIdx],
         isItemInactive: true,
+        openCalendar: openCalendar,
       },
+    });
+
+    itemDialogRef.afterClosed().subscribe((result) => {
+      if (result == 'publish') {
+        this.publishItem(itemIdx);
+      }
     });
   }
 
@@ -245,7 +254,8 @@ export class MyItemsComponent {
       });
   }
 
-  publishItem(): void {
-    console.log('publish item');
+  publishItem(itemIdx: number): void {
+    console.log('publish item: ' + itemIdx);
+    console.log('expiry date: ' + this.myItemService.expiryDatetime);
   }
 }

@@ -11,6 +11,7 @@ export class MyItemService {
   editItemForm: AddItemRequest = {} as AddItemRequest;
   editItemImageFilename: string = '';
   editItemImageFile: File | null = null;
+  expiryDatetime: string = '';
 
   constructor() {}
 }

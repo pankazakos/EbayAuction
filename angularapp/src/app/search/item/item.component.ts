@@ -3,12 +3,16 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { Component, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserEndpoints } from 'src/app/shared/contracts/endpoints/UserEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
 import { IdToUsernameResponse } from 'src/app/shared/contracts/responses/user';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { DateTimeFormatService } from 'src/app/shared/services/date-time-format.service';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
@@ -22,6 +26,12 @@ import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints'
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { BidStepService } from 'src/app/shared/services/bid-step.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
+import {
+  MatDatepicker,
+  MatDatepickerInputEvent,
+} from '@angular/material/datepicker';
+import { DatePipe } from '@angular/common';
+import { MyItemService } from 'src/app/my-items/my-item.service';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -31,11 +41,10 @@ type loadingImage = { src: string; isLoading: boolean };
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
 })
-export class ItemComponent {
+export class ItemComponent implements AfterViewInit {
   seller: IdToUsernameResponse = {} as IdToUsernameResponse;
   item: loadingItem = {} as loadingItem;
   image: loadingImage = {} as loadingImage;
-  isItemInactive: boolean = false;
   headers: HttpHeaders;
   bid: BasicBidResponse = {} as BasicBidResponse;
   categories: BasicCategoryResponse[] = [];
@@ -47,24 +56,44 @@ export class ItemComponent {
   authData: AuthData | null = null;
   bidStep: number = 0;
 
+  isItemInactive: boolean = false;
+  openCalendar: boolean = false;
+
+  currentDate: Date = new Date();
+  minDate: Date = this.currentDate;
+  maxDate: Date = new Date(
+    this.currentDate.getFullYear() + 1,
+    this.currentDate.getMonth(),
+    this.currentDate.getDate()
+  );
+
+  inputDate: Date = this.currentDate;
+  inputTime: string = '23:59';
+
   @ViewChild('bidForm') bidForm!: NgForm;
+  @ViewChild('picker') datepicker!: MatDatepicker<Date>;
 
   constructor(
     private http: HttpClient,
+    private selfDialogRef: MatDialogRef<ItemComponent>,
     private confirmDialog: MatDialog,
     private formatter: DateTimeFormatService,
     private authService: AuthService,
     private alertService: AlertService,
     private bidStepService: BidStepService,
+    private datePipe: DatePipe,
+    private myItemService: MyItemService,
     @Inject(MAT_DIALOG_DATA) public dialogInputData: any
   ) {
     this.item.data = dialogInputData.item;
     this.image = dialogInputData.image;
     this.isItemInactive = dialogInputData.isItemInactive;
+    this.openCalendar = dialogInputData.openCalendar;
     this.headers = new HttpHeaders().set(
       'Authorization',
       `Bearer ${localStorage.getItem('accessToken')}`
     );
+    this.setExpiryDatetime();
   }
 
   ngOnInit(): void {
@@ -103,6 +132,14 @@ export class ItemComponent {
         console.error(error);
       },
     });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.isItemInactive && this.openCalendar) {
+      setTimeout(() => {
+        this.datepicker.open();
+      }, 100);
+    }
   }
 
   private openInvalidBidAlert(): void {
@@ -169,5 +206,50 @@ export class ItemComponent {
 
   isOwner(): boolean {
     return this.authData?.username === this.seller.username;
+  }
+
+  private setExpiryDatetime(): void {
+    const formattedDate = this.datePipe.transform(this.inputDate, 'MM/dd/yyyy');
+    this.myItemService.expiryDatetime = `${formattedDate}T${this.inputTime}`;
+  }
+
+  onSelectDate(event: MatDatepickerInputEvent<Date>): void {
+    if (event.value) {
+      const formattedDate = this.datePipe.transform(event.value, 'MM/dd/yyyy');
+      console.log(formattedDate);
+      console.log(this.inputTime);
+      this.inputDate = event.value;
+      this.setExpiryDatetime();
+      console.log(this.myItemService.expiryDatetime);
+    }
+  }
+
+  onSelectTime(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    console.log(input.value);
+    this.inputTime = input.value;
+    this.setExpiryDatetime();
+    console.log(this.myItemService.expiryDatetime);
+  }
+
+  confirmPublish(): void {
+    const confirmDialogRef = this.confirmDialog.open(ConfirmComponent, {
+      autoFocus: false,
+      restoreFocus: false,
+      disableClose: true,
+      data: {
+        question: `Are you sure you want to start an auction for ${
+          this.item.data.name
+        } 
+        that ends on ${this.myItemService.expiryDatetime.replace('T', ' ')}? 
+        This action cannot be undone.`,
+      },
+    });
+
+    confirmDialogRef.afterClosed().subscribe((result) => {
+      if (result == 'confirm') {
+        this.selfDialogRef.close('publish');
+      }
+    });
   }
 }
