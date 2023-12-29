@@ -102,9 +102,9 @@ namespace webapi.Controllers
         {
             try
             {
-                await _itemService.Activate(id, input, cancel);
+                var item = await _itemService.Activate(id, input, cancel);
 
-                return Ok($"Item {id} was successfully published");
+                return Ok(item.MapToResponse<BasicItemResponse>(_mapper));
             }
             catch (ArgumentException ex)
             {
