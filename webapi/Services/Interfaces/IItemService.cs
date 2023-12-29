@@ -13,6 +13,8 @@ namespace webapi.Services.Interfaces
 
         public Task<IEnumerable<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel = default);
 
+        public Task<IEnumerable<Item>> GetBidden(long userId, CancellationToken cancel = default);
+
         public Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default);
 
         public Task<IEnumerable<Category>> GetCategories(long id, CancellationToken cancel = default);

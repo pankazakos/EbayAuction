@@ -92,7 +92,17 @@ namespace webapi.Controllers
         [HttpGet(ItemEndpoints.Bidden)]
         public async Task<IActionResult> ListBidden(CancellationToken cancel = default)
         {
-            return await ListMyItems(true, cancel);
+            var username = _controllerHelper.UsernameClaim;
+
+            var user = await _userService.GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                return _controllerHelper.NotFoundRespond<User>();
+            }
+
+            return await _controllerHelper.GetAllAndRespond<Item, BasicItemResponse>(
+                () => _itemService.GetBidden(user.Id, cancel), _mapper);
         }
 
 

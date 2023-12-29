@@ -13,6 +13,8 @@ namespace webapi.Repository.Interfaces
 
         public Task<List<Item>> GetItemsOfUserBasedOnStatus(int userId, bool active, CancellationToken cancel = default);
 
+        public Task<List<Item>> GetBidden(long userId, CancellationToken cancel = default);
+
         public Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default);
 
         public Task<List<Category>> GetCategories(long id, CancellationToken cancel = default);

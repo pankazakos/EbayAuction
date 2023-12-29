@@ -137,6 +137,14 @@ namespace webapi.Repository
             return items;
         }
 
+        public async Task<List<Item>> GetBidden(long userId, CancellationToken cancel = default)
+        {
+            var items = await _dbContext.Items.Where(i => i.Active && i.NumBids > 0 && i.SellerId == userId)
+                .ToListAsync(cancel);
+
+            return items;
+        }
+
         private string GetImageFilenameFullPath(string guid)
         {
             var directoryPath = _configuration.GetValue<string>("FileStorage:BasePath");

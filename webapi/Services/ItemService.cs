@@ -120,6 +120,20 @@ namespace webapi.Services
             return userItems;
         }
 
+        public async Task<IEnumerable<Item>> GetBidden(long userId, CancellationToken cancel = default)
+        {
+            var itemsWithBids = await _itemRepository.GetBidden(userId, cancel);
+
+            if (itemsWithBids.Any())
+            {
+                return itemsWithBids;
+            }
+
+            _logger.LogWarning("No bidden items found for user {userId}", userId);
+
+            return itemsWithBids;
+        }
+
         public async Task<ByteArrayContent> GetImage(string guid, CancellationToken cancel = default)
         {
             var content = await _itemRepository.GetImage(guid, cancel);
