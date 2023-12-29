@@ -36,12 +36,14 @@
                 fxLayoutAlign="start start"
               >
                 <div
-                  *ngIf="!inactiveItems.loading && !inactiveItems.empty"
+                  *ngIf="
+                    !inactiveItems.loading && inactiveItems.items.length > 0
+                  "
                   class="item-boxes"
                 >
                   <mat-card
                     class="item-card"
-                    *ngFor="let item of inactiveItems.data; let i = index"
+                    *ngFor="let item of inactiveItems.items; let i = index"
                   >
                     <div
                       class="item-link"
@@ -51,13 +53,13 @@
                         <div class="item-card-image">
                           <div
                             class="skeleton-image"
-                            *ngIf="inactiveItems.images[i].isLoading"
+                            *ngIf="item.image.isLoading"
                           ></div>
                           <img
-                            *ngIf="!inactiveItems.images[i].isLoading"
+                            *ngIf="!item.image.isLoading"
                             mat-card-image
                             class="item-image"
-                            [src]="inactiveItems.images[i].src"
+                            [src]="item.image.src"
                             alt="item photo"
                           />
                         </div>
@@ -65,7 +67,7 @@
                         <div class="item-card-header">
                           <mat-card-header>
                             <mat-card-title>
-                              {{ item.name }}
+                              {{ item.data.name }}
                             </mat-card-title>
                           </mat-card-header>
                         </div>
@@ -75,7 +77,7 @@
                             <mat-list-item>
                               <div class="item-content-element">
                                 <div>Minimum Bid:</div>
-                                <div>${{ item.firstBid }}</div>
+                                <div>${{ item.data.firstBid }}</div>
                               </div>
                             </mat-list-item>
                             <mat-list-item>
@@ -83,7 +85,9 @@
                                 <div>Buy at:</div>
                                 <div>
                                   {{
-                                    item.buyPrice ? "$" + item.buyPrice : "-"
+                                    item.data.buyPrice
+                                      ? "$" + item.data.buyPrice
+                                      : "-"
                                   }}
                                 </div>
                               </div>
@@ -109,7 +113,7 @@
                             matTooltip="edit"
                             class="edit-button"
                             (click)="
-                              editItem(item, i); $event.stopPropagation()
+                              editItem(item.data, i); $event.stopPropagation()
                             "
                           >
                             <mat-icon aria-label="edit icon" fontIcon="edit" />
@@ -134,7 +138,10 @@
                     </div>
                   </mat-card>
                 </div>
-                <mat-card *ngIf="inactiveItems.empty" class="note-card">
+                <mat-card
+                  *ngIf="inactiveItems.items.length === 0"
+                  class="note-card"
+                >
                   <mat-card-header>
                     <mat-card-title>
                       <div class="note-label">
@@ -191,12 +198,14 @@
                 fxLayoutAlign="start start"
               >
                 <div
-                  *ngIf="!displayedItems.loading && !displayedItems.empty"
+                  *ngIf="
+                    !displayedItems.loading && displayedItems.items.length > 0
+                  "
                   class="item-boxes"
                 >
                   <mat-card
                     class="item-card"
-                    *ngFor="let item of displayedItems.data; let i = index"
+                    *ngFor="let item of displayedItems.items; let i = index"
                   >
                     <div
                       class="item-link"
@@ -206,13 +215,13 @@
                         <div class="item-card-image">
                           <div
                             class="skeleton-image"
-                            *ngIf="displayedItems.images[i].isLoading"
+                            *ngIf="item.image.isLoading"
                           ></div>
                           <img
-                            *ngIf="!displayedItems.images[i].isLoading"
+                            *ngIf="!item.image.isLoading"
                             mat-card-image
                             class="item-image"
-                            [src]="displayedItems.images[i].src"
+                            [src]="item.image.src"
                             alt="item photo"
                           />
                         </div>
@@ -220,7 +229,7 @@
                         <div class="item-card-header">
                           <mat-card-header>
                             <mat-card-title>
-                              {{ item.name }}
+                              {{ item.data.name }}
                             </mat-card-title>
                           </mat-card-header>
                         </div>
@@ -230,7 +239,7 @@
                             <mat-list-item>
                               <div class="item-content-element">
                                 <div>Minimum Bid:</div>
-                                <div>${{ item.firstBid }}</div>
+                                <div>${{ item.data.firstBid }}</div>
                               </div>
                             </mat-list-item>
                             <mat-list-item>
@@ -238,7 +247,9 @@
                                 <div>Buy at:</div>
                                 <div>
                                   {{
-                                    item.buyPrice ? "$" + item.buyPrice : "-"
+                                    item.data.buyPrice
+                                      ? "$" + item.data.buyPrice
+                                      : "-"
                                   }}
                                 </div>
                               </div>
@@ -249,7 +260,10 @@
                     </div>
                   </mat-card>
                 </div>
-                <mat-card *ngIf="displayedItems.empty" class="note-card">
+                <mat-card
+                  *ngIf="displayedItems.items.length === 0"
+                  class="note-card"
+                >
                   <mat-card-header>
                     <mat-card-title>
                       <div class="note-label">

@@ -19,55 +19,37 @@ import { PublishItemRequest } from '../shared/contracts/requests/item';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+interface SingleItemWithImage {
+  data: BasicItemResponse;
+  image: { src: string; isLoading: boolean };
+}
+
+interface MutlipleItemsWithImage {
+  items: SingleItemWithImage[];
+  loading: boolean;
+}
+
 @Component({
   selector: 'app-my-items',
   templateUrl: './my-items.component.html',
   styleUrls: ['./my-items.component.scss'],
 })
 export class MyItemsComponent {
-  inactiveItems: {
-    data: BasicItemResponse[];
-    loading: boolean;
-    images: { src: string; isLoading: boolean; itemId: number }[];
-    empty: boolean;
-  } = {
-    data: [],
+  inactiveItems: MutlipleItemsWithImage = {
+    items: [],
     loading: true,
-    images: [],
-    empty: false,
   };
-  publishedItems: {
-    data: BasicItemResponse[];
-    loading: boolean;
-    images: { src: string; isLoading: boolean; itemId: number }[];
-    empty: boolean;
-  } = {
-    data: [],
+  publishedItems: MutlipleItemsWithImage = {
+    items: [],
     loading: true,
-    images: [],
-    empty: false,
   };
-  itemsWithBids: {
-    data: BasicItemResponse[];
-    loading: boolean;
-    images: { src: string; isLoading: boolean; itemId: number }[];
-    empty: boolean;
-  } = {
-    data: [],
+  itemsWithBids: MutlipleItemsWithImage = {
+    items: [],
     loading: true,
-    images: [],
-    empty: false,
   };
-  displayedItems: {
-    data: BasicItemResponse[];
-    loading: boolean;
-    images: { src: string; isLoading: boolean; itemId: number }[];
-    empty: boolean;
-  } = {
-    data: [],
+  displayedItems: MutlipleItemsWithImage = {
+    items: [],
     loading: true,
-    images: [],
-    empty: false,
   };
 
   toggleChecked = false;
@@ -104,6 +86,15 @@ export class MyItemsComponent {
     }
   }
 
+  private copyResponseItems(
+    response: BasicItemResponse[]
+  ): SingleItemWithImage[] {
+    return response.map((item: BasicItemResponse) => ({
+      data: item,
+      image: { src: '', isLoading: true },
+    }));
+  }
+
   setInactiveItems(): void {
     if (!this.inactiveItems.loading) return;
 
@@ -113,12 +104,9 @@ export class MyItemsComponent {
         next: (response: BasicItemResponse[] | any) => {
           console.log(response);
 
-          this.inactiveItems.data = response;
+          this.inactiveItems.items = this.copyResponseItems(response);
           this.inactiveItems.loading = false;
-          this.inactiveItems.empty = false;
-          if (this.inactiveItems.data.length == 0)
-            this.inactiveItems.empty = true;
-          else this.fetchImages();
+          if (this.inactiveItems.items.length > 0) this.fetchImages();
         },
         error: (error: any) => {
           console.log(error);
@@ -135,21 +123,19 @@ export class MyItemsComponent {
         next: (response: BasicItemResponse[] | any) => {
           console.log(response);
 
-          this.publishedItems.data = response;
+          this.publishedItems.items = this.copyResponseItems(response);
           this.publishedItems.loading = false;
-          this.publishedItems.empty = false;
-          if (this.publishedItems.data.length == 0)
-            this.publishedItems.empty = true;
-          else this.fetchPublishedImages();
+          if (this.publishedItems.items.length > 0) this.fetchPublishedImages();
         },
         error: (error: any) => console.error(error),
       });
   }
 
   setItemsWithBids(): void {
-    this.itemsWithBids.data = this.publishedItems.data.filter(
-      (item) => item.numBids > 0
+    this.itemsWithBids.items = this.publishedItems.items.filter(
+      (item) => item.data.numBids > 0
     );
+    this.itemsWithBids.loading = false;
   }
 
   showItemDialog(
@@ -162,12 +148,12 @@ export class MyItemsComponent {
     let isItemInactive = false;
 
     if (itemStatus == 'inactive') {
-      item = this.inactiveItems.data[itemIdx];
-      image = this.inactiveItems.images[itemIdx];
+      item = this.inactiveItems.items[itemIdx].data;
+      image = this.inactiveItems.items[itemIdx].image;
       isItemInactive = true;
     } else if (itemStatus == 'published') {
-      item = this.displayedItems.data[itemIdx];
-      image = this.displayedItems.images[itemIdx];
+      item = this.displayedItems.items[itemIdx].data;
+      image = this.displayedItems.items[itemIdx].image;
       isItemInactive = false;
     } else {
       return;
@@ -192,15 +178,9 @@ export class MyItemsComponent {
   }
 
   private fetchImages(): void {
-    this.inactiveItems.images = new Array(this.inactiveItems.data.length).fill({
-      src: '',
-      isLoading: true,
-      itemId: -1,
-    });
-
-    this.inactiveItems.data.map((item, i) => {
+    this.inactiveItems.items.map((item) => {
       this.http
-        .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
+        .get(`${ItemEndpoints.getImage(item.data.imageGuid)}`, {
           responseType: 'blob',
         })
         .subscribe({
@@ -210,10 +190,9 @@ export class MyItemsComponent {
                 type: 'image/jpeg',
               });
               const imageUrl = URL.createObjectURL(blob);
-              this.inactiveItems.images[i] = {
+              item.image = {
                 src: imageUrl,
                 isLoading: false,
-                itemId: item.itemId,
               };
             }, environment.timeout);
           },
@@ -225,17 +204,9 @@ export class MyItemsComponent {
   }
 
   private fetchPublishedImages(): void {
-    this.publishedItems.images = new Array(
-      this.publishedItems.data.length
-    ).fill({
-      src: '',
-      isLoading: true,
-      itemId: -1,
-    });
-
-    const imageRequests = this.publishedItems.data.map((item, i) => {
+    const imageRequests = this.publishedItems.items.map((item) => {
       return this.http
-        .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
+        .get(`${ItemEndpoints.getImage(item.data.imageGuid)}`, {
           responseType: 'blob',
         })
         .pipe(
@@ -245,10 +216,9 @@ export class MyItemsComponent {
                 type: 'image/jpeg',
               });
               const imageUrl = URL.createObjectURL(blob);
-              this.publishedItems.images[i] = {
+              item.image = {
                 src: imageUrl,
                 isLoading: false,
-                itemId: item.itemId,
               };
             }, environment.timeout);
           })
@@ -285,13 +255,13 @@ export class MyItemsComponent {
       autoFocus: false,
       disableClose: true,
       data: {
-        question: `Are you sure you want to delete your saved item ${this.inactiveItems.data[index].name}?`,
+        question: `Are you sure you want to delete your saved item ${this.inactiveItems.items[index].data.name}?`,
       },
     });
 
     confirmDeleteDialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirm') {
-        this.deleteItem(this.inactiveItems.data[index].itemId);
+        this.deleteItem(this.inactiveItems.items[index].data.itemId);
       }
     });
   }
@@ -329,7 +299,7 @@ export class MyItemsComponent {
       .subscribe((result: EditItemDialogOutputData) => {
         if (result.status == 'edited') {
           if (result.item) {
-            this.inactiveItems.data[idx] = result.item;
+            this.inactiveItems.items[idx].data = result.item;
           }
           this.alertService.success('Item successfully saved', 'Ok');
           this.inactiveItems.loading = true;
@@ -345,7 +315,7 @@ export class MyItemsComponent {
 
     this.http
       .put<PublishItemRequest>(
-        ItemEndpoints.activate(this.inactiveItems.data[itemIdx].itemId),
+        ItemEndpoints.activate(this.inactiveItems.items[itemIdx].data.itemId),
         publishItemRequestData,
         { headers: this.authService.getHeaders() }
       )
@@ -370,7 +340,6 @@ export class MyItemsComponent {
       return;
     }
 
-    console.log(this.itemsWithBids);
     this.displayedItems = this.itemsWithBids;
   }
 }
