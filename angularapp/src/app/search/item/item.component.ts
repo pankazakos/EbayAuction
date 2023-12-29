@@ -209,30 +209,29 @@ export class ItemComponent implements AfterViewInit {
   }
 
   private setExpiryDatetime(): void {
-    const formattedDate = this.datePipe.transform(this.inputDate, 'MM/dd/yyyy');
+    const formattedDate = this.datePipe.transform(this.inputDate, 'MM-dd-yyyy');
     this.myItemService.expiryDatetime = `${formattedDate}T${this.inputTime}`;
   }
 
   onSelectDate(event: MatDatepickerInputEvent<Date>): void {
     if (event.value) {
-      const formattedDate = this.datePipe.transform(event.value, 'MM/dd/yyyy');
-      console.log(formattedDate);
-      console.log(this.inputTime);
+      const formattedDate = this.datePipe.transform(event.value, 'MM-dd-yyyy');
       this.inputDate = event.value;
       this.setExpiryDatetime();
-      console.log(this.myItemService.expiryDatetime);
     }
   }
 
   onSelectTime(event: Event): void {
     const input = event.target as HTMLInputElement;
-    console.log(input.value);
     this.inputTime = input.value;
     this.setExpiryDatetime();
-    console.log(this.myItemService.expiryDatetime);
   }
 
   confirmPublish(): void {
+    const formattedDate = this.datePipe.transform(this.inputDate, 'yyyy-MM-dd');
+
+    this.myItemService.expiryDatetime = `${formattedDate}T${this.inputTime}`;
+
     const confirmDialogRef = this.confirmDialog.open(ConfirmComponent, {
       autoFocus: false,
       restoreFocus: false,

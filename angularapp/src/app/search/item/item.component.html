@@ -113,8 +113,8 @@
 <div mat-dialog-actions>
   <button mat-raised-button mat-dialog-close>close</button>
   <div *ngIf="isItemInactive" class="publish-section">
-    <mat-form-field subscriptSizing="dynamic">
-      <mat-label>Choose a date</mat-label>
+    <mat-form-field subscriptSizing="dynamic" class="datetime-form-field">
+      <mat-label class="datetime-label">Select Expiry Date</mat-label>
       <input
         class="datetime-input"
         matInput

@@ -185,6 +185,14 @@ $item-box-gap: 2rem;
   justify-content: flex-end;
 }
 
+.datetime-form-field {
+  font-weight: 900;
+}
+
+.datetime-label {
+  font-weight: 900;
+}
+
 @media (max-width: 1600px) {
   #item-main-container {
     width: 60vw;

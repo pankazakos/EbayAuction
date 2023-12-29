@@ -1,5 +1,9 @@
 @import "../../styles.scss";
 
+#items-and-bids-main-container {
+  margin-top: 5rem;
+}
+
 #my-items-tabs {
   mat-tab-group {
     height: 100%;
@@ -10,10 +14,19 @@
   height: 100%;
 }
 
+#saved-items-section {
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+#published-items-section {
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
 #saved-items-list {
   width: 100%;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  margin: 1rem 0;
 
   .note-card {
     width: 100%;
@@ -37,10 +50,6 @@
   width: 100%;
 }
 
-.add-item-button {
-  margin-right: 1rem;
-}
-
 $item-boxes-column-gap: 1rem;
 $item-boxes-left-rigth-padding: 1rem;
 
@@ -54,7 +63,6 @@ $item-boxes-left-rigth-padding: 1rem;
   justify-content: flex-start;
   padding-top: 2rem;
   padding-bottom: 2rem;
-  padding-left: $item-boxes-left-rigth-padding;
 }
 
 mat-card.item-card {
@@ -63,9 +71,7 @@ mat-card.item-card {
 
 .item-card {
   box-sizing: border-box;
-  width: calc(
-    20% - $item-boxes-column-gap - $item-boxes-left-rigth-padding * 2
-  );
+  width: calc(20% - $item-boxes-column-gap);
   background-color: rgb(255, 255, 255);
   overflow: hidden;
 }

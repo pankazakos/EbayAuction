@@ -7,5 +7,5 @@ export interface AddItemRequest {
 }
 
 export interface PublishItemRequest {
-  expiration: Date;
+  expiration: string;
 }

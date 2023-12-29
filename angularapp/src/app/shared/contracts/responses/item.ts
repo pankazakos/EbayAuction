@@ -30,20 +30,6 @@ export interface AddItemResponse extends IItemResponse {
   imageUrl: string;
 }
 
-export interface PublishedItemResponse extends IItemResponse {
-  itemId: string;
-  name: string;
-  currently: number;
-  buyPrice: number;
-  firstBid: number;
-  numBids: number;
-  started: Date;
-  ends: Date;
-  active: boolean;
-  description: string;
-  sellerId: number;
-}
-
 export interface LimitedInfoPublishedItemResponse extends IItemResponse {
   itemId: string;
   name: string;

@@ -1,5 +1,5 @@
 <div
-  id="my-items-container"
+  id="items-and-bids-main-container"
   fxLayout="row"
   fxLayoutAlign="center flex-start"
   fxFill
@@ -11,152 +11,262 @@
     fxFlex="75%"
     fxFill
   >
-    <div id="my-items-tabs" fxFlex="85%" fxFill>
+    <div id="my-items-tabs" fxFlex="100%" fxFill>
       <mat-tab-group (selectedTabChange)="onTabChanged($event)">
-        <mat-tab label="Saved Items">
+        <mat-tab label="My Items">
           <div
-            id="saved-items-container"
+            id="my-items-container"
             fxLayout="column"
             fxLayoutAlign="start start"
             fxFill
           >
-            <div
-              id="saved-items-list"
-              fxLayout="row wrap"
-              fxLayoutAlign="start start"
+            <section
+              id="saved-items-section"
+              fxLayout="column"
+              fxLayout="start start"
             >
+              <div>
+                <h2>Saved items</h2>
+              </div>
+
               <div
-                *ngIf="!inactiveItems.loading && !inactiveItems.empty"
-                class="item-boxes"
+                id="saved-items-list"
+                fxLayout="row wrap"
+                fxLayoutAlign="start start"
               >
-                <mat-card
-                  class="item-card"
-                  *ngFor="let item of inactiveItems.data; let i = index"
+                <div
+                  *ngIf="!inactiveItems.loading && !inactiveItems.empty"
+                  class="item-boxes"
                 >
-                  <div class="item-link" (click)="showItemDialog(i, false)">
-                    <div class="item-card-main-container">
-                      <div class="item-card-image">
-                        <div
-                          class="skeleton-image"
-                          *ngIf="inactiveItems.images[i].isLoading"
-                        ></div>
-                        <img
-                          *ngIf="!inactiveItems.images[i].isLoading"
-                          mat-card-image
-                          class="item-image"
-                          [src]="inactiveItems.images[i].src"
-                          alt="item photo"
-                        />
-                      </div>
+                  <mat-card
+                    class="item-card"
+                    *ngFor="let item of inactiveItems.data; let i = index"
+                  >
+                    <div
+                      class="item-link"
+                      (click)="showItemDialog(i, 'inactive', false)"
+                    >
+                      <div class="item-card-main-container">
+                        <div class="item-card-image">
+                          <div
+                            class="skeleton-image"
+                            *ngIf="inactiveItems.images[i].isLoading"
+                          ></div>
+                          <img
+                            *ngIf="!inactiveItems.images[i].isLoading"
+                            mat-card-image
+                            class="item-image"
+                            [src]="inactiveItems.images[i].src"
+                            alt="item photo"
+                          />
+                        </div>
 
-                      <div class="item-card-header">
-                        <mat-card-header>
-                          <mat-card-title>
-                            {{ item.name }}
-                          </mat-card-title>
-                        </mat-card-header>
-                      </div>
+                        <div class="item-card-header">
+                          <mat-card-header>
+                            <mat-card-title>
+                              {{ item.name }}
+                            </mat-card-title>
+                          </mat-card-header>
+                        </div>
 
-                      <div class="item-content">
-                        <mat-card-content>
-                          <mat-list-item>
-                            <div class="item-content-element">
-                              <div>Minimum Bid:</div>
-                              <div>${{ item.firstBid }}</div>
-                            </div>
-                          </mat-list-item>
-                          <mat-list-item>
-                            <div class="item-content-element">
-                              <div>Buy at:</div>
-                              <div>
-                                {{ item.buyPrice ? "$" + item.buyPrice : "-" }}
+                        <div class="item-content">
+                          <mat-card-content>
+                            <mat-list-item>
+                              <div class="item-content-element">
+                                <div>Minimum Bid:</div>
+                                <div>${{ item.firstBid }}</div>
                               </div>
-                            </div>
-                          </mat-list-item>
-                        </mat-card-content>
-                      </div>
+                            </mat-list-item>
+                            <mat-list-item>
+                              <div class="item-content-element">
+                                <div>Buy at:</div>
+                                <div>
+                                  {{
+                                    item.buyPrice ? "$" + item.buyPrice : "-"
+                                  }}
+                                </div>
+                              </div>
+                            </mat-list-item>
+                          </mat-card-content>
+                        </div>
 
-                      <div class="item-card-actions">
-                        <button
-                          mat-raised-button
-                          matTooltip="delete"
-                          color="warn"
-                          class="delete-button"
-                          (click)="confirmDelete(i); $event.stopPropagation()"
-                        >
-                          <mat-icon
-                            aria-label="delete icon"
-                            fontIcon="delete"
-                          />
-                        </button>
-                        <button
-                          mat-raised-button
-                          matTooltip="edit"
-                          class="edit-button"
-                          (click)="editItem(item, i); $event.stopPropagation()"
-                        >
-                          <mat-icon aria-label="edit icon" fontIcon="edit" />
-                        </button>
-                        <button
-                          mat-raised-button
-                          matTooltip="publish"
-                          color="accent"
-                          class="publish-button"
-                          (click)="
-                            showItemDialog(i, true); $event.stopPropagation()
-                          "
-                        >
-                          <mat-icon
-                            aria-label="publish icon"
-                            fontIcon="publish"
-                          />
-                        </button>
+                        <div class="item-card-actions">
+                          <button
+                            mat-raised-button
+                            matTooltip="delete"
+                            color="warn"
+                            class="delete-button"
+                            (click)="confirmDelete(i); $event.stopPropagation()"
+                          >
+                            <mat-icon
+                              aria-label="delete icon"
+                              fontIcon="delete"
+                            />
+                          </button>
+                          <button
+                            mat-raised-button
+                            matTooltip="edit"
+                            class="edit-button"
+                            (click)="
+                              editItem(item, i); $event.stopPropagation()
+                            "
+                          >
+                            <mat-icon aria-label="edit icon" fontIcon="edit" />
+                          </button>
+                          <button
+                            mat-raised-button
+                            matTooltip="publish"
+                            color="accent"
+                            class="publish-button"
+                            (click)="
+                              showItemDialog(i, 'inactive', true);
+                              $event.stopPropagation()
+                            "
+                          >
+                            <mat-icon
+                              aria-label="publish icon"
+                              fontIcon="publish"
+                            />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </mat-card>
+                </div>
+                <mat-card *ngIf="inactiveItems.empty" class="note-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <div class="note-label">
+                        <mat-icon
+                          class="notification-icon"
+                          aria-hidden="false"
+                          aria-label="info icon"
+                          fontIcon="info"
+                        ></mat-icon>
+                        <span>Note</span>
+                      </div></mat-card-title
+                    >
+                  </mat-card-header>
+                  <mat-card-content
+                    >Currently you don't have any temporary saved items. You can
+                    create a new item by pressing the add button below and
+                    filling the item information. After creating an item you
+                    have the option to edit or publish it.</mat-card-content
+                  >
                 </mat-card>
               </div>
-              <mat-card *ngIf="inactiveItems.empty" class="note-card">
-                <mat-card-header>
-                  <mat-card-title>
-                    <div class="note-label">
-                      <mat-icon
-                        class="notification-icon"
-                        aria-hidden="false"
-                        aria-label="info icon"
-                        fontIcon="info"
-                      ></mat-icon>
-                      <span>Note</span>
-                    </div></mat-card-title
-                  >
-                </mat-card-header>
-                <mat-card-content
-                  >Currently you don't have any temporary saved items. You can
-                  create a new item by pressing the add button below and filling
-                  the item information. After creating an item you have the
-                  option to edit or publish it.</mat-card-content
-                >
-              </mat-card>
-            </div>
-            <div
-              id="add-item-section"
-              fxLayout="row wrap"
-              fxLayoutAlign="end center"
-            >
-              <button
-                class="add-item-button"
-                mat-fab
-                color="accent"
-                matTooltip="Add Item"
-                matTooltipPosition="above"
-                (click)="addItem()"
+              <div
+                id="add-item-section"
+                fxLayout="row wrap"
+                fxLayoutAlign="end center"
               >
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
+                <button
+                  class="add-item-button"
+                  mat-fab
+                  color="accent"
+                  matTooltip="Add Item"
+                  matTooltipPosition="above"
+                  (click)="addItem()"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </section>
+
+            <section id="published-items-section">
+              <div>
+                <h2>Published items</h2>
+              </div>
+
+              <div
+                id="saved-items-list"
+                fxLayout="row wrap"
+                fxLayoutAlign="start start"
+              >
+                <div
+                  *ngIf="!publishedItems.loading && !publishedItems.empty"
+                  class="item-boxes"
+                >
+                  <mat-card
+                    class="item-card"
+                    *ngFor="let item of publishedItems.data; let i = index"
+                  >
+                    <div
+                      class="item-link"
+                      (click)="showItemDialog(i, 'published', false)"
+                    >
+                      <div class="item-card-main-container">
+                        <div class="item-card-image">
+                          <div
+                            class="skeleton-image"
+                            *ngIf="publishedItems.images[i].isLoading"
+                          ></div>
+                          <img
+                            *ngIf="!publishedItems.images[i].isLoading"
+                            mat-card-image
+                            class="item-image"
+                            [src]="publishedItems.images[i].src"
+                            alt="item photo"
+                          />
+                        </div>
+
+                        <div class="item-card-header">
+                          <mat-card-header>
+                            <mat-card-title>
+                              {{ item.name }}
+                            </mat-card-title>
+                          </mat-card-header>
+                        </div>
+
+                        <div class="item-content">
+                          <mat-card-content>
+                            <mat-list-item>
+                              <div class="item-content-element">
+                                <div>Minimum Bid:</div>
+                                <div>${{ item.firstBid }}</div>
+                              </div>
+                            </mat-list-item>
+                            <mat-list-item>
+                              <div class="item-content-element">
+                                <div>Buy at:</div>
+                                <div>
+                                  {{
+                                    item.buyPrice ? "$" + item.buyPrice : "-"
+                                  }}
+                                </div>
+                              </div>
+                            </mat-list-item>
+                          </mat-card-content>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card>
+                </div>
+                <mat-card *ngIf="publishedItems.empty" class="note-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <div class="note-label">
+                        <mat-icon
+                          class="notification-icon"
+                          aria-hidden="false"
+                          aria-label="info icon"
+                          fontIcon="info"
+                        ></mat-icon>
+                        <span>Note</span>
+                      </div></mat-card-title
+                    >
+                  </mat-card-header>
+                  <mat-card-content
+                    >Currently you don't have any published items. You can
+                    create a new item from the above section of saved items and
+                    then pubish it with an expiry date and
+                    time.</mat-card-content
+                  >
+                </mat-card>
+              </div>
+            </section>
           </div>
         </mat-tab>
-        <mat-tab label="Published"></mat-tab>
         <mat-tab label="My Bids"></mat-tab>
       </mat-tab-group>
     </div>
