@@ -18,6 +18,7 @@
             id="my-items-container"
             fxLayout="column"
             fxLayoutAlign="start start"
+            fxLayoutGap="3rem"
             fxFill
           >
             <section
@@ -174,8 +175,14 @@
             </section>
 
             <section id="published-items-section">
-              <div>
+              <div class="published-items-header">
                 <h2>Published items</h2>
+                <mat-slide-toggle
+                  [checked]="toggleChecked"
+                  (change)="showOnlyWithBids()"
+                >
+                  <strong>Only with bids</strong></mat-slide-toggle
+                >
               </div>
 
               <div
@@ -184,12 +191,12 @@
                 fxLayoutAlign="start start"
               >
                 <div
-                  *ngIf="!publishedItems.loading && !publishedItems.empty"
+                  *ngIf="!displayedItems.loading && !displayedItems.empty"
                   class="item-boxes"
                 >
                   <mat-card
                     class="item-card"
-                    *ngFor="let item of publishedItems.data; let i = index"
+                    *ngFor="let item of displayedItems.data; let i = index"
                   >
                     <div
                       class="item-link"
@@ -199,13 +206,13 @@
                         <div class="item-card-image">
                           <div
                             class="skeleton-image"
-                            *ngIf="publishedItems.images[i].isLoading"
+                            *ngIf="displayedItems.images[i].isLoading"
                           ></div>
                           <img
-                            *ngIf="!publishedItems.images[i].isLoading"
+                            *ngIf="!displayedItems.images[i].isLoading"
                             mat-card-image
                             class="item-image"
-                            [src]="publishedItems.images[i].src"
+                            [src]="displayedItems.images[i].src"
                             alt="item photo"
                           />
                         </div>
@@ -242,7 +249,7 @@
                     </div>
                   </mat-card>
                 </div>
-                <mat-card *ngIf="publishedItems.empty" class="note-card">
+                <mat-card *ngIf="displayedItems.empty" class="note-card">
                   <mat-card-header>
                     <mat-card-title>
                       <div class="note-label">

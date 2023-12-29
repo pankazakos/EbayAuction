@@ -201,6 +201,13 @@ mat-card.item-card {
   }
 }
 
+.published-items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 1700px) {
   .item-card {
     width: calc(25% - $item-boxes-column-gap);

@@ -16,6 +16,8 @@ import {
 import { ConfirmComponent } from '../shared/components/confirm/confirm.component';
 import { MyItemService } from './my-item.service';
 import { PublishItemRequest } from '../shared/contracts/requests/item';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-items',
@@ -45,10 +47,30 @@ export class MyItemsComponent {
     images: [],
     empty: false,
   };
-  itemsWithBids: { data: BasicItemResponse[]; loading: boolean } = {
+  itemsWithBids: {
+    data: BasicItemResponse[];
+    loading: boolean;
+    images: { src: string; isLoading: boolean; itemId: number }[];
+    empty: boolean;
+  } = {
     data: [],
     loading: true,
+    images: [],
+    empty: false,
   };
+  displayedItems: {
+    data: BasicItemResponse[];
+    loading: boolean;
+    images: { src: string; isLoading: boolean; itemId: number }[];
+    empty: boolean;
+  } = {
+    data: [],
+    loading: true,
+    images: [],
+    empty: false,
+  };
+
+  toggleChecked = false;
 
   constructor(
     private http: HttpClient,
@@ -76,7 +98,6 @@ export class MyItemsComponent {
         this.setPublishedItems();
         break;
       case 1:
-        this.setItemsWithBids();
         break;
       default:
         break;
@@ -126,19 +147,9 @@ export class MyItemsComponent {
   }
 
   setItemsWithBids(): void {
-    if (!this.itemsWithBids.loading) return;
-
-    this.http
-      .get(ItemEndpoints.bidden, { headers: this.authService.getHeaders() })
-      .subscribe({
-        next: (response: BasicItemResponse[] | any) => {
-          console.log(response);
-
-          this.itemsWithBids.data = response;
-          this.itemsWithBids.loading = false;
-        },
-        error: (error: any) => console.error(error),
-      });
+    this.itemsWithBids.data = this.publishedItems.data.filter(
+      (item) => item.numBids > 0
+    );
   }
 
   showItemDialog(
@@ -155,8 +166,8 @@ export class MyItemsComponent {
       image = this.inactiveItems.images[itemIdx];
       isItemInactive = true;
     } else if (itemStatus == 'published') {
-      item = this.publishedItems.data[itemIdx];
-      image = this.publishedItems.images[itemIdx];
+      item = this.displayedItems.data[itemIdx];
+      image = this.displayedItems.images[itemIdx];
       isItemInactive = false;
     } else {
       return;
@@ -222,13 +233,13 @@ export class MyItemsComponent {
       itemId: -1,
     });
 
-    this.publishedItems.data.map((item, i) => {
-      this.http
+    const imageRequests = this.publishedItems.data.map((item, i) => {
+      return this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
         })
-        .subscribe({
-          next: (imageData: Blob) => {
+        .pipe(
+          map((imageData: Blob) => {
             setTimeout(() => {
               const blob = new Blob([imageData], {
                 type: 'image/jpeg',
@@ -240,11 +251,18 @@ export class MyItemsComponent {
                 itemId: item.itemId,
               };
             }, environment.timeout);
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
+          })
+        );
+    });
+
+    forkJoin(imageRequests).subscribe({
+      next: () => {
+        this.displayedItems = this.publishedItems;
+        this.setItemsWithBids();
+      },
+      error: (error) => {
+        console.error(error);
+      },
     });
   }
 
@@ -342,5 +360,17 @@ export class MyItemsComponent {
         },
         error: (error: any) => console.error(error),
       });
+  }
+
+  showOnlyWithBids(): void {
+    this.toggleChecked = !this.toggleChecked;
+
+    if (!this.toggleChecked) {
+      this.displayedItems = this.publishedItems;
+      return;
+    }
+
+    console.log(this.itemsWithBids);
+    this.displayedItems = this.itemsWithBids;
   }
 }
