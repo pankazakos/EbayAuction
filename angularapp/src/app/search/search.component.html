@@ -169,12 +169,12 @@
           <div class="item-link" (click)="showItemDialog(i)">
             <div class="item-card-main-container">
               <div class="item-card-image">
-                <div class="skeleton-image" *ngIf="images[i].isLoading"></div>
+                <div class="skeleton-image" *ngIf="item.image.isLoading"></div>
                 <img
-                  *ngIf="!images[i].isLoading"
+                  *ngIf="!item.image.isLoading"
                   mat-card-image
                   class="item-image"
-                  [src]="images[i].src"
+                  [src]="item.image.src"
                   alt="item photo"
                 />
               </div>
@@ -206,13 +206,13 @@
                   <mat-list-item>
                     <div class="item-content-element">
                       <div>Started:</div>
-                      <div>{{ auctionStarted[i] }}</div>
+                      <div>{{ item.auctionStarted }}</div>
                     </div>
                   </mat-list-item>
                   <mat-list-item>
                     <div class="item-content-element">
                       <div>Ends:</div>
-                      <div>{{ auctionEnds[i] }}</div>
+                      <div>{{ item.auctionEnds }}</div>
                     </div>
                   </mat-list-item>
                 </mat-card-content>

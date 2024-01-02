@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
-import { BasicItemResponse } from '../shared/contracts/responses/item';
+import {
+  BasicItemResponse,
+  ExtendedItemInfo,
+} from '../shared/contracts/responses/item';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -19,7 +22,7 @@ import { AlertService } from '../shared/services/alert.service';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements AfterViewInit {
-  public items: PaginatedResponse<BasicItemResponse> = {
+  public items: PaginatedResponse<ExtendedItemInfo> = {
     castEntities: [],
     total: 0,
     page: 1,
@@ -30,11 +33,6 @@ export class SearchComponent implements AfterViewInit {
   minPrice: number = 0;
   maxPrice: number = 0;
   categoryQuery: string = '';
-
-  auctionStarted: string[] = [];
-  auctionEnds: string[] = [];
-
-  images: { src: string; isLoading: boolean; itemId: number }[] = [];
 
   removedExpansionPanel: boolean = false;
   authData: AuthData | null = null;
@@ -142,19 +140,22 @@ export class SearchComponent implements AfterViewInit {
   }
 
   private fetchImages(): void {
-    this.images = new Array(this.items.limit).fill({
-      src: '',
-      isLoading: true,
-      itemId: -1,
+    // initialize
+    this.items.castEntities.map((item) => {
+      item.image = {
+        src: '',
+        isLoading: true,
+      };
     });
 
     if (this.items.castEntities.length === 0) {
       this.openNoItemsFoundSnackBar();
+      return;
     }
 
     this.items.castEntities.map((item, i) => {
-      this.auctionStarted[i] = this.formatter.convertOnlyToDate(item.started);
-      this.auctionEnds[i] = this.formatter.convertOnlyToDate(item.ends);
+      item.auctionStarted = this.formatter.convertOnlyToDate(item.started);
+      item.auctionEnds = this.formatter.convertOnlyToDate(item.ends);
       this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
@@ -166,10 +167,9 @@ export class SearchComponent implements AfterViewInit {
                 type: 'image/jpeg',
               });
               const imageUrl = URL.createObjectURL(blob);
-              this.images[i] = {
+              item.image = {
                 src: imageUrl,
                 isLoading: false,
-                itemId: item.itemId,
               };
             }, environment.timeout);
           },
@@ -201,7 +201,7 @@ export class SearchComponent implements AfterViewInit {
       restoreFocus: false,
       data: {
         item: this.items.castEntities[itemIdx],
-        image: this.images[itemIdx],
+        image: this.items.castEntities[itemIdx].image,
       },
     });
   }
