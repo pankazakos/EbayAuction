@@ -14,7 +14,7 @@ import {
   EditItemDialogOutputData,
 } from './edit-item-dialog/edit-item-dialog.component';
 import { ConfirmComponent } from '../shared/components/confirm/confirm.component';
-import { MyItemService } from './my-item.service';
+import { MyItemService } from './services/my-item.service';
 import { PublishItemRequest } from '../shared/contracts/requests/item';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/shared/services/category.service';
-import { MyItemService } from '../my-item.service';
+import { MyItemService } from '../services/my-item.service';
 import { AuthService } from 'src/app/shared/services/auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';

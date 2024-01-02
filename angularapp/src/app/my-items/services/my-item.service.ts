@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AddItemRequest } from '../shared/contracts/requests/item';
+import { AddItemRequest } from '../../shared/contracts/requests/item';
 
 @Injectable({
   providedIn: 'root',

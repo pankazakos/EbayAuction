@@ -31,7 +31,7 @@ import {
   MatDatepickerInputEvent,
 } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
-import { MyItemService } from 'src/app/my-items/my-item.service';
+import { MyItemService } from 'src/app/my-items/services/my-item.service';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };

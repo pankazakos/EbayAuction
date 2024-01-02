@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MyItemService } from '../my-item.service';
+import { MyItemService } from '../services/my-item.service';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { baseUrl } from 'src/app/shared/types';

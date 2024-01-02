@@ -6,8 +6,8 @@ import {
   Router,
   UrlTree,
 } from '@angular/router';
-import { AuthService } from './shared/services/auth-service.service';
-import { UserRole } from './shared/types';
+import { AuthService } from '../shared/services/auth-service.service';
+import { UserRole } from '../shared/types';
 import { Observable } from 'rxjs';
 
 @Injectable({

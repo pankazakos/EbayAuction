@@ -5,7 +5,7 @@ import { baseUrl } from 'src/app/shared/types';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FilterService } from '../filter.service';
+import { FilterService } from '../services/filter.service';
 import { CategoryService } from 'src/app/shared/services/category.service';
 
 @Component({
