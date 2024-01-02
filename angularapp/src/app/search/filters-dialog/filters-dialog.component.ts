@@ -77,8 +77,6 @@ export class FiltersDialogComponent {
   }
 
   applyFilters(): void {
-    this.closeDialog();
-
     const categoryParams: {
       category: string[];
     } = {
@@ -87,6 +85,16 @@ export class FiltersDialogComponent {
 
     for (const category of this.categoryService.selected) {
       categoryParams.category.push(category.name);
+    }
+
+    if (
+      this.filterService.minPrice == null &&
+      this.filterService.maxPrice == null &&
+      categoryParams.category.length == 0
+    ) {
+      this.dialogRef.close('no-filters');
+    } else {
+      this.dialogRef.close('apply');
     }
 
     this.router.navigate([], {
@@ -99,9 +107,5 @@ export class FiltersDialogComponent {
       },
       queryParamsHandling: 'merge',
     });
-  }
-
-  closeDialog(): void {
-    this.dialogRef.close();
   }
 }

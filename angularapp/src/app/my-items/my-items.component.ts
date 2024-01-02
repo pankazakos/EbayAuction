@@ -6,7 +6,7 @@ import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
 import { AuthService } from '../shared/services/auth-service.service';
-import { ItemComponent } from '../search/item/item.component';
+import { ItemComponent } from '../shared/components/item/item.component';
 import { environment } from 'src/environments/environment';
 import { AlertService } from '../shared/services/alert.service';
 import {
@@ -95,7 +95,7 @@ export class MyItemsComponent {
     }));
   }
 
-  setInactiveItems(): void {
+  private setInactiveItems(): void {
     if (!this.inactiveItems.loading) return;
 
     this.http
@@ -114,7 +114,7 @@ export class MyItemsComponent {
       });
   }
 
-  setPublishedItems(): void {
+  private setPublishedItems(): void {
     if (!this.publishedItems.loading) return;
 
     this.http
@@ -131,50 +131,11 @@ export class MyItemsComponent {
       });
   }
 
-  setItemsWithBids(): void {
+  private setItemsWithBids(): void {
     this.itemsWithBids.items = this.publishedItems.items.filter(
       (item) => item.data.numBids > 0
     );
     this.itemsWithBids.loading = false;
-  }
-
-  showItemDialog(
-    itemIdx: number,
-    itemStatus: string,
-    openCalendar: boolean
-  ): void {
-    let item = null;
-    let image = null;
-    let isItemInactive = false;
-
-    if (itemStatus == 'inactive') {
-      item = this.inactiveItems.items[itemIdx].data;
-      image = this.inactiveItems.items[itemIdx].image;
-      isItemInactive = true;
-    } else if (itemStatus == 'published') {
-      item = this.displayedItems.items[itemIdx].data;
-      image = this.displayedItems.items[itemIdx].image;
-      isItemInactive = false;
-    } else {
-      return;
-    }
-
-    const itemDialogRef = this.itemDialog.open(ItemComponent, {
-      autoFocus: false,
-      restoreFocus: false,
-      data: {
-        item: item,
-        image: image,
-        isItemInactive: isItemInactive,
-        openCalendar: openCalendar,
-      },
-    });
-
-    itemDialogRef.afterClosed().subscribe((result) => {
-      if (result == 'publish') {
-        this.publishItem(itemIdx);
-      }
-    });
   }
 
   private fetchImages(): void {
@@ -330,6 +291,45 @@ export class MyItemsComponent {
         },
         error: (error: any) => console.error(error),
       });
+  }
+
+  showItemDialog(
+    itemIdx: number,
+    itemStatus: string,
+    openCalendar: boolean
+  ): void {
+    let item = null;
+    let image = null;
+    let isItemInactive = false;
+
+    if (itemStatus == 'inactive') {
+      item = this.inactiveItems.items[itemIdx].data;
+      image = this.inactiveItems.items[itemIdx].image;
+      isItemInactive = true;
+    } else if (itemStatus == 'published') {
+      item = this.displayedItems.items[itemIdx].data;
+      image = this.displayedItems.items[itemIdx].image;
+      isItemInactive = false;
+    } else {
+      return;
+    }
+
+    const itemDialogRef = this.itemDialog.open(ItemComponent, {
+      autoFocus: false,
+      restoreFocus: false,
+      data: {
+        item: item,
+        image: image,
+        isItemInactive: isItemInactive,
+        openCalendar: openCalendar,
+      },
+    });
+
+    itemDialogRef.afterClosed().subscribe((result) => {
+      if (result == 'publish') {
+        this.publishItem(itemIdx);
+      }
+    });
   }
 
   showOnlyWithBids(): void {

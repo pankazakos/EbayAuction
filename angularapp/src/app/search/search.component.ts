@@ -8,10 +8,10 @@ import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ItemComponent } from './item/item.component';
+import { ItemComponent } from '../shared/components/item/item.component';
 import { DateTimeFormatService } from '../shared/services/date-time-format.service';
 import { AuthData, AuthService } from '../shared/services/auth-service.service';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
   selector: 'app-search',
@@ -30,15 +30,16 @@ export class SearchComponent implements AfterViewInit {
   minPrice: number = 0;
   maxPrice: number = 0;
   categoryQuery: string = '';
-  selectedCategoryNames: string[] = [];
 
-  auctionStarted: string = '';
-  auctionEnds: string = '';
+  auctionStarted: string[] = [];
+  auctionEnds: string[] = [];
 
   images: { src: string; isLoading: boolean; itemId: number }[] = [];
 
   removedExpansionPanel: boolean = false;
   authData: AuthData | null = null;
+
+  showClearFiltersButton: boolean = false;
 
   @ViewChild('paginatorTop') paginatorTop?: MatPaginator;
   @ViewChild('paginatorBottom') paginatorBottom?: MatPaginator;
@@ -49,7 +50,7 @@ export class SearchComponent implements AfterViewInit {
     private router: Router,
     private filtersDialog: MatDialog,
     private itemDialog: MatDialog,
-    private snackBar: MatSnackBar,
+    private alertService: AlertService,
     private formatter: DateTimeFormatService,
     private authService: AuthService
   ) {}
@@ -152,8 +153,8 @@ export class SearchComponent implements AfterViewInit {
     }
 
     this.items.castEntities.map((item, i) => {
-      this.auctionStarted = this.formatter.convertOnlyToDate(item.started);
-      this.auctionEnds = this.formatter.convertOnlyToDate(item.ends);
+      this.auctionStarted[i] = this.formatter.convertOnlyToDate(item.started);
+      this.auctionEnds[i] = this.formatter.convertOnlyToDate(item.ends);
       this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
@@ -180,9 +181,17 @@ export class SearchComponent implements AfterViewInit {
   }
 
   public showFiltersDialog(): void {
-    this.filtersDialog.open(FiltersDialogComponent, {
+    this.showClearFiltersButton = false;
+
+    const filtersDialogRef = this.filtersDialog.open(FiltersDialogComponent, {
       autoFocus: false,
       restoreFocus: false,
+    });
+
+    filtersDialogRef.afterClosed().subscribe((result) => {
+      if (result === 'apply') {
+        this.showClearFiltersButton = true;
+      }
     });
   }
 
@@ -198,6 +207,7 @@ export class SearchComponent implements AfterViewInit {
   }
 
   public clearFilters(): void {
+    this.showClearFiltersButton = false;
     this.removeUrlParameters(['minPrice', 'maxPrice', 'category']);
   }
 
@@ -254,12 +264,7 @@ export class SearchComponent implements AfterViewInit {
   }
 
   private openNoItemsFoundSnackBar(): void {
-    this.snackBar.open('No Items found', 'close', {
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      duration: 2500,
-      panelClass: ['error-snackbar'],
-    });
+    this.alertService.error('No items found', 'Close');
   }
 
   private addUrlParameters(params: { name: string; value: string }[]): void {

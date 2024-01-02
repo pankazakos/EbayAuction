@@ -83,7 +83,7 @@
             </button>
           </div>
 
-          <div class="clear-filters-button">
+          <div *ngIf="showClearFiltersButton" class="clear-filters-button">
             <button
               mat-icon-button
               matTooltip="clear filters"
@@ -206,13 +206,13 @@
                   <mat-list-item>
                     <div class="item-content-element">
                       <div>Started:</div>
-                      <div>{{ auctionStarted }}</div>
+                      <div>{{ auctionStarted[i] }}</div>
                     </div>
                   </mat-list-item>
                   <mat-list-item>
                     <div class="item-content-element">
                       <div>Ends:</div>
-                      <div>{{ auctionEnds }}</div>
+                      <div>{{ auctionEnds[i] }}</div>
                     </div>
                   </mat-list-item>
                 </mat-card-content>
