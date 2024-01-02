@@ -32,11 +32,27 @@ export class CategoryService {
 
   setCategories(categories: BasicCategoryResponse[]): void {
     this._categories = categories;
+
+    if (this._selected.length > 0) {
+      this._filtered = this.categories.filter(
+        (category) =>
+          !this._selected.find((selected) => selected.id === category.id)
+      );
+      return;
+    }
+
     this._filtered = categories;
   }
 
   setSelectedCategories(selected: BasicCategoryResponse[]): void {
     this._selected = selected;
+
+    if (this._selected.length > 0) {
+      this._filtered = this.categories.filter(
+        (category) =>
+          !this._selected.find((selected) => selected.id === category.id)
+      );
+    }
   }
 
   onSelected(event: MatAutocompleteSelectedEvent): void {
@@ -60,7 +76,7 @@ export class CategoryService {
     }
   }
 
-  filter(value: string) {
+  filter(value: string): void {
     const filterValue = value.toLowerCase();
 
     // Filter based on the input value
@@ -83,10 +99,10 @@ export class CategoryService {
       this._selected.splice(index, 1);
     }
 
-    const indexToAddback = this._categories.findIndex(
-      (cat) => cat.id === category.id
-    );
-    if (indexToAddback >= 0) {
+    const categoryExists =
+      this._categories.findIndex((cat) => cat.id === category.id) >= 0;
+
+    if (categoryExists) {
       this._filtered.push(category);
     }
   }

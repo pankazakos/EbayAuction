@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import { MyItemService } from '../services/my-item.service';
@@ -23,7 +23,7 @@ export interface EditItemDialogOutputData {
   templateUrl: './edit-item-dialog.component.html',
   styleUrls: ['./edit-item-dialog.component.scss'],
 })
-export class EditItemDialogComponent implements AfterViewInit {
+export class EditItemDialogComponent {
   item: BasicItemResponse;
 
   constructor(
@@ -44,31 +44,25 @@ export class EditItemDialogComponent implements AfterViewInit {
 
   ngOnInit(): void {
     this.http.get(`${baseUrl}/category/all`).subscribe({
-      next: (response: BasicCategoryResponse[] | any) => {
-        this.categoryService.setCategories(response);
+      next: (allCategories: BasicCategoryResponse[] | any) => {
+        this.categoryService.setCategories(allCategories);
+
+        this.http.get(ItemEndpoints.categories(this.item.itemId)).subscribe({
+          next: (itemCategories: BasicCategoryResponse | any) => {
+            this.categoryService.setSelectedCategories(itemCategories);
+          },
+          error: (error) => console.log(error),
+        });
       },
       error: (error) => console.log(error),
     });
 
-    this.http.get(ItemEndpoints.categories(this.item.itemId)).subscribe({
-      next: (response: BasicCategoryResponse | any) => {
-        console.log(response);
-        this.categoryService.setSelectedCategories(response);
-      },
-      error: (error) => console.log(error),
+    this.categoryService.formControl.valueChanges.subscribe((value) => {
+      this.categoryService.filter(value);
     });
-  }
-
-  ngAfterViewInit(): void {
-    console.log('after view init');
-
-    // this.categoryService.formControl.valueChanges.subscribe((value) => {
-    //   this.categoryService.filter(value);
-    // });
   }
 
   onSaveItem(): void {
-    console.log('save item');
     this.myItemService.editItemForm.categoryIds =
       this.categoryService.getCategoryIds();
 
@@ -79,7 +73,6 @@ export class EditItemDialogComponent implements AfterViewInit {
     formData.append(
       'itemJson',
       JSON.stringify(this.myItemService.editItemForm)
-      // this.myItemService.editItemForm
     );
 
     if (this.myItemService.editItemImageFile) {

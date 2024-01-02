@@ -256,6 +256,8 @@ export class MyItemsComponent {
     editItemDialogRef
       .afterClosed()
       .subscribe((result: EditItemDialogOutputData) => {
+        if (!result) return;
+
         if (result.status == 'edited') {
           if (result.item) {
             item = result.item;
