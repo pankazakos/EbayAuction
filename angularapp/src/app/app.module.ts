@@ -12,6 +12,7 @@ import { SearchModule } from './search/search.module';
 import { MyItemsModule } from './my-items/my-items.module';
 import { MyItemsComponent } from './my-items/my-items.component';
 import { authorizedUserGuard } from './authorized-user.guard';
+import { AdminModule } from './admin/admin.module';
 
 const routes: Routes = [
   {
@@ -36,10 +37,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, AdminComponent],
+  declarations: [AppComponent],
   imports: [
     CommonImportsModule,
     SharedModule,
+    AdminModule,
     SearchModule,
     MyItemsModule,
     RouterModule.forRoot(routes),
