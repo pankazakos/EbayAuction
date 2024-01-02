@@ -11,6 +11,7 @@ import { AdminGuard } from './admin.guard';
 import { SearchModule } from './search/search.module';
 import { MyItemsModule } from './my-items/my-items.module';
 import { MyItemsComponent } from './my-items/my-items.component';
+import { authorizedUserGuard } from './authorized-user.guard';
 
 const routes: Routes = [
   {
@@ -18,7 +19,12 @@ const routes: Routes = [
     path: '',
     component: SearchComponent,
   },
-  { title: 'my items', path: 'my-items', component: MyItemsComponent },
+  {
+    title: 'my items',
+    path: 'my-items',
+    component: MyItemsComponent,
+    canActivate: [authorizedUserGuard],
+  },
   { title: 'login', path: 'login', component: SignInComponent },
   { title: 'register', path: 'register', component: SignUpComponent },
   {
