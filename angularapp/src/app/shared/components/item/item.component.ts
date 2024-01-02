@@ -69,6 +69,7 @@ export class ItemComponent implements AfterViewInit {
 
   inputDate: Date = this.currentDate;
   inputTime: string = '23:59';
+  selectedTime: string | null = null;
 
   @ViewChild('bidForm') bidForm!: NgForm;
   @ViewChild('picker') datepicker!: MatDatepicker<Date>;
@@ -213,6 +214,11 @@ export class ItemComponent implements AfterViewInit {
     this.myItemService.expiryDatetime = `${formattedDate}T${this.inputTime}`;
   }
 
+  applyDateTime(): void {
+    // Date is automatically updated from the datepicker.
+    this.inputTime = this.selectedTime ? this.selectedTime : '23:59'; // Update input time
+  }
+
   onSelectDate(event: MatDatepickerInputEvent<Date>): void {
     if (event.value) {
       const formattedDate = this.datePipe.transform(event.value, 'MM-dd-yyyy');
@@ -221,10 +227,9 @@ export class ItemComponent implements AfterViewInit {
     }
   }
 
-  onSelectTime(event: Event): void {
+  updateSelectedTime(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.inputTime = input.value;
-    this.setExpiryDatetime();
+    this.selectedTime = input.value;
   }
 
   confirmPublish(): void {

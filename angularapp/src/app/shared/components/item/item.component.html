@@ -140,12 +140,17 @@
               type="time"
               [value]="inputTime"
               class="time-input"
-              (input)="onSelectTime($event)"
+              (input)="updateSelectedTime($event)"
             />
           </div>
           <div class="datepicker-action-buttons">
             <button mat-button matDatepickerCancel>Cancel</button>
-            <button mat-raised-button color="accent" matDatepickerApply>
+            <button
+              mat-raised-button
+              color="accent"
+              matDatepickerApply
+              (click)="applyDateTime()"
+            >
               Apply
             </button>
           </div>
