@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { BasicItemResponse } from '../shared/contracts/responses/item';
+import {
+  BasicItemResponse,
+  ExtendedItemInfo,
+} from '../shared/contracts/responses/item';
 import { HttpClient } from '@angular/common/http';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
@@ -19,13 +22,8 @@ import { PublishItemRequest } from '../shared/contracts/requests/item';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-interface SingleItemWithImage {
-  data: BasicItemResponse;
-  image: { src: string; isLoading: boolean };
-}
-
 interface MutlipleItemsWithImage {
-  items: SingleItemWithImage[];
+  items: ExtendedItemInfo[];
   loading: boolean;
 }
 
@@ -86,12 +84,12 @@ export class MyItemsComponent {
     }
   }
 
-  private copyResponseItems(
-    response: BasicItemResponse[]
-  ): SingleItemWithImage[] {
+  private copyResponseItems(response: BasicItemResponse[]): ExtendedItemInfo[] {
     return response.map((item: BasicItemResponse) => ({
-      data: item,
+      ...item,
       image: { src: '', isLoading: true },
+      auctionStarted: '',
+      auctionEnds: '',
     }));
   }
 
@@ -133,7 +131,7 @@ export class MyItemsComponent {
 
   private setItemsWithBids(): void {
     this.itemsWithBids.items = this.publishedItems.items.filter(
-      (item) => item.data.numBids > 0
+      (item) => item.numBids > 0
     );
     this.itemsWithBids.loading = false;
   }
@@ -141,7 +139,7 @@ export class MyItemsComponent {
   private fetchImages(): void {
     this.inactiveItems.items.map((item) => {
       this.http
-        .get(`${ItemEndpoints.getImage(item.data.imageGuid)}`, {
+        .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
         })
         .subscribe({
@@ -167,7 +165,7 @@ export class MyItemsComponent {
   private fetchPublishedImages(): void {
     const imageRequests = this.publishedItems.items.map((item) => {
       return this.http
-        .get(`${ItemEndpoints.getImage(item.data.imageGuid)}`, {
+        .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
         })
         .pipe(
@@ -211,18 +209,18 @@ export class MyItemsComponent {
     });
   }
 
-  confirmDelete(index: number): void {
+  confirmDelete(item: ExtendedItemInfo): void {
     const confirmDeleteDialogRef = this.confirmDialog.open(ConfirmComponent, {
       autoFocus: false,
       disableClose: true,
       data: {
-        question: `Are you sure you want to delete your saved item ${this.inactiveItems.items[index].data.name}?`,
+        question: `Are you sure you want to delete your saved item ${item.name}?`,
       },
     });
 
     confirmDeleteDialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirm') {
-        this.deleteItem(this.inactiveItems.items[index].data.itemId);
+        this.deleteItem(item.itemId);
       }
     });
   }
@@ -243,7 +241,7 @@ export class MyItemsComponent {
       });
   }
 
-  editItem(item: BasicItemResponse, idx: number): void {
+  editItem(item: ExtendedItemInfo): void {
     const editItemDialogRef = this.editItemDialog.open(
       EditItemDialogComponent,
       {
@@ -260,7 +258,7 @@ export class MyItemsComponent {
       .subscribe((result: EditItemDialogOutputData) => {
         if (result.status == 'edited') {
           if (result.item) {
-            this.inactiveItems.items[idx].data = result.item;
+            item = result.item;
           }
           this.alertService.success('Item successfully saved', 'Ok');
           this.inactiveItems.loading = true;
@@ -269,14 +267,14 @@ export class MyItemsComponent {
       });
   }
 
-  publishItem(itemIdx: number): void {
+  publishItem(item: ExtendedItemInfo): void {
     const publishItemRequestData: PublishItemRequest = {
       expiration: this.myItemService.expiryDatetime,
     };
 
     this.http
       .put<PublishItemRequest>(
-        ItemEndpoints.activate(this.inactiveItems.items[itemIdx].data.itemId),
+        ItemEndpoints.activate(item.itemId),
         publishItemRequestData,
         { headers: this.authService.getHeaders() }
       )
@@ -294,21 +292,20 @@ export class MyItemsComponent {
   }
 
   showItemDialog(
-    itemIdx: number,
+    item: ExtendedItemInfo,
     itemStatus: string,
     openCalendar: boolean
   ): void {
-    let item = null;
     let image = null;
     let isItemInactive = false;
 
     if (itemStatus == 'inactive') {
-      item = this.inactiveItems.items[itemIdx].data;
-      image = this.inactiveItems.items[itemIdx].image;
+      item = item;
+      image = item.image;
       isItemInactive = true;
     } else if (itemStatus == 'published') {
-      item = this.displayedItems.items[itemIdx].data;
-      image = this.displayedItems.items[itemIdx].image;
+      item = item;
+      image = item.image;
       isItemInactive = false;
     } else {
       return;
@@ -327,7 +324,7 @@ export class MyItemsComponent {
 
     itemDialogRef.afterClosed().subscribe((result) => {
       if (result == 'publish') {
-        this.publishItem(itemIdx);
+        this.publishItem(item);
       }
     });
   }

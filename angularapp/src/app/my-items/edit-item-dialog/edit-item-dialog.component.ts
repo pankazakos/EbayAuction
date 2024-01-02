@@ -6,13 +6,16 @@ import { AuthService } from 'src/app/shared/services/auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
-import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
+import {
+  BasicItemResponse,
+  ExtendedItemInfo,
+} from 'src/app/shared/contracts/responses/item';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { baseUrl } from 'src/app/shared/types';
 
 export interface EditItemDialogOutputData {
   status: 'edited' | 'cancelled';
-  item?: BasicItemResponse;
+  item?: ExtendedItemInfo;
 }
 
 @Component({

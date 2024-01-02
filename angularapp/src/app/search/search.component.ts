@@ -195,13 +195,13 @@ export class SearchComponent implements AfterViewInit {
     });
   }
 
-  public showItemDialog(itemIdx: number): void {
+  public showItemDialog(item: ExtendedItemInfo): void {
     this.itemDialog.open(ItemComponent, {
       autoFocus: false,
       restoreFocus: false,
       data: {
-        item: this.items.castEntities[itemIdx],
-        image: this.items.castEntities[itemIdx].image,
+        item: item,
+        image: item.image,
       },
     });
   }

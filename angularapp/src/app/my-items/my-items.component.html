@@ -47,7 +47,7 @@
                   >
                     <div
                       class="item-link"
-                      (click)="showItemDialog(i, 'inactive', false)"
+                      (click)="showItemDialog(item, 'inactive', false)"
                     >
                       <div class="item-card-main-container">
                         <div class="item-card-image">
@@ -67,7 +67,7 @@
                         <div class="item-card-header">
                           <mat-card-header>
                             <mat-card-title>
-                              {{ item.data.name }}
+                              {{ item.name }}
                             </mat-card-title>
                           </mat-card-header>
                         </div>
@@ -77,7 +77,7 @@
                             <mat-list-item>
                               <div class="item-content-element">
                                 <div>Minimum Bid:</div>
-                                <div>${{ item.data.firstBid }}</div>
+                                <div>${{ item.firstBid }}</div>
                               </div>
                             </mat-list-item>
                             <mat-list-item>
@@ -85,9 +85,7 @@
                                 <div>Buy at:</div>
                                 <div>
                                   {{
-                                    item.data.buyPrice
-                                      ? "$" + item.data.buyPrice
-                                      : "-"
+                                    item.buyPrice ? "$" + item.buyPrice : "-"
                                   }}
                                 </div>
                               </div>
@@ -101,7 +99,9 @@
                             matTooltip="delete"
                             color="warn"
                             class="delete-button"
-                            (click)="confirmDelete(i); $event.stopPropagation()"
+                            (click)="
+                              confirmDelete(item); $event.stopPropagation()
+                            "
                           >
                             <mat-icon
                               aria-label="delete icon"
@@ -112,9 +112,7 @@
                             mat-raised-button
                             matTooltip="edit"
                             class="edit-button"
-                            (click)="
-                              editItem(item.data, i); $event.stopPropagation()
-                            "
+                            (click)="editItem(item); $event.stopPropagation()"
                           >
                             <mat-icon aria-label="edit icon" fontIcon="edit" />
                           </button>
@@ -124,7 +122,7 @@
                             color="accent"
                             class="publish-button"
                             (click)="
-                              showItemDialog(i, 'inactive', true);
+                              showItemDialog(item, 'inactive', true);
                               $event.stopPropagation()
                             "
                           >
@@ -205,11 +203,11 @@
                 >
                   <mat-card
                     class="item-card"
-                    *ngFor="let item of displayedItems.items; let i = index"
+                    *ngFor="let item of displayedItems.items"
                   >
                     <div
                       class="item-link"
-                      (click)="showItemDialog(i, 'published', false)"
+                      (click)="showItemDialog(item, 'published', false)"
                     >
                       <div class="item-card-main-container">
                         <div class="item-card-image">
@@ -229,7 +227,7 @@
                         <div class="item-card-header">
                           <mat-card-header>
                             <mat-card-title>
-                              {{ item.data.name }}
+                              {{ item.name }}
                             </mat-card-title>
                           </mat-card-header>
                         </div>
@@ -239,7 +237,7 @@
                             <mat-list-item>
                               <div class="item-content-element">
                                 <div>Minimum Bid:</div>
-                                <div>${{ item.data.firstBid }}</div>
+                                <div>${{ item.firstBid }}</div>
                               </div>
                             </mat-list-item>
                             <mat-list-item>
@@ -247,9 +245,7 @@
                                 <div>Buy at:</div>
                                 <div>
                                   {{
-                                    item.data.buyPrice
-                                      ? "$" + item.data.buyPrice
-                                      : "-"
+                                    item.buyPrice ? "$" + item.buyPrice : "-"
                                   }}
                                 </div>
                               </div>
