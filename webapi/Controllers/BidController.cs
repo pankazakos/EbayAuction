@@ -42,5 +42,27 @@ namespace webapi.Controllers
             return await _controllerHelper.GetAllAndRespond<Bid, BasicBidResponse>(
                 () => _bidService.GetItemBids(itemId, cancel), _mapper);
         }
+
+
+        [Authorize]
+        [HttpGet(BidEndpoints.GetUserBids)]
+        public async Task<IActionResult> GetUserBids(CancellationToken cancel = default)
+        {
+            var username = _controllerHelper.UsernameClaim;
+
+            return await _controllerHelper.GetAllAndRespond<Bid, BasicBidResponse>(
+                               () => _bidService.GetUserBids(username, cancel), _mapper);
+        }
+
+
+        [Authorize]
+        [HttpGet(BidEndpoints.GetLastBidOfUser)]
+        public async Task<IActionResult> GetLastBidOfUser([FromQuery] long itemId, CancellationToken cancel = default)
+        {
+            var username = _controllerHelper.UsernameClaim;
+
+            return await _controllerHelper.GetAndRespond<Bid?, BasicBidResponse>(
+                               () => _bidService.GetLastBidOfUser(username, itemId, cancel), _mapper);
+        }
     }
 }

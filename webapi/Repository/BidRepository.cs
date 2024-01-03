@@ -49,5 +49,16 @@ namespace webapi.Repository
         {
             return await _dbContext.Bids.Where(b => b.ItemId == itemId).ToListAsync(cancel);
         }
+
+        public async Task<IEnumerable<Bid>> GetUserBids(int userId, CancellationToken cancel = default)
+        {
+            return await _dbContext.Bids.Where(b => b.BidderId == userId).ToListAsync(cancel);
+        }
+
+        public Task<Bid?> GetLastBidOfUser(int userId, long itemId, CancellationToken cancel = default)
+        {
+            return _dbContext.Bids.Where(b => b.BidderId == userId && b.ItemId == itemId)
+                                .OrderByDescending(b => b.Time).FirstOrDefaultAsync(cancel);
+        }
     }
 }

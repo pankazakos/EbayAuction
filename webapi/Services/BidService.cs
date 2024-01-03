@@ -95,5 +95,39 @@ namespace webapi.Services
 
             return bids;
         }
+
+        public async Task<IEnumerable<Bid>> GetUserBids(string username, CancellationToken cancel = default)
+        {
+            var user = await _userService.GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                _logger.LogWarning("Cannot get bids. User {Username} was not found", username);
+                throw new ArgumentException($"User {username} does not exist");
+            }
+
+            var bids = await _bidRepository.GetUserBids(user.Id, cancel);
+
+            _logger.LogInformation("Retrieved bids of user {Username}", username);
+
+            return bids;
+        }
+
+        public async Task<Bid?> GetLastBidOfUser(string username, long itemId, CancellationToken cancel = default)
+        {
+            var user = await _userService.GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                _logger.LogWarning("Cannot get bids. User {Username} was not found", username);
+                throw new ArgumentException($"User {username} does not exist");
+            }
+
+            var bid = await _bidRepository.GetLastBidOfUser(user.Id, itemId, cancel);
+
+            _logger.LogInformation("Retrieved last bid of user {Username} for item {ItemId}", username, itemId);
+
+            return bid;
+        }
     }
 }

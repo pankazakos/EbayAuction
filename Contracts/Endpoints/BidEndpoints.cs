@@ -7,5 +7,9 @@
         public const string Create = "";
 
         public const string GetItemBids = "";
+
+        public const string GetUserBids = "my-bids";
+
+        public const string GetLastBidOfUser = "last";
     }
 }

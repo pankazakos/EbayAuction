@@ -8,5 +8,9 @@ namespace webapi.Repository.Interfaces
         public Task<Bid> Create(AddBidRequest input, User bidder, Item item, CancellationToken cancel = default);
 
         public Task<IEnumerable<Bid>> GetItemBids(long itemId, CancellationToken cancel = default);
+
+        public Task<IEnumerable<Bid>> GetUserBids(int userId, CancellationToken cancel = default);
+
+        public Task<Bid?> GetLastBidOfUser(int userId, long itemId, CancellationToken cancel = default);
     }
 }
