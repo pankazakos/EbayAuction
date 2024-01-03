@@ -110,6 +110,14 @@ namespace Api.IntegrationTests.ItemController
                 Description = "description of default test item"
             };
 
+            var unpublished = new AddItemRequest
+            {
+                Name = "unpublished test item",
+                CategoryIds = new List<int> { 1, 2 },
+                FirstBid = 20,
+                Description = "description of default test item"
+            };
+
             var seller = await _userRepository.GetByUsername("TestUser") 
                          ?? throw new InvalidOperationException("Cannot find user TestUser");
 
@@ -118,6 +126,11 @@ namespace Api.IntegrationTests.ItemController
 
             await _itemRepository.Create(firstItem, seller);
             await _itemRepository.Create(secondItem, seller);
+            await _itemRepository.Create(unpublished, seller);
+
+            // publish items
+            await _itemRepository.Activate(1, DateTime.Now.AddHours(1));
+            await _itemRepository.Activate(2, DateTime.Now.AddHours(1));
 
             var bid = new AddBidRequest
             {

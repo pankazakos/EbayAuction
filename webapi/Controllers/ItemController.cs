@@ -219,7 +219,7 @@ namespace webapi.Controllers
         [HttpGet(ItemEndpoints.GetById)]
         public async Task<IActionResult> GetById([FromRoute] long id, CancellationToken cancel = default)
         {
-            return await _controllerHelper.GetAndRespond<Item?, PublishedItemResponse>(
+            return await _controllerHelper.GetAndRespond<Item?, BasicItemResponse>(
                 () => _itemService.GetById(id, cancel), _mapper);
         }
     }

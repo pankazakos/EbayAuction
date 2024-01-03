@@ -9,7 +9,7 @@ namespace Api.IntegrationTests.ItemController
     {
         private readonly ItemFixture _fixture;
         private readonly HttpClient _client;
-        private const long ItemId = 1;
+        private const long ItemId = 3;
         private readonly StringContent _data;
 
         public ActivateItemTest(ItemFixture itemFixture)
