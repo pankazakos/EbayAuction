@@ -21,6 +21,9 @@ import { MyItemService } from './services/my-item.service';
 import { PublishItemRequest } from '../shared/contracts/requests/item';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { BasicBidResponse } from '../shared/contracts/responses/bid';
+import { BidEndpoints } from '../shared/contracts/endpoints/BidEndpoints';
+import { DateTimeFormatService } from '../shared/services/date-time-format.service';
 
 interface MutlipleItemsWithImage {
   items: ExtendedItemInfo[];
@@ -49,6 +52,14 @@ export class MyItemsComponent {
     items: [],
     loading: true,
   };
+  myBids: { data: BasicBidResponse[]; loading: boolean } = {
+    data: [],
+    loading: true,
+  };
+  itemsWithMyBids: MutlipleItemsWithImage = {
+    items: [],
+    loading: true,
+  };
 
   toggleChecked = false;
 
@@ -60,7 +71,8 @@ export class MyItemsComponent {
     private authService: AuthService,
     private itemDialog: MatDialog,
     private confirmDialog: MatDialog,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private dateTimeFormatter: DateTimeFormatService
   ) {}
 
   ngOnInit(): void {
@@ -78,6 +90,7 @@ export class MyItemsComponent {
         this.setPublishedItems();
         break;
       case 1:
+        this.setMyBids();
         break;
       default:
         break;
@@ -104,7 +117,8 @@ export class MyItemsComponent {
 
           this.inactiveItems.items = this.copyResponseItems(response);
           this.inactiveItems.loading = false;
-          if (this.inactiveItems.items.length > 0) this.fetchImages();
+          if (this.inactiveItems.items.length > 0)
+            this.fetchImagesForInactiveItems();
         },
         error: (error: any) => {
           console.log(error);
@@ -123,7 +137,8 @@ export class MyItemsComponent {
 
           this.publishedItems.items = this.copyResponseItems(response);
           this.publishedItems.loading = false;
-          if (this.publishedItems.items.length > 0) this.fetchPublishedImages();
+          if (this.publishedItems.items.length > 0)
+            this.fetchImagesForPublishedItems();
         },
         error: (error: any) => console.error(error),
       });
@@ -136,7 +151,50 @@ export class MyItemsComponent {
     this.itemsWithBids.loading = false;
   }
 
-  private fetchImages(): void {
+  private setMyBids(): void {
+    if (!this.myBids.loading) return;
+
+    this.http
+      .get(BidEndpoints.myBids, { headers: this.authService.getHeaders() })
+      .subscribe({
+        next: (response: BasicBidResponse[] | any) => {
+          console.log(response);
+
+          this.myBids.data = response;
+          this.myBids.loading = false;
+
+          this.setItemsWithMyBids();
+        },
+        error: (error: any) => console.error(error),
+      });
+  }
+
+  private setItemsWithMyBids(): void {
+    if (!this.itemsWithMyBids.loading) return;
+
+    const uniqueItemIds = new Set<number>();
+    this.myBids.data.forEach((bid) => {
+      uniqueItemIds.add(bid.itemId);
+    });
+
+    const requests = Array.from(uniqueItemIds).map((itemId) =>
+      this.http.get(ItemEndpoints.getById(itemId))
+    );
+
+    forkJoin(requests).subscribe({
+      next: (responses: BasicItemResponse[] | any) => {
+        console.log(responses);
+
+        this.itemsWithMyBids.items = this.copyResponseItems(responses);
+        this.itemsWithMyBids.loading = false;
+        if (this.itemsWithMyBids.items.length > 0)
+          this.fetchImagesForItemsWithMyBids();
+      },
+      error: (error: any) => console.error(error),
+    });
+  }
+
+  private fetchImagesForInactiveItems(): void {
     this.inactiveItems.items.map((item) => {
       this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
@@ -162,8 +220,13 @@ export class MyItemsComponent {
     });
   }
 
-  private fetchPublishedImages(): void {
+  private fetchImagesForPublishedItems(): void {
     const imageRequests = this.publishedItems.items.map((item) => {
+      item.auctionStarted = this.dateTimeFormatter.convertOnlyToDate(
+        item.started
+      );
+      item.auctionEnds = this.dateTimeFormatter.convertOnlyToDate(item.ends);
+
       return this.http
         .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
           responseType: 'blob',
@@ -192,6 +255,37 @@ export class MyItemsComponent {
       error: (error) => {
         console.error(error);
       },
+    });
+  }
+
+  private fetchImagesForItemsWithMyBids(): void {
+    this.itemsWithMyBids.items.map((item) => {
+      item.auctionStarted = this.dateTimeFormatter.convertOnlyToDate(
+        item.started
+      );
+      item.auctionEnds = this.dateTimeFormatter.convertOnlyToDate(item.ends);
+
+      this.http
+        .get(`${ItemEndpoints.getImage(item.imageGuid)}`, {
+          responseType: 'blob',
+        })
+        .subscribe({
+          next: (imageData: Blob) => {
+            setTimeout(() => {
+              const blob = new Blob([imageData], {
+                type: 'image/jpeg',
+              });
+              const imageUrl = URL.createObjectURL(blob);
+              item.image = {
+                src: imageUrl,
+                isLoading: false,
+              };
+            }, environment.timeout);
+          },
+          error: (error) => {
+            console.error(error);
+          },
+        });
     });
   }
 
