@@ -38,6 +38,10 @@ body {
   flex-grow: 1;
 }
 
+.full-width {
+  width: 100%;
+}
+
 // Themes
 $primary-color: #00696d; // same as mat.define-palette(mat.$cyan-palette, 900)
 $secondary-color: #4a6364;

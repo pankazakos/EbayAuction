@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
 import { EditItemDialogComponent } from './edit-item-dialog/edit-item-dialog.component';
 import { DatePipe } from '@angular/common';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,7 @@ import { DatePipe } from '@angular/common';
     EditItemDialogComponent,
   ],
   providers: [DatePipe],
-  imports: [CommonImportsModule, RouterModule],
+  imports: [CommonImportsModule, RouterModule, SharedModule],
   exports: [MyItemsComponent],
 })
 export class MyItemsModule {}

@@ -1,0 +1,45 @@
+<mat-expansion-panel
+  *ngIf="expansionPanel && showExpansionPanelIfExists"
+  expanded
+  class="notification-panel"
+>
+  <mat-expansion-panel-header>
+    <mat-panel-title class="panel-title">
+      <div class="note-label">
+        <mat-icon
+          class="notification-icon"
+          aria-hidden="false"
+          aria-label="info icon"
+          fontIcon="info"
+        ></mat-icon>
+        <span>Note</span>
+      </div>
+      <div>
+        <button mat-icon-button (click)="removeNote()">
+          <mat-icon class="close-icon" aria-label="close icon" fontIcon="close">
+          </mat-icon>
+        </button>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="notification-message">{{ inputText }}</div>
+</mat-expansion-panel>
+
+<mat-card *ngIf="!expansionPanel" class="note-card">
+  <mat-card-header>
+    <mat-card-title>
+      <div class="note-label">
+        <mat-icon
+          class="notification-icon"
+          aria-hidden="false"
+          aria-label="info icon"
+          fontIcon="info"
+        ></mat-icon>
+        <span>Note</span>
+      </div></mat-card-title
+    >
+  </mat-card-header>
+  <mat-card-content class="notification-message">{{
+    inputText
+  }}</mat-card-content>
+</mat-card>

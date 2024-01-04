@@ -32,23 +32,6 @@
 .items-list {
   width: 100%;
   margin: 1rem 0;
-
-  .note-card {
-    width: 100%;
-    font-weight: 500;
-    color: $tertiary-color;
-    background-color: $tertiary-container;
-
-    .note-label {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-
-      .notification-icon {
-        color: #1a6899;
-      }
-    }
-  }
 }
 
 #add-item-section {

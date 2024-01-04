@@ -6,6 +6,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { CardComponent } from './components/card/card.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
+import { NoteComponent } from './components/note/note.component';
 
 @NgModule({
   declarations: [
@@ -14,8 +15,9 @@ import { ConfirmComponent } from './components/confirm/confirm.component';
     SignUpComponent,
     CardComponent,
     ConfirmComponent,
+    NoteComponent,
   ],
   imports: [CommonImportsModule, RouterModule],
-  exports: [NavBarComponent],
+  exports: [NavBarComponent, NoteComponent],
 })
 export class SharedModule {}

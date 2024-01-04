@@ -136,30 +136,17 @@
                     </div>
                   </mat-card>
                 </div>
-                <mat-card
-                  *ngIf="inactiveItems.items.length === 0"
-                  class="note-card"
-                >
-                  <mat-card-header>
-                    <mat-card-title>
-                      <div class="note-label">
-                        <mat-icon
-                          class="notification-icon"
-                          aria-hidden="false"
-                          aria-label="info icon"
-                          fontIcon="info"
-                        ></mat-icon>
-                        <span>Note</span>
-                      </div></mat-card-title
-                    >
-                  </mat-card-header>
-                  <mat-card-content
-                    >Currently you don't have any temporary saved items. You can
+                <app-note
+                  class="full-width"
+                  *ngIf="
+                    !inactiveItems.loading && inactiveItems.items.length === 0
+                  "
+                  inputText="Currently you don't have any temporary saved items. You can
                     create a new item by pressing the add button below and
                     filling the item information. After creating an item you
-                    have the option to edit or publish it.</mat-card-content
-                  >
-                </mat-card>
+                    have the option to edit or publish it."
+                >
+                </app-note>
               </div>
               <div
                 id="add-item-section"
@@ -268,30 +255,19 @@
                     </div>
                   </mat-card>
                 </div>
-                <mat-card
-                  *ngIf="displayedItems.items.length === 0"
-                  class="note-card"
-                >
-                  <mat-card-header>
-                    <mat-card-title>
-                      <div class="note-label">
-                        <mat-icon
-                          class="notification-icon"
-                          aria-hidden="false"
-                          aria-label="info icon"
-                          fontIcon="info"
-                        ></mat-icon>
-                        <span>Note</span>
-                      </div></mat-card-title
-                    >
-                  </mat-card-header>
-                  <mat-card-content
-                    >Currently you don't have any published items. You can
-                    create a new item from the above section of saved items and
-                    then pubish it with an expiry date and
-                    time.</mat-card-content
-                  >
-                </mat-card>
+                <app-note
+                  class="full-width"
+                  *ngIf="
+                    !displayedItems.loading && displayedItems.items.length === 0
+                  "
+                  [inputText]="
+                    displayedItems === publishedItems
+                      ? 'Currently you don\'t have any published items. ' +
+                        'You can create a new item from the above section of saved items and ' +
+                        'then publish it with an expiry date and time.'
+                      : 'Currently you don\'t have any published items that have bids.'
+                  "
+                ></app-note>
               </div>
             </section>
           </div>
@@ -388,30 +364,13 @@
                   </mat-card>
                 </div>
               </div>
-
-              <mat-card
-                *ngIf="itemsWithMyBids.items.length === 0"
-                class="note-card"
-              >
-                <mat-card-header>
-                  <mat-card-title>
-                    <div class="note-label">
-                      <mat-icon
-                        class="notification-icon"
-                        aria-hidden="false"
-                        aria-label="info icon"
-                        fontIcon="info"
-                      ></mat-icon>
-                      <span>Note</span>
-                    </div></mat-card-title
-                  >
-                </mat-card-header>
-                <mat-card-content
-                  >Currently you don't have any published items. You can create
-                  a new item from the above section of saved items and then
-                  pubish it with an expiry date and time.</mat-card-content
-                >
-              </mat-card>
+              <app-note
+                class="full-width"
+                *ngIf="
+                  !itemsWithMyBids.loading && itemsWithMyBids.items.length === 0
+                "
+                inputText="You haven't placed bids yet so there aren't any items with your bids."
+              ></app-note>
             </section>
           </div>
         </mat-tab>

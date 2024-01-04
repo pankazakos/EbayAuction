@@ -34,7 +34,6 @@ export class SearchComponent implements AfterViewInit {
   maxPrice: number = 0;
   categoryQuery: string = '';
 
-  removedExpansionPanel: boolean = false;
   authData: AuthData | null = null;
 
   showClearFiltersButton: boolean = false;
@@ -243,10 +242,6 @@ export class SearchComponent implements AfterViewInit {
 
   public getNumberArray(limit: number): number[] {
     return Array.from({ length: limit }, (_, i) => i);
-  }
-
-  public removeNotification(): void {
-    this.removedExpansionPanel = true;
   }
 
   private setQueryParameter(
