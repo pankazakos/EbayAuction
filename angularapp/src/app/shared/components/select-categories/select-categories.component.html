@@ -1,0 +1,42 @@
+<mat-chip-listbox *ngIf="listOutside" class="outside-top-listbox">
+  <mat-chip
+    *ngFor="let category of categoryService.selected"
+    [removable]="true"
+    (removed)="categoryService.remove(category)"
+  >
+    {{ category.name }}
+    <mat-icon matChipRemove>cancel</mat-icon>
+  </mat-chip>
+</mat-chip-listbox>
+<mat-form-field floatLabel="always">
+  <mat-label>Select Categories</mat-label>
+  <mat-chip-listbox *ngIf="!listOutside">
+    <mat-chip
+      *ngFor="let category of categoryService.selected"
+      [removable]="true"
+      (removed)="categoryService.remove(category)"
+    >
+      {{ category.name }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-listbox>
+  <input
+    type="text"
+    placeholder="Type to search"
+    matInput
+    [formControl]="categoryService.formControl"
+    [matAutocomplete]="auto"
+    (keydown.enter)="categoryService.onAutocompleteEnterKeyPress()"
+    [required]="categoryService.selected.length == 0"
+  />
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="categoryService.onSelected($event)"
+  >
+    <mat-option
+      *ngFor="let category of categoryService.filtered"
+      [value]="category.name"
+      >{{ category.name }}</mat-option
+    >
+  </mat-autocomplete>
+</mat-form-field>

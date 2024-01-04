@@ -72,38 +72,7 @@
       </div>
       <div id="select-categories" fxFlex="50%" fxLayout="column" fxFill>
         <div class="filter-label">Categories</div>
-        <mat-chip-listbox class="category-chips">
-          <mat-chip
-            *ngFor="let category of categoryService.selected"
-            [removable]="true"
-            (removed)="categoryService.remove(category)"
-          >
-            {{ category.name }}
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip>
-        </mat-chip-listbox>
-
-        <mat-form-field>
-          <mat-label>Select Categories</mat-label>
-          <input
-            type="text"
-            placeholder="Type to search"
-            matInput
-            [formControl]="categoryService.formControl"
-            [matAutocomplete]="auto"
-            (keydown.enter)="categoryService.onAutocompleteEnterKeyPress()"
-          />
-          <mat-autocomplete
-            #auto="matAutocomplete"
-            (optionSelected)="categoryService.onSelected($event)"
-          >
-            <mat-option
-              *ngFor="let category of categoryService.filtered"
-              [value]="category.name"
-              >{{ category.name }}</mat-option
-            >
-          </mat-autocomplete>
-        </mat-form-field>
+        <app-select-categories listOutside></app-select-categories>
       </div>
     </div>
   </div>
