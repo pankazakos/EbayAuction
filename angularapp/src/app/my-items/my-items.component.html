@@ -299,7 +299,9 @@
               >
                 <div
                   *ngIf="
-                    !itemsWithMyBids.loading && itemsWithMyBids.items.length > 0
+                    !itemsWithMyBids.loading &&
+                    !yourLastBids.loading &&
+                    itemsWithMyBids.items.length > 0
                   "
                   class="item-boxes"
                 >
@@ -340,6 +342,14 @@
                               <div class="item-content-element">
                                 <div>Minimum Bid:</div>
                                 <div>${{ item.firstBid }}</div>
+                              </div>
+                            </mat-list-item>
+                            <mat-list-item>
+                              <div class="item-content-element">
+                                <div>Your last bid:</div>
+                                <div>
+                                  {{ "$" + yourLastBids.bids[i].amount }}
+                                </div>
                               </div>
                             </mat-list-item>
                             <mat-list-item>

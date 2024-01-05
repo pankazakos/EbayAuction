@@ -69,6 +69,10 @@ export class MyItemsComponent {
     items: [],
     loading: true,
   };
+  yourLastBids: { bids: BasicBidResponse[]; loading: boolean } = {
+    bids: [],
+    loading: true,
+  };
 
   toggleOnlyWithBids = false;
   toggleOnlyNotExpired = true;
@@ -203,6 +207,20 @@ export class MyItemsComponent {
         this.itemsWithMyBids.loading = false;
         if (this.itemsWithMyBids.items.length > 0)
           this.fetchImagesForItemsWithMyBids();
+      },
+      error: (error: any) => console.error(error),
+    });
+
+    const lastBidRequests = Array.from(uniqueItemIds).map((itemId) => {
+      return this.http.get(BidEndpoints.lastBid(itemId), {
+        headers: this.authService.getHeaders(),
+      });
+    });
+
+    forkJoin(lastBidRequests).subscribe({
+      next: (responses: BasicBidResponse[] | any) => {
+        this.yourLastBids.bids = responses;
+        this.yourLastBids.loading = false;
       },
       error: (error: any) => console.error(error),
     });
