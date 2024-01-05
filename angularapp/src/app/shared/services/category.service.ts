@@ -30,6 +30,11 @@ export class CategoryService {
     return this._filtered;
   }
 
+  clear(): void {
+    this._selected = [];
+    this._filtered = [];
+  }
+
   setCategories(categories: BasicCategoryResponse[]): void {
     this._categories = categories;
 

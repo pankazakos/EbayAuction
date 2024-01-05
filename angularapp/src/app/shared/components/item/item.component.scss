@@ -244,6 +244,10 @@ $item-box-gap: 2rem;
   .bid-section {
     width: 50%;
   }
+
+  .publish-section {
+    width: 65%;
+  }
 }
 
 @media (max-width: 576px) {
@@ -253,5 +257,10 @@ $item-box-gap: 2rem;
 
   .bid-section {
     width: 65%;
+  }
+
+  .publish-section {
+    width: 100%;
+    margin-top: 1rem;
   }
 }

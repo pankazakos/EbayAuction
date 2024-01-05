@@ -27,7 +27,7 @@
     [formControl]="categoryService.formControl"
     [matAutocomplete]="auto"
     (keydown.enter)="categoryService.onAutocompleteEnterKeyPress()"
-    [required]="categoryService.selected.length == 0"
+    [required]="categoryService.selected.length == 0 && !listOutside"
   />
   <mat-autocomplete
     #auto="matAutocomplete"

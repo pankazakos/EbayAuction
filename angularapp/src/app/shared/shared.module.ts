@@ -8,6 +8,7 @@ import { CardComponent } from './components/card/card.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { NoteComponent } from './components/note/note.component';
 import { SelectCategoriesComponent } from './components/select-categories/select-categories.component';
+import { CommonModalComponent } from './components/common-modal/common-modal.component';
 
 @NgModule({
   declarations: [
@@ -18,8 +19,14 @@ import { SelectCategoriesComponent } from './components/select-categories/select
     ConfirmComponent,
     NoteComponent,
     SelectCategoriesComponent,
+    CommonModalComponent,
   ],
   imports: [CommonImportsModule, RouterModule],
-  exports: [NavBarComponent, NoteComponent, SelectCategoriesComponent],
+  exports: [
+    NavBarComponent,
+    NoteComponent,
+    SelectCategoriesComponent,
+    CommonModalComponent,
+  ],
 })
 export class SharedModule {}

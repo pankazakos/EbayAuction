@@ -15,6 +15,8 @@ import { ItemComponent } from '../shared/components/item/item.component';
 import { DateTimeFormatService } from '../shared/services/date-time-format.service';
 import { AuthData, AuthService } from '../shared/services/auth-service.service';
 import { AlertService } from '../shared/services/alert.service';
+import { CategoryService } from '../shared/services/category.service';
+import { FilterService } from './services/filter.service';
 
 @Component({
   selector: 'app-search',
@@ -49,7 +51,9 @@ export class SearchComponent implements AfterViewInit {
     private itemDialog: MatDialog,
     private alertService: AlertService,
     private formatter: DateTimeFormatService,
-    private authService: AuthService
+    private authService: AuthService,
+    private categoryService: CategoryService,
+    private filterService: FilterService
   ) {}
 
   ngOnInit(): void {
@@ -180,8 +184,6 @@ export class SearchComponent implements AfterViewInit {
   }
 
   public showFiltersDialog(): void {
-    this.showClearFiltersButton = false;
-
     const filtersDialogRef = this.filtersDialog.open(FiltersDialogComponent, {
       autoFocus: false,
       restoreFocus: false,
@@ -207,6 +209,8 @@ export class SearchComponent implements AfterViewInit {
 
   public clearFilters(): void {
     this.showClearFiltersButton = false;
+    this.filterService.clear();
+    this.categoryService.clear();
     this.removeUrlParameters(['minPrice', 'maxPrice', 'category']);
   }
 

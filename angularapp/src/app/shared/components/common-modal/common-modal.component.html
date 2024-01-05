@@ -1,0 +1,19 @@
+<div mat-dialog-title>
+  <ng-content select="[slot='title']"></ng-content>
+  <div>
+    <button mat-icon-button class="top-close-button" mat-dialog-close>
+      <mat-icon aria-label="close icon" fontIcon="close"></mat-icon>
+    </button>
+  </div>
+</div>
+<div mat-dialog-content>
+  <ng-content select="[slot='content']"></ng-content>
+</div>
+<div mat-dialog-actions>
+  <div>
+    <button mat-raised-button mat-dialog-close>Close</button>
+  </div>
+  <div>
+    <ng-content select="[slot='action']"></ng-content>
+  </div>
+</div>

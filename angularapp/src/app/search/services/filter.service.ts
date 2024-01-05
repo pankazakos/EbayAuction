@@ -31,4 +31,13 @@ export class FilterService {
     this.sliderMaxPrice = this.priceRanges[0].values.to;
     this.disabledSlider = true;
   }
+
+  clear(): void {
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.selected = null;
+    this.sliderMinPrice = this.priceRanges[0].values.from;
+    this.sliderMaxPrice = this.priceRanges[0].values.to;
+    this.disabledSlider = true;
+  }
 }
