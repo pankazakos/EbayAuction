@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   BasicItemResponse,
   ExtendedItemInfo,
 } from '../shared/contracts/responses/item';
 import { HttpClient } from '@angular/common/http';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
@@ -24,6 +24,7 @@ import { map } from 'rxjs/operators';
 import { BasicBidResponse } from '../shared/contracts/responses/bid';
 import { BidEndpoints } from '../shared/contracts/endpoints/BidEndpoints';
 import { DateTimeFormatService } from '../shared/services/date-time-format.service';
+import { CategoryService } from '../shared/services/category.service';
 
 interface MutlipleItemsWithImage {
   items: ExtendedItemInfo[];
@@ -44,7 +45,15 @@ export class MyItemsComponent {
     items: [],
     loading: true,
   };
-  itemsWithBids: MutlipleItemsWithImage = {
+  publishedWithBids: MutlipleItemsWithImage = {
+    items: [],
+    loading: true,
+  };
+  publishedNotExpired: MutlipleItemsWithImage = {
+    items: [],
+    loading: true,
+  };
+  publishedNotExpiredWithBids: MutlipleItemsWithImage = {
     items: [],
     loading: true,
   };
@@ -61,7 +70,8 @@ export class MyItemsComponent {
     loading: true,
   };
 
-  toggleChecked = false;
+  toggleOnlyWithBids = false;
+  toggleOnlyNotExpired = true;
 
   constructor(
     private http: HttpClient,
@@ -72,13 +82,15 @@ export class MyItemsComponent {
     private itemDialog: MatDialog,
     private confirmDialog: MatDialog,
     private alertService: AlertService,
-    private dateTimeFormatter: DateTimeFormatService
+    private dateTimeFormatter: DateTimeFormatService,
+    private categoryService: CategoryService
   ) {}
 
+  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
+
   ngOnInit(): void {
-    // default tab is for my items
+    // default tab is only for saved items
     this.setInactiveItems();
-    this.setPublishedItems();
   }
 
   onTabChanged(event: MatTabChangeEvent): void {
@@ -87,9 +99,11 @@ export class MyItemsComponent {
     switch (selectedIndex) {
       case 0:
         this.setInactiveItems();
-        this.setPublishedItems();
         break;
       case 1:
+        this.setPublishedItems();
+        break;
+      case 2:
         this.setMyBids();
         break;
       default:
@@ -144,11 +158,11 @@ export class MyItemsComponent {
       });
   }
 
-  private setItemsWithBids(): void {
-    this.itemsWithBids.items = this.publishedItems.items.filter(
+  private setPublishedWithBids(): void {
+    this.publishedWithBids.items = this.publishedItems.items.filter(
       (item) => item.numBids > 0
     );
-    this.itemsWithBids.loading = false;
+    this.publishedWithBids.loading = false;
   }
 
   private setMyBids(): void {
@@ -192,6 +206,22 @@ export class MyItemsComponent {
       },
       error: (error: any) => console.error(error),
     });
+  }
+
+  private setPublishedNotExpired(): void {
+    this.publishedNotExpired.items = this.publishedItems.items.filter(
+      (item) => !this.dateTimeFormatter.isExpired(item.ends)
+    );
+    this.publishedNotExpired.loading = false;
+  }
+
+  private setPublishedNotExpiredWithBids(): void {
+    this.publishedNotExpiredWithBids = {
+      items: this.publishedNotExpired.items.filter((item) =>
+        this.publishedWithBids.items.includes(item)
+      ),
+      loading: false,
+    };
   }
 
   private fetchImagesForInactiveItems(): void {
@@ -249,8 +279,10 @@ export class MyItemsComponent {
 
     forkJoin(imageRequests).subscribe({
       next: () => {
-        this.displayedItems = this.publishedItems;
-        this.setItemsWithBids();
+        this.setPublishedWithBids();
+        this.setPublishedNotExpired();
+        this.setPublishedNotExpiredWithBids();
+        this.displayedItems = this.publishedNotExpired;
       },
       error: (error) => {
         console.error(error);
@@ -350,6 +382,8 @@ export class MyItemsComponent {
     editItemDialogRef
       .afterClosed()
       .subscribe((result: EditItemDialogOutputData) => {
+        this.categoryService.clear();
+
         if (!result) return;
 
         if (result.status == 'edited') {
@@ -382,6 +416,7 @@ export class MyItemsComponent {
           this.setInactiveItems();
           this.publishedItems.loading = true;
           this.setPublishedItems();
+          if (this.tabGroup) this.tabGroup.selectedIndex = 1;
         },
         error: (error: any) => console.error(error),
       });
@@ -425,14 +460,50 @@ export class MyItemsComponent {
     });
   }
 
-  showOnlyWithBids(): void {
-    this.toggleChecked = !this.toggleChecked;
+  private handleToggles(): void {
+    console.log('handle toggles');
+    console.log(this.toggleOnlyNotExpired);
+    console.log(this.toggleOnlyWithBids);
 
-    if (!this.toggleChecked) {
-      this.displayedItems = this.publishedItems;
+    if (this.toggleOnlyNotExpired && this.toggleOnlyWithBids) {
+      console.log('both toggles are true');
+
+      this.displayedItems = this.publishedNotExpiredWithBids;
       return;
     }
 
-    this.displayedItems = this.itemsWithBids;
+    if (this.toggleOnlyNotExpired) {
+      console.log('only not expired is true');
+
+      this.displayedItems = this.publishedNotExpired;
+      return;
+    }
+
+    if (this.toggleOnlyWithBids) {
+      console.log('only with bids is true');
+
+      this.displayedItems = this.publishedWithBids;
+      return;
+    }
+
+    console.log('both toggles are false');
+
+    this.displayedItems = this.publishedItems;
+  }
+
+  showOnlyNotExpired(): void {
+    console.log('show only not expired');
+
+    this.toggleOnlyNotExpired = !this.toggleOnlyNotExpired;
+
+    this.handleToggles();
+  }
+
+  showOnlyWithBids(): void {
+    console.log('show only with bids');
+
+    this.toggleOnlyWithBids = !this.toggleOnlyWithBids;
+
+    this.handleToggles();
   }
 }
