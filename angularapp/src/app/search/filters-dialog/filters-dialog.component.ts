@@ -39,8 +39,6 @@ export class FiltersDialogComponent {
   }
 
   onPriceRangeChange(event: MatChipListboxChange) {
-    console.log('price range change');
-
     const selectedOption = event.value;
 
     this.filterService.priceRanges.forEach((range) => {
