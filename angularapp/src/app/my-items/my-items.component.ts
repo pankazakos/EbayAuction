@@ -131,8 +131,6 @@ export class MyItemsComponent {
       .get(ItemEndpoints.inactive, { headers: this.authService.getHeaders() })
       .subscribe({
         next: (response: BasicItemResponse[] | any) => {
-          console.log(response);
-
           this.inactiveItems.items = this.copyResponseItems(response);
           this.inactiveItems.loading = false;
           if (this.inactiveItems.items.length > 0)
@@ -151,8 +149,6 @@ export class MyItemsComponent {
       .get(ItemEndpoints.active, { headers: this.authService.getHeaders() })
       .subscribe({
         next: (response: BasicItemResponse[] | any) => {
-          console.log(response);
-
           this.publishedItems.items = this.copyResponseItems(response);
           this.publishedItems.loading = false;
           if (this.publishedItems.items.length > 0)
@@ -176,8 +172,6 @@ export class MyItemsComponent {
       .get(BidEndpoints.myBids, { headers: this.authService.getHeaders() })
       .subscribe({
         next: (response: BasicBidResponse[] | any) => {
-          console.log(response);
-
           this.myBids.data = response;
           this.myBids.loading = false;
 
@@ -201,8 +195,6 @@ export class MyItemsComponent {
 
     forkJoin(requests).subscribe({
       next: (responses: BasicItemResponse[] | any) => {
-        console.log(responses);
-
         this.itemsWithMyBids.items = this.copyResponseItems(responses);
         this.itemsWithMyBids.loading = false;
         if (this.itemsWithMyBids.items.length > 0)
@@ -376,7 +368,6 @@ export class MyItemsComponent {
       })
       .subscribe({
         next: (response: any) => {
-          console.log(response);
           this.alertService.success('Item successfully deleted', 'Ok');
           this.inactiveItems.loading = true;
           this.setInactiveItems();
@@ -428,7 +419,6 @@ export class MyItemsComponent {
       )
       .subscribe({
         next: (response: string | any) => {
-          console.log(response);
           this.alertService.success('Item successfully published', 'Ok');
           this.inactiveItems.loading = true;
           this.setInactiveItems();
@@ -479,47 +469,31 @@ export class MyItemsComponent {
   }
 
   private handleToggles(): void {
-    console.log('handle toggles');
-    console.log(this.toggleOnlyNotExpired);
-    console.log(this.toggleOnlyWithBids);
-
     if (this.toggleOnlyNotExpired && this.toggleOnlyWithBids) {
-      console.log('both toggles are true');
-
       this.displayedItems = this.publishedNotExpiredWithBids;
       return;
     }
 
     if (this.toggleOnlyNotExpired) {
-      console.log('only not expired is true');
-
       this.displayedItems = this.publishedNotExpired;
       return;
     }
 
     if (this.toggleOnlyWithBids) {
-      console.log('only with bids is true');
-
       this.displayedItems = this.publishedWithBids;
       return;
     }
-
-    console.log('both toggles are false');
 
     this.displayedItems = this.publishedItems;
   }
 
   showOnlyNotExpired(): void {
-    console.log('show only not expired');
-
     this.toggleOnlyNotExpired = !this.toggleOnlyNotExpired;
 
     this.handleToggles();
   }
 
   showOnlyWithBids(): void {
-    console.log('show only with bids');
-
     this.toggleOnlyWithBids = !this.toggleOnlyWithBids;
 
     this.handleToggles();

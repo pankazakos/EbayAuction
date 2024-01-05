@@ -55,7 +55,6 @@ export class AddItemDialogComponent {
       })
       .subscribe({
         next: (response: any) => {
-          console.log(response);
           this.alertService.success('Item created successfully', 'Ok');
           this.selfDialogRef.close('success');
         },

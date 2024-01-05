@@ -66,8 +66,6 @@ export class EditItemDialogComponent {
     this.myItemService.editItemForm.categoryIds =
       this.categoryService.getCategoryIds();
 
-    console.log(this.myItemService.editItemForm);
-
     const formData = new FormData();
 
     formData.append(
@@ -85,7 +83,6 @@ export class EditItemDialogComponent {
       })
       .subscribe({
         next: (response: BasicItemResponse | any) => {
-          console.log(response);
           this.selfDialogRef.close({
             status: 'edited',
             item: response,
