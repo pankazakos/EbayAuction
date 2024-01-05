@@ -21,11 +21,16 @@
             };
         }
 
-        public static bool IsBidAmountValid(decimal currentPrice, decimal bidAmount)
+        public static bool IsBidAmountValid(decimal currentPrice, decimal bidAmount, bool addBidStep)
         {
             var bidStep = GetBidStep(currentPrice);
 
-            return bidAmount >= currentPrice + bidStep;
+            if (addBidStep)
+            {
+                return bidAmount >= currentPrice + bidStep;
+            }
+
+            return bidAmount >= currentPrice;
         }
 
         public static decimal GetBidStep(decimal currentPrice)

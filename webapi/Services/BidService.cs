@@ -66,7 +66,9 @@ namespace webapi.Services
                 throw new ArgumentException($"Bid cannot be less than first bid. Must be equal or greater than {item.FirstBid}");
             }
 
-            if (BidStepService.IsBidAmountValid(item.Currently, input.Amount) == false)
+            var addBidStep = item.NumBids > 0;
+
+            if (BidStepService.IsBidAmountValid(item.Currently, input.Amount, addBidStep) == false)
             {
                 _logger.LogWarning("Bid amount {Amount} is not valid for current price {CurrentPrice}", input.Amount, item.Currently);
                 throw new ArgumentException($"Bid amount {input.Amount} is not valid for current price {item.Currently}");
