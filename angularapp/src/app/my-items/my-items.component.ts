@@ -151,8 +151,11 @@ export class MyItemsComponent {
         next: (response: BasicItemResponse[] | any) => {
           this.publishedItems.items = this.copyResponseItems(response);
           this.publishedItems.loading = false;
-          if (this.publishedItems.items.length > 0)
+          if (this.publishedItems.items.length > 0) {
             this.fetchImagesForPublishedItems();
+          } else {
+            this.displayedItems.loading = false;
+          }
         },
         error: (error: any) => console.error(error),
       });
@@ -193,6 +196,10 @@ export class MyItemsComponent {
       this.http.get(ItemEndpoints.getById(itemId))
     );
 
+    if (requests.length == 0) {
+      this.itemsWithMyBids.loading = false;
+    }
+
     forkJoin(requests).subscribe({
       next: (responses: BasicItemResponse[] | any) => {
         this.itemsWithMyBids.items = this.copyResponseItems(responses);
@@ -208,6 +215,10 @@ export class MyItemsComponent {
         headers: this.authService.getHeaders(),
       });
     });
+
+    if (lastBidRequests.length == 0) {
+      this.yourLastBids.loading = false;
+    }
 
     forkJoin(lastBidRequests).subscribe({
       next: (responses: BasicBidResponse[] | any) => {

@@ -268,12 +268,9 @@
                 *ngIf="
                   !displayedItems.loading && displayedItems.items.length === 0
                 "
-                [inputText]="
-                  displayedItems === publishedItems
-                    ? 'Currently you don\'t have any published items. ' +
-                      'You can create a new item from the above section of saved items and ' +
-                      'then publish it with an expiry date and time.'
-                    : 'Currently you don\'t have any published items that have bids.'
+                inputText="Currently you don't have any published items. 
+                      You can create a new item from the previous tab called saved items and
+                      then publish it with an expiry date and time.
                 "
               ></app-note>
             </div>
