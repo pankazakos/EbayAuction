@@ -35,4 +35,11 @@ export class DateTimeFormatService {
 
     return parsedDatetime.toLocaleDateString('en-US', options);
   }
+
+  isExpired(dateString: string): boolean {
+    const now = new Date();
+    const endDate = new Date(dateString);
+
+    return now > endDate;
+  }
 }
