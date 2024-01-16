@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Ignore uploaded images
 /webapi/wwwroot/item-images/**
+/webapi/myEnv.env
