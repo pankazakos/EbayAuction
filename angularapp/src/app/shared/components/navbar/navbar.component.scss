@@ -1,3 +1,5 @@
+@import "../../../../styles.scss";
+
 #toolbar {
   width: 100%;
   box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.5);
@@ -46,4 +48,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+::ng-deep .mat-mdc-menu-content {
+  color: $on-secondary-container;
+  background-color: $secondary-container;
+}
+
+.menu-header{
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+}
+
+.logout-button{
+  border-top: 1px solid $on-secondary-container;
+}
+
+::ng-deep .mat-mdc-menu-item:hover{
+    color: $on-tertiary !important;
+    background-color: $tertiary-color !important;
 }

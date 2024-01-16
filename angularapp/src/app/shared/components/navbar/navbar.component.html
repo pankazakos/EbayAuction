@@ -27,13 +27,37 @@
       </button>
     </div>
     <mat-menu #menu="matMenu">
-      <a *ngIf="authData?.role != adminRole" class="link" routerLink="my-items">
-        <button mat-menu-item>my items</button>
-      </a>
-      <a *ngIf="authData?.role == adminRole" class="link" routerLink="admin">
+      <div class="menu-header">
+        {{ authData?.username }}
+      </div>
+      <a
+        *ngIf="authData?.role == adminRole"
+        class="menu-item link"
+        routerLink="admin"
+      >
         <button mat-menu-item>control panel</button>
       </a>
-      <button mat-menu-item (click)="callLogoutUser()">logout</button>
+      <a
+        *ngIf="authData?.role != adminRole"
+        class="menu-item link"
+        routerLink="my-items"
+      >
+        <button mat-menu-item>my items</button>
+      </a>
+      <a
+        *ngIf="authData?.role != adminRole"
+        class="menu-item link"
+        routerLink="my-items"
+      >
+        <button mat-menu-item>profile</button>
+      </a>
+      <button
+        mat-menu-item
+        class="menu-item logout-button"
+        (click)="callLogoutUser()"
+      >
+        logout
+      </button>
     </mat-menu>
   </div>
 </mat-toolbar>
