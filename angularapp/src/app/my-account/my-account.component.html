@@ -1,1 +1,25 @@
-<p>my-account works!</p>
+<div
+  id="my-account-main-container"
+  fxLayout="row"
+  fxLayoutAlign="center flex-start"
+  fxFill
+>
+  <div
+    id="my-account-body"
+    fxLayout="column"
+    fxLayoutAlign="space-evenly center"
+    fxFlex="75%"
+    fxFill
+  >
+    <div id="my-items-tabs" fxFlex="100%" fxFill>
+      <mat-tab-group>
+        <mat-tab label="My Details"
+          ><app-bid-history></app-bid-history
+        ></mat-tab>
+        <mat-tab label="My Bid History">
+          <app-personal-info></app-personal-info>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

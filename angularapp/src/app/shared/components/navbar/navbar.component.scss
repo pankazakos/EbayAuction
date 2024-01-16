@@ -68,9 +68,17 @@
   border-top: 1px solid $on-secondary-container;
 }
 
+::ng-deep .mat-mdc-menu-item{
+    padding-right: 2rem;
+}
+
 ::ng-deep .mat-mdc-menu-item:hover{
     color: $on-tertiary !important;
     background-color: $tertiary-color !important;
+
+    mat-icon{
+      color: inherit !important;
+    }
 }
 
 ::ng-deep .mat-mdc-menu-item > mat-icon{
@@ -78,4 +86,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: $on-secondary-container !important;
 }
