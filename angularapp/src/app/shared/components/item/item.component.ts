@@ -13,18 +13,18 @@ import {
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { DateTimeFormatService } from 'src/app/shared/services/date-time-format.service';
+import { DateTimeFormatService } from 'src/app/shared/services/common/date-time-format.service';
 import { BasicBidResponse } from 'src/app/shared/contracts/responses/bid';
 import { AddBidRequest } from 'src/app/shared/contracts/requests/bid';
 import {
   AuthData,
   AuthService,
-} from 'src/app/shared/services/auth-service.service';
+} from 'src/app/shared/services/authentication/auth-service.service';
 import { BidEndpoints } from 'src/app/shared/contracts/endpoints/BidEndpoints';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
-import { AlertService } from 'src/app/shared/services/alert.service';
-import { BidStepService } from 'src/app/shared/services/bid-step.service';
+import { AlertService } from 'src/app/shared/services/common/alert.service';
+import { BidStepService } from 'src/app/shared/services/common/bid-step.service';
 import { ConfirmComponent } from 'src/app/shared/components/confirm/confirm.component';
 import {
   MatDatepicker,

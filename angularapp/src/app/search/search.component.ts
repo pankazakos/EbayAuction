@@ -12,10 +12,13 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
 import { ItemComponent } from '../shared/components/item/item.component';
-import { DateTimeFormatService } from '../shared/services/date-time-format.service';
-import { AuthData, AuthService } from '../shared/services/auth-service.service';
-import { AlertService } from '../shared/services/alert.service';
-import { CategoryService } from '../shared/services/category.service';
+import { DateTimeFormatService } from '../shared/services/common/date-time-format.service';
+import {
+  AuthData,
+  AuthService,
+} from '../shared/services/authentication/auth-service.service';
+import { AlertService } from '../shared/services/common/alert.service';
+import { CategoryService } from '../shared/services/common/category.service';
 import { FilterService } from './services/filter.service';
 
 @Component({

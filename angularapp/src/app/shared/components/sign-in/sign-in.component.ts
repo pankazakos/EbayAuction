@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CardWrapperCssProps } from '../card/card.component';
 import { UserCredentialsRequest } from '../../contracts/requests/user';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/authentication/auth-service.service';
 
 @Component({
   selector: 'app-sign-in',

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CardWrapperCssProps } from '../card/card.component';
 import { RegisterUserResponse } from '../../contracts/responses/user';
 import { RegisterUserRequest } from '../../contracts/requests/user';
-import { AuthService } from '../../services/auth-service.service';
+import { AuthService } from '../../services/authentication/auth-service.service';
 import { UserEndpoints } from '../../contracts/endpoints/UserEndpoints';
 
 @Component({

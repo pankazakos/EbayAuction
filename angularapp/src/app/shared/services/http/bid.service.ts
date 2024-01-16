@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BidEndpoints } from '../contracts/endpoints/BidEndpoints';
-import { AuthService } from './auth-service.service';
-import { BasicBidResponse } from '../contracts/responses/bid';
+import { BidEndpoints } from '../../contracts/endpoints/BidEndpoints';
+import { AuthService } from '../authentication/auth-service.service';
+import { BasicBidResponse } from '../../contracts/responses/bid';
 import { Observable } from 'rxjs';
 
 @Injectable({

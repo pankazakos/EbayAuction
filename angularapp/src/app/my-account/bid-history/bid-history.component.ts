@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BidService } from 'src/app/shared/services/bid.service';
+import { BidService } from 'src/app/shared/services/http/bid.service';
 
 @Component({
   selector: 'app-bid-history',

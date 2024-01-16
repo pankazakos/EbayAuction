@@ -6,7 +6,7 @@ import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/catego
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FilterService } from '../services/filter.service';
-import { CategoryService } from 'src/app/shared/services/category.service';
+import { CategoryService } from 'src/app/shared/services/common/category.service';
 
 @Component({
   selector: 'app-filters-dialog',

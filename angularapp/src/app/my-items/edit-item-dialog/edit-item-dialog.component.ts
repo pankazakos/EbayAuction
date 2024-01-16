@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CategoryService } from 'src/app/shared/services/category.service';
+import { CategoryService } from 'src/app/shared/services/common/category.service';
 import { MyItemService } from '../services/my-item.service';
-import { AuthService } from 'src/app/shared/services/auth-service.service';
+import { AuthService } from 'src/app/shared/services/authentication/auth-service.service';
 import { HttpClient } from '@angular/common/http';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
@@ -10,7 +10,7 @@ import {
   BasicItemResponse,
   ExtendedItemInfo,
 } from 'src/app/shared/contracts/responses/item';
-import { AlertService } from 'src/app/shared/services/alert.service';
+import { AlertService } from 'src/app/shared/services/common/alert.service';
 import { baseUrl } from 'src/app/shared/types';
 
 export interface EditItemDialogOutputData {

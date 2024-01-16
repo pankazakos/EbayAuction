@@ -8,10 +8,10 @@ import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { ItemEndpoints } from '../shared/contracts/endpoints/ItemEndpoints';
 import { MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './add-item-dialog/add-item-dialog.component';
-import { AuthService } from '../shared/services/auth-service.service';
+import { AuthService } from '../shared/services/authentication/auth-service.service';
 import { ItemComponent } from '../shared/components/item/item.component';
 import { environment } from 'src/environments/environment';
-import { AlertService } from '../shared/services/alert.service';
+import { AlertService } from '../shared/services/common/alert.service';
 import {
   EditItemDialogComponent,
   EditItemDialogOutputData,
@@ -23,8 +23,8 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BasicBidResponse } from '../shared/contracts/responses/bid';
 import { BidEndpoints } from '../shared/contracts/endpoints/BidEndpoints';
-import { DateTimeFormatService } from '../shared/services/date-time-format.service';
-import { CategoryService } from '../shared/services/category.service';
+import { DateTimeFormatService } from '../shared/services/common/date-time-format.service';
+import { CategoryService } from '../shared/services/common/category.service';
 
 interface MutlipleItemsWithImage {
   items: ExtendedItemInfo[];

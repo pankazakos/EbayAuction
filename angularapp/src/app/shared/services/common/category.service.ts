@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { BasicCategoryResponse } from '../contracts/responses/category';
+import { BasicCategoryResponse } from '../../contracts/responses/category';
 
 @Injectable({
   providedIn: 'root',

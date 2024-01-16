@@ -3,11 +3,11 @@ import { MyItemService } from '../services/my-item.service';
 import { BasicCategoryResponse } from 'src/app/shared/contracts/responses/category';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { baseUrl } from 'src/app/shared/types';
-import { AuthService } from 'src/app/shared/services/auth-service.service';
-import { CategoryService } from 'src/app/shared/services/category.service';
+import { AuthService } from 'src/app/shared/services/authentication/auth-service.service';
+import { CategoryService } from 'src/app/shared/services/common/category.service';
 import { ItemEndpoints } from 'src/app/shared/contracts/endpoints/ItemEndpoints';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AlertService } from 'src/app/shared/services/alert.service';
+import { AlertService } from 'src/app/shared/services/common/alert.service';
 
 @Component({
   selector: 'app-add-item-dialog',

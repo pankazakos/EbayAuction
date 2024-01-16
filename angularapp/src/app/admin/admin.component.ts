@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
-import { DateTimeFormatService } from '../shared/services/date-time-format.service';
+import { DateTimeFormatService } from '../shared/services/common/date-time-format.service';
 import { BasicUserResponse } from '../shared/contracts/responses/user';
 import { PaginatedResponse } from '../shared/contracts/responses/PaginatedResponse';
 import { UserEndpoints } from '../shared/contracts/endpoints/UserEndpoints';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from '../shared/components/confirm/confirm.component';
-import { AlertService } from '../shared/services/alert.service';
+import { AlertService } from '../shared/services/common/alert.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
