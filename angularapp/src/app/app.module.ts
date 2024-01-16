@@ -13,6 +13,8 @@ import { MyItemsModule } from './my-items/my-items.module';
 import { MyItemsComponent } from './my-items/my-items.component';
 import { authorizedUserGuard } from './guards/authorized-user.guard';
 import { AdminModule } from './admin/admin.module';
+import { MyAccountComponent } from './my-account/my-account.component';
+import { MyAccountModule } from './my-account/my-account.module';
 
 const routes: Routes = [
   {
@@ -24,6 +26,12 @@ const routes: Routes = [
     title: 'my items',
     path: 'my-items',
     component: MyItemsComponent,
+    canActivate: [authorizedUserGuard],
+  },
+  {
+    title: 'my account',
+    path: 'my-account',
+    component: MyAccountComponent,
     canActivate: [authorizedUserGuard],
   },
   { title: 'login', path: 'login', component: SignInComponent },
@@ -44,6 +52,7 @@ const routes: Routes = [
     AdminModule,
     SearchModule,
     MyItemsModule,
+    MyAccountModule,
     RouterModule.forRoot(routes),
   ],
   exports: [RouterModule],

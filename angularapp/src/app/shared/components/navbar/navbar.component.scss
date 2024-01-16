@@ -72,3 +72,10 @@
     color: $on-tertiary !important;
     background-color: $tertiary-color !important;
 }
+
+::ng-deep .mat-mdc-menu-item > mat-icon{
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -42,20 +42,25 @@
         class="menu-item link"
         routerLink="my-items"
       >
-        <button mat-menu-item>my items</button>
+        <button mat-menu-item>
+          <mat-icon fontIcon="inventory"></mat-icon> My Items
+        </button>
       </a>
       <a
         *ngIf="authData?.role != adminRole"
         class="menu-item link"
-        routerLink="my-items"
+        routerLink="my-account"
       >
-        <button mat-menu-item>profile</button>
+        <button mat-menu-item>
+          <mat-icon fontIcon="person"></mat-icon>Account
+        </button>
       </a>
       <button
         mat-menu-item
         class="menu-item logout-button"
         (click)="callLogoutUser()"
       >
+        <mat-icon fontIcon="logout"></mat-icon>
         logout
       </button>
     </mat-menu>
