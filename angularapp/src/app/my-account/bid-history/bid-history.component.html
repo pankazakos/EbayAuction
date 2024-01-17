@@ -8,4 +8,48 @@
   <div *ngIf="isLoading" class="loading-spinner">
     <mat-spinner></mat-spinner>
   </div>
+
+  <div *ngIf="!isLoading" class="full-width bid-history-table">
+    <table mat-table [dataSource]="userBids" class="mat-elevation-z8">
+      <ng-container matColumnDef="No">
+        <th mat-header-cell *matHeaderCellDef>No</th>
+        <td mat-cell *matCellDef="let i = index">{{ i }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Bid Amount">
+        <th mat-header-cell *matHeaderCellDef>Bid Amount</th>
+        <td mat-cell *matCellDef="let bid">${{ bid.amount }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="DateTime">
+        <th mat-header-cell *matHeaderCellDef>DateTime</th>
+        <td mat-cell *matCellDef="let bid">{{ bid.time }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Item Title">
+        <th mat-header-cell *matHeaderCellDef>Item Title</th>
+        <td mat-cell *matCellDef="let bid">{{ bid.itemTitle }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Seller">
+        <th mat-header-cell *matHeaderCellDef>Seller</th>
+        <td mat-cell *matCellDef="let bid">{{ bid.seller }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Auction Status">
+        <th mat-header-cell *matHeaderCellDef>Auction Status</th>
+        <td mat-cell *matCellDef="let bid">{{ bid.auctionStatus }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Show Item">
+        <th mat-header-cell *matHeaderCellDef>Show Item</th>
+        <td mat-cell *matCellDef="let bid">
+          <button mat-stroked-button>show</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
 </section>

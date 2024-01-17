@@ -9,14 +9,6 @@ import { PersonalInfoComponent } from './personal-info/personal-info.component';
   styleUrls: ['./my-account.component.scss'],
 })
 export class MyAccountComponent {
-  displayedColumns: string[] = [
-    'Bid Amount',
-    'DateTime',
-    'Item Title',
-    'Seller',
-    'Show Item',
-  ];
-
   @ViewChild(PersonalInfoComponent) personalInfoTab!: PersonalInfoComponent;
   @ViewChild(BidHistoryComponent) bidHistoryTab!: BidHistoryComponent;
 
