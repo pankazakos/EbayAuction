@@ -1,1 +1,11 @@
-<p>bid-history works!</p>
+<section
+  id="bid-history-container"
+  fxLayout="column"
+  fxLayoutAlign="start start"
+  fxLayoutGap="3rem"
+  fxFill
+>
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+</section>

@@ -11,13 +11,13 @@
     fxFlex="75%"
     fxFill
   >
-    <div id="my-items-tabs" fxFlex="100%" fxFill>
-      <mat-tab-group>
-        <mat-tab label="My Details"
-          ><app-bid-history></app-bid-history
-        ></mat-tab>
-        <mat-tab label="My Bid History">
+    <div id="my-account-tabs" fxFlex="100%" fxFill>
+      <mat-tab-group (selectedTabChange)="onTabChange($event)">
+        <mat-tab label="My Details">
           <app-personal-info></app-personal-info>
+        </mat-tab>
+        <mat-tab label="My Bid History">
+          <app-bid-history></app-bid-history>
         </mat-tab>
       </mat-tab-group>
     </div>
