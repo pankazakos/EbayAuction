@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using webapi.Models;
 using webapi.Services.Interfaces;
 using webapi.Utilities.ControllerUtils;
+using contracts.Responses;
 
 namespace webapi.Controllers
 {
@@ -52,6 +53,24 @@ namespace webapi.Controllers
 
             return await _controllerHelper.GetAllAndRespond<Bid, BasicBidResponse>(
                                () => _bidService.GetUserBids(username, cancel), _mapper);
+        }
+
+
+        [Authorize]
+        [HttpGet(BidEndpoints.GetFullInfoUserBids)]
+        public async Task<IActionResult> GetExtendedInfoUserBids(CancellationToken cancel = default)
+        {
+            var username = _controllerHelper.UsernameClaim;
+
+            try
+            {
+                var bids = await _bidService.GetExtendedInfoUserBids(username, cancel);
+                return Ok(bids);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using contracts.Requests.Bid;
+using contracts.Responses.bid;
 using webapi.Models;
 
 namespace webapi.Repository.Interfaces
@@ -10,6 +11,8 @@ namespace webapi.Repository.Interfaces
         public Task<IEnumerable<Bid>> GetItemBids(long itemId, CancellationToken cancel = default);
 
         public Task<IEnumerable<Bid>> GetUserBids(int userId, CancellationToken cancel = default);
+
+        public Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(int userId, CancellationToken cancel = default);
 
         public Task<Bid?> GetLastBidOfUser(int userId, long itemId, CancellationToken cancel = default);
     }

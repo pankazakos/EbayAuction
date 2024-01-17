@@ -10,6 +10,8 @@
 
         public const string GetUserBids = "my-bids";
 
+        public const string GetFullInfoUserBids = "full/my-bids";
+
         public const string GetLastBidOfUser = "last";
     }
 }

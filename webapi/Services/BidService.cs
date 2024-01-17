@@ -1,4 +1,5 @@
 ﻿using contracts.Requests.Bid;
+using contracts.Responses.bid;
 using webapi.Models;
 using webapi.Repository.Interfaces;
 using webapi.Services.Interfaces;
@@ -109,6 +110,23 @@ namespace webapi.Services
             }
 
             var bids = await _bidRepository.GetUserBids(user.Id, cancel);
+
+            _logger.LogInformation("Retrieved bids of user {Username}", username);
+
+            return bids;
+        }
+
+        public async Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(string username, CancellationToken cancel = default)
+        {
+            var user = await _userService.GetByUsername(username, cancel);
+
+            if (user is null)
+            {
+                _logger.LogWarning("Cannot get bids. User {Username} was not found", username);
+                throw new ArgumentException($"User {username} does not exist");
+            }
+
+            var bids = await _bidRepository.GetExtendedInfoUserBids(user.Id, cancel);
 
             _logger.LogInformation("Retrieved bids of user {Username}", username);
 

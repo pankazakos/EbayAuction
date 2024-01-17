@@ -1,4 +1,5 @@
 ﻿using contracts.Requests.Bid;
+using contracts.Responses.bid;
 using Microsoft.EntityFrameworkCore;
 using webapi.Database;
 using webapi.Models;
@@ -53,6 +54,25 @@ namespace webapi.Repository
         public async Task<IEnumerable<Bid>> GetUserBids(int userId, CancellationToken cancel = default)
         {
             return await _dbContext.Bids.Where(b => b.BidderId == userId).ToListAsync(cancel);
+        }
+
+        public async Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(int userId, CancellationToken cancel = default)
+        {
+            var extendedBids = await _dbContext.Bids
+                .Where(bid => bid.BidderId == userId)
+                .Select(bid => new ExtendedBidInfo
+                {
+                    BidId = bid.BidId,
+                    Time = bid.Time,
+                    Amount = bid.Amount,
+                    ItemId = bid.ItemId,
+                    BidderId = bid.BidderId,
+                    Seller = bid.Item.Seller.Username,
+                    ItemTitle = bid.Item.Name,
+                    AuctionStatus = DateTime.Now < bid.Item.Ends ? AuctionStatusType.Active : AuctionStatusType.Expired
+                }).ToListAsync(cancel);
+
+            return extendedBids;
         }
 
         public Task<Bid?> GetLastBidOfUser(int userId, long itemId, CancellationToken cancel = default)
