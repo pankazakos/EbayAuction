@@ -4,6 +4,27 @@
     padding: 3rem 1rem;
 }
 
+.bid-history-body{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.sort-options-section{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+
+    .sort-options{
+        width: 15%;
+    }
+}
+
 .loading-spinner{
     height: 75%;
     width: 100%;

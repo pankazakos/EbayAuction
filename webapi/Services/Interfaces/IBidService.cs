@@ -10,9 +10,9 @@ namespace webapi.Services.Interfaces
 
         public Task<IEnumerable<Bid>> GetItemBids(long itemId, CancellationToken cancel = default);
 
-        public Task<IEnumerable<Bid>> GetUserBids(string username, CancellationToken cancel = default);
+        public Task<IEnumerable<Bid>> GetUserBids(GetBidsOrderOptions? orderOptions, string username, CancellationToken cancel = default);
 
-        public Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(string username, CancellationToken cancel = default);
+        public Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(GetBidsOrderOptions? orderOptions, string username, CancellationToken cancel = default);
 
         public Task<Bid?> GetLastBidOfUser(string username, long itemId, CancellationToken cancel = default);
     }

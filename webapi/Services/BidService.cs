@@ -99,7 +99,7 @@ namespace webapi.Services
             return bids;
         }
 
-        public async Task<IEnumerable<Bid>> GetUserBids(string username, CancellationToken cancel = default)
+        public async Task<IEnumerable<Bid>> GetUserBids(GetBidsOrderOptions? orderOptions, string username, CancellationToken cancel = default)
         {
             var user = await _userService.GetByUsername(username, cancel);
 
@@ -116,8 +116,13 @@ namespace webapi.Services
             return bids;
         }
 
-        public async Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(string username, CancellationToken cancel = default)
+        public async Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(GetBidsOrderOptions? orderOptions, string username, CancellationToken cancel = default)
         {
+            if(orderOptions != null)
+            {
+                orderOptions.Validate();
+            }
+
             var user = await _userService.GetByUsername(username, cancel);
 
             if (user is null)
@@ -126,7 +131,7 @@ namespace webapi.Services
                 throw new ArgumentException($"User {username} does not exist");
             }
 
-            var bids = await _bidRepository.GetExtendedInfoUserBids(user.Id, cancel);
+            var bids = await _bidRepository.GetExtendedInfoUserBids(orderOptions, user.Id, cancel);
 
             _logger.LogInformation("Retrieved bids of user {Username}", username);
 

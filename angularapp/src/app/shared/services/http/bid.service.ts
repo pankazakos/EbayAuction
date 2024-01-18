@@ -8,21 +8,36 @@ import {
 } from '../../contracts/responses/bid';
 import { Observable } from 'rxjs';
 
+export type OrderType = 'ascending' | 'descending';
+export type OrderByOption = 'time' | 'amount';
+
 @Injectable({
   providedIn: 'root',
 })
 export class BidService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getUserBids(): Observable<BasicBidResponse[]> {
-    return this.http.get<BasicBidResponse[]>(`${BidEndpoints.myBids}`, {
-      headers: this.authService.getHeaders(),
-    });
+  getUserBids(
+    orderType: OrderType = 'ascending',
+    orderByOption: OrderByOption = 'time'
+  ): Observable<BasicBidResponse[]> {
+    return this.http.get<BasicBidResponse[]>(
+      `${BidEndpoints.myBids}?orderType=${orderType}&orderByOption=${orderByOption}`,
+      {
+        headers: this.authService.getHeaders(),
+      }
+    );
   }
 
-  getFullInfoUserBids(): Observable<ExtendedBidInfo[]> {
-    return this.http.get<ExtendedBidInfo[]>(`${BidEndpoints.extendedMyBids}`, {
-      headers: this.authService.getHeaders(),
-    });
+  getFullInfoUserBids(
+    orderType: OrderType = 'ascending',
+    orderByOption: OrderByOption = 'time'
+  ): Observable<ExtendedBidInfo[]> {
+    return this.http.get<ExtendedBidInfo[]>(
+      `${BidEndpoints.extendedMyBids}?orderType=${orderType}&orderByOption=${orderByOption}`,
+      {
+        headers: this.authService.getHeaders(),
+      }
+    );
   }
 }

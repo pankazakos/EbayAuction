@@ -9,8 +9,35 @@
     <mat-spinner></mat-spinner>
   </div>
 
-  <div *ngIf="!isLoading" class="full-width bid-history-table">
-    <table mat-table [dataSource]="userBids" class="mat-elevation-z8">
+  <div *ngIf="!isLoading" class="full-width bid-history-body">
+    <section class="sort-options-section">
+      <button
+        mat-icon-button
+        matTooltip="order"
+        matTooltipPosition="left"
+        (click)="toggleOrderType()"
+      >
+        <mat-icon>{{
+          orderType === "ascending" ? "arrow_upward" : "arrow_downward"
+        }}</mat-icon>
+      </button>
+      <mat-form-field subscriptSizing="dynamic" class="sort-options">
+        <mat-label>sort by</mat-label>
+        <mat-select
+          (selectionChange)="onSelectOrderBy($event)"
+          [(value)]="orderByOption"
+        >
+          <mat-option value="time"> Time </mat-option>
+          <mat-option value="amount"> Amount </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <table
+      mat-table
+      [dataSource]="userBids"
+      class="bid-history-table full-width mat-elevation-z8"
+    >
       <ng-container matColumnDef="No">
         <th mat-header-cell *matHeaderCellDef>No</th>
         <td mat-cell *matCellDef="let i = index">{{ i }}</td>
@@ -22,7 +49,7 @@
       </ng-container>
 
       <ng-container matColumnDef="DateTime">
-        <th mat-header-cell *matHeaderCellDef>DateTime</th>
+        <th mat-header-cell *matHeaderCellDef>Time</th>
         <td mat-cell *matCellDef="let bid">{{ bid.time }}</td>
       </ng-container>
 

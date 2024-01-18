@@ -56,9 +56,10 @@ namespace webapi.Repository
             return await _dbContext.Bids.Where(b => b.BidderId == userId).ToListAsync(cancel);
         }
 
-        public async Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(int userId, CancellationToken cancel = default)
+        public async Task<IEnumerable<ExtendedBidInfo>> GetExtendedInfoUserBids(GetBidsOrderOptions? orderOptions, 
+            int userId, CancellationToken cancel = default)
         {
-            var extendedBids = await _dbContext.Bids
+            var bidsQuery = _dbContext.Bids
                 .Where(bid => bid.BidderId == userId)
                 .Select(bid => new ExtendedBidInfo
                 {
@@ -70,9 +71,29 @@ namespace webapi.Repository
                     Seller = bid.Item.Seller.Username,
                     ItemTitle = bid.Item.Name,
                     AuctionStatus = DateTime.Now < bid.Item.Ends ? AuctionStatusType.Active : AuctionStatusType.Expired
-                })
-                .OrderByDescending(bid => bid.Time)
-                .ToListAsync(cancel);
+                });
+
+            if(orderOptions != null)
+            {
+                bool isAscending = orderOptions.OrderType == OrderType.Ascending;
+
+                switch(orderOptions.OrderByOption)
+                {
+                    case OrderByOption.Time:
+                        bidsQuery = isAscending ? bidsQuery.OrderBy(bid => bid.Time) : bidsQuery.OrderByDescending(bid => bid.Time);
+                        break;
+
+                    case OrderByOption.Amount:
+                        bidsQuery = isAscending ? bidsQuery.OrderBy(bid => bid.Amount) : bidsQuery.OrderByDescending(bid => bid.Amount);
+                        break;
+                }
+            }
+            else
+            {
+                bidsQuery.OrderBy(bid => bid.Time);
+            }
+
+            var extendedBids = await bidsQuery.ToListAsync(cancel);
 
             return extendedBids;
         }
