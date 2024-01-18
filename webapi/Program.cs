@@ -1,22 +1,21 @@
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using webapi.Database;
-using DotNetEnv;
 using webapi.Utilities.Common;
 
 // WebApplicationBuilder object
 var builder = WebApplication.CreateBuilder(args);
 
-// Get configuration from appsettings.json
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
-
-// Startup helper object
-var startupHelper = new StartupHelper(builder, configuration);
-
 // Load env variables
-Env.Load("myEnv.env");
+Env.Load("myEnv.env"); // Includes the connection string for your db
 var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+
+var isTestEnv = Environment.GetEnvironmentVariable("ASPNET__isTestEnvironment"); // set from test ApiFactory
+
+if(isTestEnv != null)
+{
+    connectionString = Environment.GetEnvironmentVariable("ASPNET__TempDbConnectionString"); // set from test ApiFactory
+}
 
 // Add DbContext
 builder.Services.AddDbContext<AuctionContext>(options =>
@@ -24,6 +23,15 @@ builder.Services.AddDbContext<AuctionContext>(options =>
 
 // Add Http context accessor
 builder.Services.AddHttpContextAccessor();
+
+// Get configuration from appsettings.json
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables()
+    .Build();
+
+// Startup helper object
+var startupHelper = new StartupHelper(builder, configuration);
 
 // Add services to Dependency Injection container
 startupHelper.AddServices();

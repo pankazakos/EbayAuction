@@ -32,6 +32,9 @@ namespace Api.IntegrationTests
 
             var hostPort = _dbContainer.GetMappedPublicPort(1433);
             _connectionString = $"Server=localhost,{hostPort};Database=test;User Id=sa;Password=zhskalComplexPass12;";
+
+            Environment.SetEnvironmentVariable("ASPNET__isTestEnvironment", "true");
+            Environment.SetEnvironmentVariable("ASPNET__TempDbConnectionString", $"{_connectionString}");
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -47,7 +50,7 @@ namespace Api.IntegrationTests
                     {"Jwt:Issuer", "AuctionsWebApp"},
                     {"Jwt:Audience", "MyWebApp"},
                     {"AllowedHosts", "*"},
-                    {"FileStorage:BasePath", "/var/www/EbayAuction/wwwroot/item-images/"}
+                    {"FileStorage:BasePath", "C:\\ProgramData\\EbayAuctionTest\\wwwroot\\item-images\\"}
                 });
             });
 
