@@ -44,7 +44,9 @@
       <ng-container matColumnDef="Show Item">
         <th mat-header-cell *matHeaderCellDef>Show Item</th>
         <td mat-cell *matCellDef="let bid">
-          <button mat-stroked-button>show</button>
+          <button mat-stroked-button (click)="showItem(bid.itemId)">
+            show
+          </button>
         </td>
       </ng-container>
 

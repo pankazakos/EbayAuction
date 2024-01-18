@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import {
-  BasicBidResponse,
-  ExtendedBidInfo,
-} from 'src/app/shared/contracts/responses/bid';
+import { MatDialog } from '@angular/material/dialog';
+import { ItemComponent } from 'src/app/shared/components/item/item.component';
+import { ExtendedBidInfo } from 'src/app/shared/contracts/responses/bid';
+import { ExtendedItemInfo } from 'src/app/shared/contracts/responses/item';
 import { DateTimeFormatService } from 'src/app/shared/services/common/date-time-format.service';
 import { BidService } from 'src/app/shared/services/http/bid.service';
-import { UserService } from 'src/app/shared/services/http/user.service';
+import { ItemService } from 'src/app/shared/services/http/item.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -26,9 +26,12 @@ export class BidHistoryComponent {
 
   isLoading: boolean = true;
   userBids: ExtendedBidInfo[] = [];
+  selectedItemToShow: ExtendedItemInfo = {} as ExtendedItemInfo;
 
   constructor(
     private bidService: BidService,
+    private itemService: ItemService,
+    private selectedItemDialog: MatDialog,
     private dateTimeFormatter: DateTimeFormatService
   ) {}
 
@@ -54,5 +57,22 @@ export class BidHistoryComponent {
         },
       });
     }, environment.timeout);
+  }
+
+  showItem(itemId: number): void {
+    this.itemService
+      .getExtendedItemResponse(itemId)
+      .then((response: ExtendedItemInfo) => {
+        this.selectedItemToShow = response;
+
+        this.selectedItemDialog.open(ItemComponent, {
+          autoFocus: false,
+          restoreFocus: false,
+          data: {
+            item: this.selectedItemToShow,
+            image: this.selectedItemToShow.image,
+          },
+        });
+      });
   }
 }
