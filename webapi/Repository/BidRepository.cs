@@ -70,7 +70,9 @@ namespace webapi.Repository
                     Seller = bid.Item.Seller.Username,
                     ItemTitle = bid.Item.Name,
                     AuctionStatus = DateTime.Now < bid.Item.Ends ? AuctionStatusType.Active : AuctionStatusType.Expired
-                }).ToListAsync(cancel);
+                })
+                .OrderByDescending(bid => bid.Time)
+                .ToListAsync(cancel);
 
             return extendedBids;
         }
