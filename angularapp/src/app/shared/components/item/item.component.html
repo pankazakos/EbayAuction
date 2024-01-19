@@ -87,7 +87,19 @@
         <div class="info-pair">
           <div class="info-label">Seller:</div>
           <div class="info-value">
-            {{ isOwner() ? "you" : seller.username }}
+            <span *ngIf="isOwner()">you</span>
+            <div *ngIf="!isOwner()" class="seller-username">
+              <button
+                *ngIf="!isOwner()"
+                class="seller-info-button"
+                (click)="showSellerInfo(seller.username)"
+              >
+                <mat-icon>info</mat-icon>
+              </button>
+              <span>
+                {{ seller.username }}
+              </span>
+            </div>
           </div>
         </div>
       </div>

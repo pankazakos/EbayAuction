@@ -153,6 +153,24 @@ $item-box-gap: 2rem;
   text-align: right;
 }
 
+.seller-username{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.seller-info-button{
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: transparent;
+
+  &:hover{
+    cursor: pointer;
+  }
+}
+
 .publish-section {
   width: 35%;
   display: flex;

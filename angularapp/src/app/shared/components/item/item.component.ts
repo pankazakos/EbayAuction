@@ -7,7 +7,10 @@ import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserEndpoints } from 'src/app/shared/contracts/endpoints/UserEndpoints';
 import { BasicItemResponse } from 'src/app/shared/contracts/responses/item';
-import { IdToUsernameResponse } from 'src/app/shared/contracts/responses/user';
+import {
+  BasicUserResponse,
+  IdToUsernameResponse,
+} from 'src/app/shared/contracts/responses/user';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -32,6 +35,7 @@ import {
 } from '@angular/material/datepicker';
 import { DatePipe } from '@angular/common';
 import { MyItemService } from 'src/app/my-items/services/my-item.service';
+import { UserService } from '../../services/http/user.service';
 
 type loadingItem = { data: BasicItemResponse; isLoading: boolean };
 type loadingImage = { src: string; isLoading: boolean };
@@ -71,6 +75,8 @@ export class ItemComponent implements AfterViewInit {
   inputTime: string = '23:59';
   selectedTime: string | null = null;
 
+  sellerInfo: BasicUserResponse = {} as BasicUserResponse;
+
   @ViewChild('bidForm') bidForm!: NgForm;
   @ViewChild('picker') datepicker!: MatDatepicker<Date>;
 
@@ -84,6 +90,7 @@ export class ItemComponent implements AfterViewInit {
     private bidStepService: BidStepService,
     private datePipe: DatePipe,
     private myItemService: MyItemService,
+    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public dialogInputData: any
   ) {
     this.item.data = dialogInputData.item;
@@ -254,6 +261,26 @@ export class ItemComponent implements AfterViewInit {
       if (result == 'confirm') {
         this.selfDialogRef.close('publish');
       }
+    });
+  }
+
+  private loadUserInfo(username: string): Promise<BasicUserResponse> {
+    return new Promise((resolve, reject) => {
+      this.userService.getByUsername(username).subscribe({
+        next: (response: BasicUserResponse) => {
+          resolve(response);
+        },
+        error: (error) => {
+          console.error(error);
+          reject();
+        },
+      });
+    });
+  }
+
+  showSellerInfo(username: string): void {
+    this.loadUserInfo(username).then((response) => {
+      this.sellerInfo = response;
     });
   }
 }

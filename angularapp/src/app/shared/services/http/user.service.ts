@@ -11,6 +11,14 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUsername(userId: number): Observable<BasicUserResponse> {
-    return this.http.get<BasicUserResponse>(`${UserEndpoints.IdToUsername(userId)}`);
+    return this.http.get<BasicUserResponse>(
+      `${UserEndpoints.IdToUsername(userId)}`
+    );
+  }
+
+  getByUsername(username: string): Observable<BasicUserResponse> {
+    return this.http.get<BasicUserResponse>(
+      `${UserEndpoints.getByUsername(username)}`
+    );
   }
 }
