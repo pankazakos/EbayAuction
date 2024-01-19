@@ -17,6 +17,12 @@ export type OrderByOption = 'time' | 'amount';
 export class BidService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
+  getItemBids(itemId: number): Observable<BasicBidResponse[]> {
+    return this.http.get<BasicBidResponse[]>(
+      `${BidEndpoints.itemBids(itemId)}`
+    );
+  }
+
   getUserBids(
     orderType: OrderType = 'ascending',
     orderByOption: OrderByOption = 'time'
@@ -39,5 +45,11 @@ export class BidService {
         headers: this.authService.getHeaders(),
       }
     );
+  }
+
+  getLastBidOfUser(itemId: number) {
+    return this.http.get<BasicBidResponse>(`${BidEndpoints.lastBid(itemId)}`, {
+      headers: this.authService.getHeaders(),
+    });
   }
 }
